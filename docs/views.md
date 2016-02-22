@@ -1,22 +1,22 @@
 # View Wireframes
 
-## New User
+## Sign-In / Sign-Up
 ![new-user]
 
-## New Session
-![new-session]
+## Profile Page / NavBar / ProfileInfo/ ProfileItemsIndex / ProfileItemSong / ProfileItemPlaylist / PlayListSong / SuggestionIndex / SuggestionIndexItem / PlayBar
+![profile-page]
 
-## NotesIndex / NoteIndexItem / NoteForm
-![notes]
+## Greeting Banner / AlbumsIndex / AlbumsStack / AlbumsIndexItem
+![greeting-page]
 
-## NotebooksIndex / NotebookIndexItem
-![notebooks]
+## Single Song or Album / NavBar / PlayBar / Playlist / PlaylistItem / SingleSong
+![single-song-or-album-page]
 
-## NotebookForm
-![notebook-form]
+## Public Collection /  NavBar / PlayBar / PublicCollection / SongIndexItem
+![public-collection-page]
 
-[new-user]: ./wireframes/new_user.png
-[new-session]: ./wireframes/new_session.png
-[notes]: ./wireframes/root_notes.png
-[notebooks]: ./wireframes/root_notebooks.png
-[notebook-form]: ./wireframes/notebook_form.png
+[new-user]: ./wireframes/Signin-SignUp.png
+[profile-page]: ./wireframes/loggedIn.png
+[greeting-page]: ./wireframes/CapstoneGreeting.png
+[single-song-or-album-page]: ./wireframes/SingleSongOrAlbum.png
+[public-collection-page]: ./wireframes/CollectionPage.png

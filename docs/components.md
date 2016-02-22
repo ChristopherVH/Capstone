@@ -1,13 +1,22 @@
 ## Component Hierarchy
 
 * `App`
-  * `SearchIndex`
-  * `NotebooksIndex`
-    * `NotebookIndexItem`
-  * `NotebookForm`
-  * `NotesIndex`
-    * `NoteForm`
-    * `NoteIndexItem`
-  * `NoteDetail`
-    * `NoteTags`
-    * `NoteEditArea`
+  * `Greetings`
+    * `GreetingsBanner`
+    * `AlbumsIndex`
+      * `AlbumsIndexItem`
+      * `AlbumsIndexStack`
+  * `PublicCollection`
+    * `SongsIndex`
+      * `SongsIndexItem`
+  * `PlaylistIndex`
+    * `PlaylistIndexItem`
+      * `SongsIndexItem`
+  * `ProfileIndex`
+    * `ProfileInfo`
+    * `ProfileTunes`
+  * `SoloIndex`
+    * `CurrentPlayBanner`
+    * `PlayListIndexItem`
+  * `Navbar`
+  * `Playbar`
