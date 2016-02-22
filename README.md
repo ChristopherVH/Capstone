@@ -7,7 +7,7 @@
 ## Minimum Viable Product
 
 NimbusPlaylist is a web application inspired by Soundcloud built using Ruby on Rails
-and React.js. FresherNote allows users to:
+and React.js. NimbusPlaylist allows users to:
 
 <!-- This is a Markdown checklist. Use it to keep track of your
 progress. Put an x between the brackets for a checkmark: [x] -->
@@ -18,7 +18,7 @@ progress. Put an x between the brackets for a checkmark: [x] -->
 - [ ] Be able to like songs
 - [ ] Create, read, edit, and delete playlists
 - [ ] Have separate page for double click on album or song
-- [ ] Have queue and loop features
+- [ ] Use queue and loop features within the media player
 
 ## Design Docs
 * [View Wireframes][views]

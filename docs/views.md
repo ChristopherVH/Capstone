@@ -15,7 +15,7 @@
 ## Public Collection /  NavBar / PlayBar / PublicCollection / SongIndexItem
 ![public-collection-page]
 
-[new-user]: ./wireframes/Signin-SignUp.png
+[new-user]: ./wireframes/SignIn-SignUp.png
 [profile-page]: ./wireframes/loggedIn.png
 [greeting-page]: ./wireframes/CapstoneGreeting.png
 [single-song-or-album-page]: ./wireframes/SingleSongOrAlbum.png
