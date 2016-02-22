@@ -2,7 +2,7 @@
 
 [Heroku link][heroku] **NB:** This should be a link to your production site
 
-[heroku]: http://www.herokuapp.com
+[heroku]: https://enigmatic-escarpment-61315.herokuapp.com/
 
 ## Minimum Viable Product
 
@@ -76,7 +76,7 @@ user interface.
 - [ ] position elements on the page
 - [ ] add basic colors & styles
 
-### Phase 5: Notebooks (1 day)
+### Phase 5: Playlists (1 day)
 
 **Objective:** Songs belong to playlists, and can be viewed by User.
 
@@ -99,7 +99,7 @@ user interface.
   - [ ] searching Songs by tag
 - [ ] Style new elements
 
-### Phase 7: Allow Complex Styling in Notes (0.5 days)
+### Phase 7: Allow Complex Styling in Songs (0.5 days)
 
 **objective:** Enable complex styling of songs.
 
