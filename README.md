@@ -35,7 +35,7 @@ progress. Put an x between the brackets for a checkmark: [x] -->
 
 ## Implementation Timeline
 
-### Phase 1: Backend setup and User Authentication (0.5 days)
+### Phase 1: Backend setup and User Authentication (1 day)
 
 **Objective:** Functioning rails project with Authentication
 
@@ -43,36 +43,32 @@ progress. Put an x between the brackets for a checkmark: [x] -->
 - [ ] create `User` model
 - [ ] authentication
 - [ ] user signup/signin pages
-- [ ] blank landing page after signin
+- [ ] blank landing page after sign in
 
-### Phase 2: Notes Model, API, and basic APIUtil (1.5 days)
+### Phase 2: Notes Model, API, and basic APIUtil (2 days)
 
-**Objective:** Notes can be created, read, edited and destroyed through
-the API.
+**Objective:** Play & like songs using the embedded media player at the bottom of the page.
 
-- [ ] create `Note` model
+- [ ] create `Song` model
 - [ ] seed the database with a small amount of test data
-- [ ] CRUD API for notes (`NotesController`)
-- [ ] jBuilder views for notes
+- [ ] CRUD API for Songs (`SongsController`)
+- [ ] jBuilder views for songs
 - [ ] setup Webpack & Flux scaffold
 - [ ] setup `APIUtil` to interact with the API
 - [ ] test out API interaction in the console.
 
-### Phase 3: Flux Architecture and Router (1.5 days)
+### Phase 3: Flux Architecture and Router (2 days)
 
-**Objective:** Notes can be created, read, edited and destroyed with the
+**Objective:** Songs can be Liked, Played, and added to playlist with the
 user interface.
 
 - [ ] setup the flux loop with skeleton files
 - [ ] setup React Router
-- implement each note component, building out the flux loop as needed.
-  - [ ] `NotesIndex`
-  - [ ] `NoteIndexItem`
-  - [ ] `NoteForm`
-- [ ] save Notes to the DB when the form loses focus or is left idle
-  after editing.
+- implement each Song component, building out the flux loop as needed.
+  - [ ] `SongIndex`
+  - [ ] `SongIndexItem`
 
-### Phase 4: Start Styling (0.5 days)
+### Phase 4: Start Styling (1 days)
 
 **Objective:** Existing pages (including singup/signin) will look good.
 
@@ -82,34 +78,30 @@ user interface.
 
 ### Phase 5: Notebooks (1 day)
 
-**Objective:** Notes belong to Notebooks, and can be viewed by notebook.
+**Objective:** Songs belong to playlists, and can be viewed by User.
 
-- [ ] create `Notebook` model
+- [ ] create `PlayList` model
 - build out API, Flux loop, and components for:
-  - [ ] Notebook CRUD
-  - [ ] adding notes requires a notebook
-  - [ ] moving notes to a different notebook
-  - [ ] viewing notes by notebook
+  - [ ] Playlist CRUD
+  - [ ] adding Songs requires a Playlist
+  - [ ] moving Songs to a different Playlist
+  - [ ] viewing Songs by Playlist
 - Use CSS to style new views
 
-Phase 3 adds organization to the Notes. Notes belong to a Notebook,
-which has its own `Index` view.
 
 ### Phase 6: Tags (1.5 days)
 
-**Objective:** Notes can be tagged with multiple tags, and tags are searchable.
+**Objective:** Songs can be tagged by genre, and tags are searchable.
 
 - [ ] create `Tag` model and join table
 - build out API, Flux loop, and components for:
-  - [ ] fetching tags for notebook
-  - [ ] adding tags to notebook
-  - [ ] creating tags while adding to notebooks
-  - [ ] searching notebooks by tag
+  - [ ] fetching tags for Songs
+  - [ ] searching Songs by tag
 - [ ] Style new elements
 
 ### Phase 7: Allow Complex Styling in Notes (0.5 days)
 
-**objective:** Enable complex styling of notes.
+**objective:** Enable complex styling of songs.
 
 - [ ] Integrate `react-quill` (based on Quill.js).
 - [ ] Use Rails helpers to sanitize HTML before rendering.
@@ -124,11 +116,10 @@ which has its own `Index` view.
 - [ ] Add modals, transitions, and other styling flourishes.
 
 ### Bonus Features (TBD)
-- [ ] Search through notes for blocks of text
-- [ ] Pagination / infinite scroll for Notes Index
-- [ ] Set reminders on notes
-- [ ] Changelogs for Notes
-- [ ] Multiple sessions
+- [ ] Add following and unfollowing of users
+- [ ] Pagination / infinite scroll for collection
+- [ ] Be able to add comments to songs
+- [ ] Upload audio files
 
 [phase-one]: ./docs/phases/phase1.md
 [phase-two]: ./docs/phases/phase2.md
