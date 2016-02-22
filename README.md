@@ -45,7 +45,7 @@ progress. Put an x between the brackets for a checkmark: [x] -->
 - [ ] user signup/signin pages
 - [ ] blank landing page after sign in
 
-### Phase 2: Notes Model, API, and basic APIUtil (2 days)
+### Phase 2: Song Model, API, and basic APIUtil (2 days)
 
 **Objective:** Play & like songs using the embedded media player at the bottom of the page.
 
