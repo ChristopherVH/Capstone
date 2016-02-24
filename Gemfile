@@ -44,6 +44,7 @@ group :development, :test do
   gem 'better_errors'
   gem 'pry-rails'
   gem 'binding_of_caller'
+  gem 'bcrypt'
 end
 
 group :development do
