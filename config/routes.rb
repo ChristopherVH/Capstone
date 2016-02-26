@@ -2,9 +2,21 @@ Rails.application.routes.draw do
 
   root to: "greetings#root"
 
-  resources :users, only: [:new, :create, :show] do
-  end
+  resources :users, only: [:new, :create]
   resource :session, only: [:new, :create, :destroy]
+  namespace :api, defaults: { format: :json } do
+
+      resources :songs, only: [:create, :destory, :index, :show] do
+        resource :like, only: [:create, :destroy]
+      end
+
+      resources :playlists, only: [:index, :show]
+
+      resources :users, only: [:show] do
+        resources :songs, only: [:index]
+        resources :playlists, only: [:index]
+      end
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

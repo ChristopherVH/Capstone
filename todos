@@ -1,0 +1,6 @@
+Todo:
+
+- Wrap apiUtil.fetchAllSongs in an action creation
+- move logic out of render method so that the html reads like english
+- go to the song show page, refresh, and make sure it still works
+- aws s3 or paperclip for file upload

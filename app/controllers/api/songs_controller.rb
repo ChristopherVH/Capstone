@@ -13,7 +13,7 @@
 #  updated_at :datetime         not null
 #
 
-class SongsController < ApplicationController
+class Api::SongsController < ApplicationController
   before_action :require_signed_in!, only: [:create, :destroy, :update]
 
   def create
@@ -31,7 +31,7 @@ class SongsController < ApplicationController
     if @song.user_id == current_user.id && @song.destroy
       render :index
     else
-      render json: "This song cannot be deleted"
+      render json: "This song cannot be deleted by you"
     end
   end
 
@@ -40,7 +40,7 @@ class SongsController < ApplicationController
     if @song.user_id == current_user.id && @song.update
       render :show
     else
-      render json: "This song cannot be deleted"
+      render json: "This song cannot be updated by you"
     end
   end
 
@@ -49,12 +49,16 @@ class SongsController < ApplicationController
   end
 
   def index
-    @user = current_user
-    @songs = @user.songs.order(updated_at: :desc)
+    @user = User.find_by(id: params[:user_id])
+    if @user
+      @songs = @user.songs
+    else
+      @songs = Song.all
+    end
   end
 
   private
   def song_params
-    params.require(:song).permit(:title, :artist, :genre, :image_url, :audio_url )
+    params.require(:song).permit(:title, :artist, :genre, :image_url, :audio_url)
   end
 end

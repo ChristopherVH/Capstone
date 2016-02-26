@@ -1,0 +1,4 @@
+module.exports = {
+  SONGS_RECEIVED: "SONGS_RECIEVED",
+  SONG_RECEIVED: "SONG_RECEIVED"
+};

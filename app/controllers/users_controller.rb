@@ -30,6 +30,9 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @songs = @user.songs
+    @playlists = @user.playlists
+    @liked_songs = @user.liked_songs
   end
 
   private

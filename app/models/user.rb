@@ -18,8 +18,8 @@ class User < ActiveRecord::Base
 
   attr_reader :password
   after_initialize :ensure_session_token
-
   has_many :likes
+  has_many :liked_songs, through: :likes, source: :song
   has_many :playlists
   has_many :songs
 
