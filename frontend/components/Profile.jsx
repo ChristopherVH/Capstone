@@ -1,35 +1,35 @@
 var React = require('react');
-var SongStore = require("../stores/SongStore.js");
-var ApiUtil = require("../util/apiUtil.js");
-var Song = require("./Song.jsx");
+var SingleUserStore = require("../stores/SingleUserStore.js");
+var Feed = require("./Feed.jsx");
+var UserActions = require("../actions/UserActions.js");
 
-var Collection = React.createClass({
+var Profile = React.createClass({
   getInitialState: function(){
     return({
-      songs: SongStore.all()
+      user: SingleUserStore.access()
+      //make a request
     })
   },
   _onChange: function(){
-    this.setState({songs: SongStore.all()})
+    this.setState({user: SingleUserStore.access()})
   },
   componentDidMount: function(){
-    this.songListener = SongStore.addListener(this._onChange);
-    ApiUtil.fetchAllSongs()
+    this.userListener = SingleUserStore.addListener(this._onChange);
+    UserActions.fetchUserInfo(this.props.params.user_id)
   },
   componentWillUnmount: function(){
-    this.songListener.remove();
+    this.userListener.remove();
   },
-
   render: function(){
-    var songs = this.state.songs;
+    var user = this.state.user;
     return(
-      <ul>
-        {songs.map(function (song) {
-             return <Song key={song.id} id={song.id} />;
-           })}
-      </ul>
+      <div>
+        <img src={user.profile_url}></img>
+        <img src={user.cover_url}> </img>
+        <h1>{user.username}</h1>
+      </div>
     )
   }
 })
 
-module.exports = Collection;
+module.exports = Profile;

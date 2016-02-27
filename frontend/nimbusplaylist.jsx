@@ -9,6 +9,9 @@ var React = require('react'),
   var PlayBar = require("./components/Playbar.jsx");
   var Greeting = require("./components/Greeting.jsx");
   var Collection = require("./components/Collection.jsx");
+  var Profile = require("./components/Profile.jsx");
+  var PlaylistIndex = require("./components/PlaylistIndex.jsx");
+  var SinglePlaylist = require('./components/SinglePlaylist.jsx');
 
 // <Router history={browserHistory}>
 //   <Route path="/" component={App}>
@@ -28,6 +31,12 @@ var React = require('react'),
 var routes = (
     <Route path="/" component={ App }>
       <IndexRoute component={ Greeting }/>
+      <Route path="user/:user_id" component={ Profile }>
+      </Route>
+      <Route path="playlists" component={PlaylistIndex}/>
+      <Route path="playlist/:playlist_id" component={SinglePlaylist}/>
+      <Route path="songs" component={Collection}/>
+      <Route path="song/:song_id" component={SinglePlaylist}/>
     </Route>
 );
 

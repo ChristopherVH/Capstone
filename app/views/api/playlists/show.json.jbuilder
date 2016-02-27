@@ -1,1 +1,1 @@
-json.extract! @playlist, :id, :user_id, :title, :description, :songs
+json.partial! "playlist", playlist: @playlist

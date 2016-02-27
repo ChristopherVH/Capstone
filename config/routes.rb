@@ -7,6 +7,9 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
 
       resources :songs, only: [:create, :destory, :index, :show] do
+        collection do
+          get 'trending'
+        end
         resource :like, only: [:create, :destroy]
       end
 

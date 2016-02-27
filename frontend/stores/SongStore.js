@@ -33,10 +33,15 @@ SongStore.__onDispatch = function(payload){
       SongStore.resetSongs(payload.songs);
       SongStore.__emitChange();
       break;
-    case SongConstant.SONG_RECIEVED:
+    case SongConstant.SONG_RECEIVED:
       SongStore.addSong(payload.song);
       SongStore.__emitChange();
       break;
+    case SongConstant.TRENDING_SONGS_RECEIVED:
+      SongStore.resetSongs(payload.songs);
+      SongStore.__emitChange();
+      break;
+      //TODO finish flux loop for trending songs
   }
 };
 

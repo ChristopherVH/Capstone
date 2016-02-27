@@ -57,6 +57,10 @@ class Api::SongsController < ApplicationController
     end
   end
 
+  def trending
+    @songs = Song.joins(:likes).group(:id).order("count(likes.song_id)")
+  end
+
   private
   def song_params
     params.require(:song).permit(:title, :artist, :genre, :image_url, :audio_url)

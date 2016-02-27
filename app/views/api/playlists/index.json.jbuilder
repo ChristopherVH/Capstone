@@ -1,1 +1,3 @@
-json.array! @playlists, :id, :user_id, :title, :description, :songs
+json.array! @playlists do |playlist|
+  json.partial! "playlist", playlist: playlist
+end

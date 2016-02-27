@@ -13,7 +13,7 @@ var Song = React.createClass({
   },
   componentDidMount: function(){
     this.songListener = SongStore.addListener(this._onChange);
-    // ApiUtil.fetchSong(this.props.id)
+    SongActions.fetchSong()
   },
   componentWillUnmount: function(){
     this.songListener.remove();

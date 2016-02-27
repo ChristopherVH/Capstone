@@ -1,11 +1,11 @@
-var UserActions = require('../actions/UserActions.js');
+
 module.exports = {
   fetchUserSongs: function(user_id){
     $.ajax({
       type:"GET",
       url:"api/users/" + user_id + "/songs",
       success:function (songs){
-        ApiAction.recieveUserSongs(songs) //TODO implement this when its actually useful
+        UserActions.receiveUserSongs(songs) //TODO implement this when its actually useful
       }
     })
   },
@@ -14,7 +14,16 @@ module.exports = {
       type:"GET",
       url:"api/users/" + user_id + "/playlists",
       success:function (playlists){
-        ApiAction.recieveUserPlaylists(playlists) //TODO implement this when its actually useful
+        UserActions.receiveUserPlaylists(playlists) //TODO implement this when its actually useful
+      }
+    })
+  },
+  fetchUserInfo: function(user_id, callback){
+    $.ajax({
+      type:"GET",
+      url:"api/users/" + user_id,
+      success:function (userinfo){
+        callback(userinfo);
       }
     })
   }
