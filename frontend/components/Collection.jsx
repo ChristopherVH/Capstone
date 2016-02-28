@@ -21,8 +21,8 @@ var Collection = React.createClass({
     this.songListener.remove();
   },
   render: function(){
-    var songsList = this.state.songs.map(function (song) {
-         return <Song key={song.id} id={song.id} />;
+    var songsList = this.state.songs.map(function (song, index) {
+         return <Song key={song.id} song={song} />;
        });
     return(
       <ul>

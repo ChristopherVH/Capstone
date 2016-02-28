@@ -4,11 +4,11 @@ var FeedConstant = require("../constants/FeedConstants");
 
 var FeedStore = new Store(AppDispatcher);
 
-var _songs = {};
+var _feed = [];
 
 FeedStore.all = function(){
-  return Object.keys(_songs).map(function(key){
-    return _songs[key];
+  return _feed.map(function(feedel){
+    return feedel;
   });
 };
 

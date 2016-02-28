@@ -58,7 +58,7 @@ class Api::SongsController < ApplicationController
   end
 
   def trending
-    @songs = Song.joins(:likes).group(:id).order("count(likes.song_id)")
+    @songs = Song.joins(:likes).group(:id).order("count(likes.song_id) desc")
   end
 
   private

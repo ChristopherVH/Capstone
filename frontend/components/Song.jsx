@@ -1,22 +1,13 @@
 var React = require('react');
 var SongStore = require("../stores/SongStore.js");
 var ApiUtil = require("../util/apiUtil.js");
+var SoundCloudAudio = require('soundcloud-audio');
 
 var Song = React.createClass({
   getInitialState: function(){
     return({
-      song: SongStore.find(this.props.id)
+      song: this.props.song
     })
-  },
-  _onChange: function(){
-    this.setState({songs: SongStore.find(this.props.id)})
-  },
-  componentDidMount: function(){
-    this.songListener = SongStore.addListener(this._onChange);
-    SongActions.fetchSong()
-  },
-  componentWillUnmount: function(){
-    this.songListener.remove();
   },
   render: function(){
     return(

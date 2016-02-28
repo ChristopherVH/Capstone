@@ -6,7 +6,7 @@ var PlaylistActions = require("../actions/PlaylistActions.js");
 var PlaylistIndex = React.createClass({
   getInitialState: function(){
     return({
-      playlists: PlaylistStore.all()
+      playlists: undefined
     })
   },
   _onChange: function(){
@@ -14,20 +14,24 @@ var PlaylistIndex = React.createClass({
   },
   componentDidMount: function(){
     this.playlistListener = PlaylistStore.addListener(this._onChange);
-    //didn't match flux pattern when calling util inside
     PlaylistActions.fetchAllPlaylists()
   },
   componentWillUnmount: function(){
     this.playlistListener.remove();
   },
-  render: function(){
-    var playlists = this.state.playlists;
+  createPlaylists: function(playlists){
     var playlistList = playlists.map(function (playlist) {
-         return <PlaylistIndexItem key={playlist.id} id={playlist.id} />;
+         return <PlaylistIndexItem key={playlist.id} playlist={playlist} />;
        });
+    return playlistList;
+  },
+  render: function(){
+    if (this.state.playlists === undefined){
+      return <div></div>
+    }
     return(
       <ul>
-        {playlistList}
+        {this.createPlaylists(this.state.playlists)}
       </ul>
     )
   }

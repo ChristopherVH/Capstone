@@ -6,7 +6,7 @@ var UserActions = require("../actions/UserActions.js");
 var Profile = React.createClass({
   getInitialState: function(){
     return({
-      user: SingleUserStore.access()
+      user: undefined
       //make a request
     })
   },
@@ -21,14 +21,28 @@ var Profile = React.createClass({
     this.userListener.remove();
   },
   render: function(){
+    if (this.state.user === undefined){
+      return <div></div>;
+    }
     var user = this.state.user;
+    var profileimage = function(){
+      if (user.cover_url){
+        return <img src={user.cover_url}></img>;
+      }
+    }
+    var profilecover = function(){
+      if (user.profile_url){
+        return <img src={user.profile_url}></img>;
+      }
+    }
     return(
       <div>
-        <img src={user.profile_url}></img>
-        <img src={user.cover_url}> </img>
         <h1>{user.username}</h1>
+        {profileimage()}
+        {profilecover()}
+        <Feed feed={user.feed}/>
       </div>
-    )
+    );
   }
 })
 

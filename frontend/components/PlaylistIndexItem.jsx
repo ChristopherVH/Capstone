@@ -6,23 +6,12 @@ var PlaylistSong = require("./PlaylistSong.jsx");
 var Playlist = React.createClass({
   getInitialState: function(){
     return({
-      playlist: PlaylistStore.find(this.props.id)
+      playlist: this.props.playlist
     })
   },
-  _onChange: function(){
-    this.setState({playlists: PlaylistStore.find(this.props.id)})
-  },
-  componentDidMount: function(){
-    this.playlistListener = PlaylistStore.addListener(this._onChange);
-    PlaylistActions.fetchPlaylist()
-  },
-  componentWillUnmount: function(){
-    this.playlistListener.remove();
-  },
   render: function(){
-    var songs = this.state.songs;
     var songsList = this.state.playlist.songs.map(function (song) {
-         return <PlaylistSong key={song.id} id={song.id} song={song}/>;
+         return <PlaylistSong key={song.ord} song={song}/>;
        });
     return(
       <div>

@@ -22,7 +22,7 @@ var SinglePlaylist = React.createClass({
   },
   createSongList: function(){
      var playlistSongs = this.state.playlist.songs.map(function (song) {
-        return <PlaylistSong key={song.id} id={song.id} song={song}/>;
+        return <PlaylistSong key={song.id} idx={song.id} song={song}/>;
       });
     return playlistSongs;
   },

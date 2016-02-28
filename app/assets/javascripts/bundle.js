@@ -54,10 +54,10 @@
 	var Navbar = __webpack_require__(217);
 	var PlayBar = __webpack_require__(218);
 	var Greeting = __webpack_require__(219);
-	var Collection = __webpack_require__(245);
-	var Profile = __webpack_require__(247);
-	var PlaylistIndex = __webpack_require__(254);
-	var SinglePlaylist = __webpack_require__(260);
+	var Collection = __webpack_require__(244);
+	var Profile = __webpack_require__(248);
+	var PlaylistIndex = __webpack_require__(249);
+	var SinglePlaylist = __webpack_require__(255);
 	
 	// <Router history={browserHistory}>
 	//   <Route path="/" component={App}>
@@ -24822,7 +24822,7 @@
 	var React = __webpack_require__(1);
 	var SongStore = __webpack_require__(220);
 	var ApiUtil = __webpack_require__(243);
-	var Collection = __webpack_require__(245);
+	var Collection = __webpack_require__(244);
 	
 	var Greeting = React.createClass({
 	  displayName: "Greeting",
@@ -24876,6 +24876,13 @@
 	  }
 	};
 	
+	SongStore.resetToTrending = function (songs) {
+	  _songs = {};
+	  for (var i = 0; i < songs.length; i++) {
+	    _songs[i] = songs[i];
+	  }
+	};
+	
 	SongStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case SongConstant.SONGS_RECEIVED:
@@ -24887,7 +24894,7 @@
 	      SongStore.__emitChange();
 	      break;
 	    case SongConstant.TRENDING_SONGS_RECEIVED:
-	      SongStore.resetSongs(payload.songs);
+	      SongStore.resetToTrending(payload.songs);
 	      SongStore.__emitChange();
 	      break;
 	    //TODO finish flux loop for trending songs
@@ -31737,6 +31744,261 @@
 /* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var React = __webpack_require__(1);
+	var SongStore = __webpack_require__(220);
+	var Song = __webpack_require__(245);
+	var SongActions = __webpack_require__(247);
+	
+	var Collection = React.createClass({
+	  displayName: "Collection",
+	
+	  getInitialState: function () {
+	    return {
+	      songs: SongStore.all()
+	    };
+	  },
+	  _onChange: function () {
+	    this.setState({ songs: SongStore.all() });
+	  },
+	  componentDidMount: function () {
+	    this.songListener = SongStore.addListener(this._onChange);
+	    //didn't match flux pattern when calling util inside
+	    SongActions.fetchTrendingSongs();
+	  },
+	  componentWillUnmount: function () {
+	    this.songListener.remove();
+	  },
+	  render: function () {
+	    var songsList = this.state.songs.map(function (song, index) {
+	      return React.createElement(Song, { key: song.id, song: song });
+	    });
+	    return React.createElement(
+	      "ul",
+	      null,
+	      songsList
+	    );
+	  }
+	});
+	
+	module.exports = Collection;
+
+/***/ },
+/* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var SongStore = __webpack_require__(220);
+	var ApiUtil = __webpack_require__(243);
+	var SoundCloudAudio = __webpack_require__(246);
+	
+	var Song = React.createClass({
+	  displayName: "Song",
+	
+	  getInitialState: function () {
+	    return {
+	      song: this.props.song
+	    };
+	  },
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      null,
+	      this.state.song.title,
+	      React.createElement("br", null),
+	      React.createElement("img", { src: this.state.song.image_url }),
+	      React.createElement("br", null),
+	      React.createElement(
+	        "audio",
+	        { controls: true },
+	        React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = Song;
+
+/***/ },
+/* 246 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	function SoundCloud (clientId) {
+	    if (!(this instanceof SoundCloud)) {
+	        return new SoundCloud(clientId);
+	    }
+	
+	    if (!clientId) {
+	        throw new Error('SoundCloud API clientId is required, get it - https://developers.soundcloud.com/');
+	    }
+	
+	    this._events = {};
+	
+	    this._clientId = clientId;
+	    this._baseUrl = 'https://api.soundcloud.com';
+	
+	    this.playing = false;
+	    this.duration = 0;
+	
+	    this.audio = document.createElement('audio');
+	}
+	
+	SoundCloud.prototype.appendQueryParam = function(url, param, value) {
+	    var regex = /\?(?:.*)$/;
+	    var chr = regex.test(url) ? '&' : '?';
+	
+	    return url + chr + param + '=' + value;
+	};
+	
+	SoundCloud.prototype.resolve = function (url, callback) {
+	    if (!url) {
+	        throw new Error('SoundCloud track or playlist url is required');
+	    }
+	
+	    url = this._baseUrl + '/resolve.json?url=' + url + '&client_id=' + this._clientId;
+	
+	    this._jsonp(url, function (data) {
+	        if (Array.isArray(data)) {
+	            var tracks = data;
+	            data = {tracks: tracks};
+	            this._playlist = data;
+	        } else if (data.tracks) {
+	            this._playlist = data;
+	        } else {
+	            this._track = data;
+	        }
+	
+	        this.duration = data.duration && !isNaN(data.duration) ?
+	            data.duration / 1000 : // convert to seconds
+	            0; // no duration is zero
+	
+	        callback(data);
+	    }.bind(this));
+	};
+	
+	SoundCloud.prototype._jsonp = function (url, callback) {
+	    var target = document.getElementsByTagName('script')[0] || document.head;
+	    var script = document.createElement('script');
+	
+	    var id = 'jsonp_callback_' + Math.round(100000 * Math.random());
+	    window[id] = function (data) {
+	        if (script.parentNode) {
+	            script.parentNode.removeChild(script);
+	        }
+	        window[id] = function () {};
+	        callback(data);
+	    };
+	
+	    script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + id;
+	    target.parentNode.insertBefore(script, target);
+	};
+	
+	SoundCloud.prototype.on = function (e, fn) {
+	    this._events[e] = fn;
+	    this.audio.addEventListener(e, fn, false);
+	};
+	
+	SoundCloud.prototype.off = function (e, fn) {
+	    this._events[e] = null;
+	    this.audio.removeEventListener(e, fn);
+	};
+	
+	SoundCloud.prototype.unbindAll = function () {
+	    for (var e in this._events) {
+	        var fn = this._events[e];
+	        if (fn) {
+	            this.off(e, fn);
+	        }
+	    }
+	};
+	
+	SoundCloud.prototype.preload = function (streamUrl) {
+	    this._track = {stream_url: streamUrl};
+	    this.audio.src = streamUrl + '?client_id=' + this._clientId;
+	};
+	
+	SoundCloud.prototype.play = function (options) {
+	    options = options || {};
+	    var src;
+	
+	    if (options.streamUrl) {
+	        src = options.streamUrl;
+	    } else if (this._playlist) {
+	        var length = this._playlist.tracks.length;
+	        if (length) {
+	            this._playlistIndex = options.playlistIndex || 0;
+	
+	            // be silent if index is out of range
+	            if (this._playlistIndex >= length || this._playlistIndex < 0) {
+	                this._playlistIndex = 0;
+	                return;
+	            }
+	            src = this._playlist.tracks[this._playlistIndex].stream_url;
+	        }
+	    } else if (this._track) {
+	        src = this._track.stream_url;
+	    }
+	
+	    if (!src) {
+	        throw new Error('There is no tracks to play, use `streamUrl` option or `load` method');
+	    }
+	
+	    src = this.appendQueryParam(src, 'client_id', this._clientId);
+	
+	    if (src !== this.audio.src) {
+	        this.audio.src = src;
+	    }
+	
+	    this.playing = src;
+	    this.audio.play();
+	};
+	
+	SoundCloud.prototype.pause = function () {
+	    this.audio.pause();
+	    this.playing = false;
+	};
+	
+	SoundCloud.prototype.stop = function () {
+	    this.audio.pause();
+	    this.audio.currentTime = 0;
+	    this.playing = false;
+	};
+	
+	SoundCloud.prototype.next = function () {
+	    var tracksLength = this._playlist.tracks.length;
+	    if (this._playlistIndex >= tracksLength - 1) {
+	        return;
+	    }
+	    if (this._playlist && tracksLength) {
+	        this.play({playlistIndex: ++this._playlistIndex});
+	    }
+	};
+	
+	SoundCloud.prototype.previous = function () {
+	    if (this._playlistIndex <= 0) {
+	        return;
+	    }
+	    if (this._playlist && this._playlist.tracks.length) {
+	        this.play({playlistIndex: --this._playlistIndex});
+	    }
+	};
+	
+	SoundCloud.prototype.seek = function (e) {
+	    if (!this.audio.readyState) {
+	        return false;
+	    }
+	    var percent = e.offsetX / e.target.offsetWidth || (e.layerX - e.target.offsetLeft) / e.target.offsetWidth;
+	    this.audio.currentTime = percent * (this.audio.duration || 0);
+	};
+	
+	module.exports = SoundCloud;
+
+
+/***/ },
+/* 247 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var Dispatcher = __webpack_require__(221);
 	var SongConstants = __webpack_require__(242);
 	var apiUtil = __webpack_require__(243);
@@ -31776,107 +32038,20 @@
 	module.exports = SongActions;
 
 /***/ },
-/* 245 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SongStore = __webpack_require__(220);
-	var Song = __webpack_require__(246);
-	var SongActions = __webpack_require__(244);
-	
-	var Collection = React.createClass({
-	  displayName: "Collection",
-	
-	  getInitialState: function () {
-	    return {
-	      songs: SongStore.all()
-	    };
-	  },
-	  _onChange: function () {
-	    this.setState({ songs: SongStore.all() });
-	  },
-	  componentDidMount: function () {
-	    this.songListener = SongStore.addListener(this._onChange);
-	    //didn't match flux pattern when calling util inside
-	    SongActions.fetchTrendingSongs();
-	  },
-	  componentWillUnmount: function () {
-	    this.songListener.remove();
-	  },
-	  render: function () {
-	    var songsList = this.state.songs.map(function (song) {
-	      return React.createElement(Song, { key: song.id, id: song.id });
-	    });
-	    return React.createElement(
-	      "ul",
-	      null,
-	      songsList
-	    );
-	  }
-	});
-	
-	module.exports = Collection;
-
-/***/ },
-/* 246 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var SongStore = __webpack_require__(220);
-	var ApiUtil = __webpack_require__(243);
-	
-	var Song = React.createClass({
-	  displayName: "Song",
-	
-	  getInitialState: function () {
-	    return {
-	      song: SongStore.find(this.props.id)
-	    };
-	  },
-	  _onChange: function () {
-	    this.setState({ songs: SongStore.find(this.props.id) });
-	  },
-	  componentDidMount: function () {
-	    this.songListener = SongStore.addListener(this._onChange);
-	    SongActions.fetchSong();
-	  },
-	  componentWillUnmount: function () {
-	    this.songListener.remove();
-	  },
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      null,
-	      this.state.song.title,
-	      React.createElement("br", null),
-	      React.createElement("img", { src: this.state.song.image_url }),
-	      React.createElement("br", null),
-	      React.createElement(
-	        "audio",
-	        { controls: true },
-	        React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = Song;
-
-/***/ },
-/* 247 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var SingleUserStore = __webpack_require__(248);
-	var Feed = __webpack_require__(252);
-	var UserActions = __webpack_require__(249);
+	var SingleUserStore = __webpack_require__(256);
+	var Feed = __webpack_require__(258);
+	var UserActions = __webpack_require__(259);
 	
 	var Profile = React.createClass({
 	  displayName: "Profile",
 	
 	  getInitialState: function () {
 	    return {
-	      user: SingleUserStore.access()
+	      user: undefined
 	      //make a request
 	    };
 	  },
@@ -31891,21 +32066,31 @@
 	    this.userListener.remove();
 	  },
 	  render: function () {
+	    if (this.state.user === undefined) {
+	      return React.createElement("div", null);
+	    }
 	    var user = this.state.user;
+	    var profileimage = function () {
+	      if (user.cover_url) {
+	        return React.createElement("img", { src: user.cover_url });
+	      }
+	    };
+	    var profilecover = function () {
+	      if (user.profile_url) {
+	        return React.createElement("img", { src: user.profile_url });
+	      }
+	    };
 	    return React.createElement(
 	      "div",
 	      null,
-	      React.createElement("img", { src: user.profile_url }),
-	      React.createElement(
-	        "img",
-	        { src: user.cover_url },
-	        " "
-	      ),
 	      React.createElement(
 	        "h1",
 	        null,
 	        user.username
-	      )
+	      ),
+	      profileimage(),
+	      profilecover(),
+	      React.createElement(Feed, { feed: user.feed })
 	    );
 	  }
 	});
@@ -31913,126 +32098,20 @@
 	module.exports = Profile;
 
 /***/ },
-/* 248 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(221);
-	var Store = __webpack_require__(225).Store;
-	var UserConstants = __webpack_require__(251);
-	
-	var SingleUserStore = new Store(AppDispatcher);
-	
-	var _single = {};
-	
-	SingleUserStore.access = function () {
-	  var singledup = $.extend({}, _single);
-	  return singledup;
-	};
-	
-	SingleUserStore.setUser = function (user) {
-	  _single = user;
-	};
-	
-	SingleUserStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case UserConstants.USER_RECEIVED:
-	      SingleUserStore.setUser(payload.user);
-	      SingleUserStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	module.exports = SingleUserStore;
-
-/***/ },
 /* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(221);
-	var UserConstants = __webpack_require__(251);
-	var userUtil = __webpack_require__(250);
-	
-	var UserActions = {
-	  fetchUserInfo: function (user_id) {
-	    userUtil.fetchUserInfo(user_id, this.receiveUserInfo);
-	  },
-	  receiveUserInfo: function (userinfo) {
-	    Dispatcher.dispatch({
-	      actionType: UserConstants.USER_RECEIVED,
-	      user: userinfo
-	    });
-	  }
-	};
-	
-	module.exports = UserActions;
-
-/***/ },
-/* 250 */
-/***/ function(module, exports) {
-
-	
-	module.exports = {
-	  fetchUserSongs: function (user_id) {
-	    $.ajax({
-	      type: "GET",
-	      url: "api/users/" + user_id + "/songs",
-	      success: function (songs) {
-	        UserActions.receiveUserSongs(songs); //TODO implement this when its actually useful
-	      }
-	    });
-	  },
-	  fetchUserPlaylists: function (user_id) {
-	    $.ajax({
-	      type: "GET",
-	      url: "api/users/" + user_id + "/playlists",
-	      success: function (playlists) {
-	        UserActions.receiveUserPlaylists(playlists); //TODO implement this when its actually useful
-	      }
-	    });
-	  },
-	  fetchUserInfo: function (user_id, callback) {
-	    $.ajax({
-	      type: "GET",
-	      url: "api/users/" + user_id,
-	      success: function (userinfo) {
-	        callback(userinfo);
-	      }
-	    });
-	  }
-	};
-
-/***/ },
-/* 251 */
-/***/ function(module, exports) {
-
-	module.exports = {
-	  USER_RECEIVED: "USER_RECEIVED",
-	  USER_SONGS_RECEIVED: "USER_SONGS_RECEIVED",
-	  USER_PLAYLISTS_RECEIVED: "USER_PLAYLISTS_RECEIVED"
-	};
-
-/***/ },
-/* 252 */
-/***/ function(module, exports) {
-
-
-
-/***/ },
-/* 253 */,
-/* 254 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var React = __webpack_require__(1);
-	var PlaylistStore = __webpack_require__(255);
-	var PlaylistIndexItem = __webpack_require__(259);
-	var PlaylistActions = __webpack_require__(256);
+	var PlaylistStore = __webpack_require__(250);
+	var PlaylistIndexItem = __webpack_require__(252);
+	var PlaylistActions = __webpack_require__(254);
 	
 	var PlaylistIndex = React.createClass({
 	  displayName: "PlaylistIndex",
 	
 	  getInitialState: function () {
 	    return {
-	      playlists: PlaylistStore.all()
+	      playlists: undefined
 	    };
 	  },
 	  _onChange: function () {
@@ -32040,21 +32119,25 @@
 	  },
 	  componentDidMount: function () {
 	    this.playlistListener = PlaylistStore.addListener(this._onChange);
-	    //didn't match flux pattern when calling util inside
 	    PlaylistActions.fetchAllPlaylists();
 	  },
 	  componentWillUnmount: function () {
 	    this.playlistListener.remove();
 	  },
-	  render: function () {
-	    var playlists = this.state.playlists;
+	  createPlaylists: function (playlists) {
 	    var playlistList = playlists.map(function (playlist) {
-	      return React.createElement(PlaylistIndexItem, { key: playlist.id, id: playlist.id });
+	      return React.createElement(PlaylistIndexItem, { key: playlist.id, playlist: playlist });
 	    });
+	    return playlistList;
+	  },
+	  render: function () {
+	    if (this.state.playlists === undefined) {
+	      return React.createElement("div", null);
+	    }
 	    return React.createElement(
 	      "ul",
 	      null,
-	      playlistList
+	      this.createPlaylists(this.state.playlists)
 	    );
 	  }
 	});
@@ -32062,12 +32145,12 @@
 	module.exports = PlaylistIndex;
 
 /***/ },
-/* 255 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(221);
 	var Store = __webpack_require__(225).Store;
-	var PlaylistConstant = __webpack_require__(257);
+	var PlaylistConstant = __webpack_require__(251);
 	
 	var PlaylistStore = new Store(AppDispatcher);
 	
@@ -32124,11 +32207,92 @@
 	module.exports = PlaylistStore;
 
 /***/ },
-/* 256 */
+/* 251 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  PLAYLISTS_RECEIVED: "PLAYLISTS_RECEIVED",
+	  PLAYLIST_RECEIVED: "PLAYLIST_RECEIVED",
+	  SINGLE_PLAYLIST_RECEIVED: "SINGLE_PLAYLIST_RECEIVED"
+	};
+
+/***/ },
+/* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PlaylistStore = __webpack_require__(250);
+	var ApiUtil = __webpack_require__(243);
+	var PlaylistSong = __webpack_require__(253);
+	
+	var Playlist = React.createClass({
+	  displayName: "Playlist",
+	
+	  getInitialState: function () {
+	    return {
+	      playlist: this.props.playlist
+	    };
+	  },
+	  render: function () {
+	    var songsList = this.state.playlist.songs.map(function (song) {
+	      return React.createElement(PlaylistSong, { key: song.ord, song: song });
+	    });
+	    return React.createElement(
+	      "div",
+	      null,
+	      this.state.playlist.title,
+	      React.createElement("br", null),
+	      this.state.playlist.description,
+	      React.createElement("br", null),
+	      songsList
+	    );
+	  }
+	});
+	
+	module.exports = Playlist;
+
+/***/ },
+/* 253 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var PlaylistSong = React.createClass({
+	  displayName: "PlaylistSong",
+	
+	  getInitialState: function () {
+	    return {
+	      ord: this.props.song.ord,
+	      song: this.props.song.song
+	    };
+	  },
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      null,
+	      this.state.ord,
+	      React.createElement("br", null),
+	      this.state.song.title,
+	      React.createElement("br", null),
+	      React.createElement("img", { src: this.state.song.image_url }),
+	      React.createElement("br", null),
+	      React.createElement(
+	        "audio",
+	        { controls: true },
+	        React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = PlaylistSong;
+
+/***/ },
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(221);
-	var PlaylistConstants = __webpack_require__(257);
+	var PlaylistConstants = __webpack_require__(251);
 	var apiUtil = __webpack_require__(243);
 	
 	PlaylistActions = {
@@ -32165,106 +32329,14 @@
 	module.exports = PlaylistActions;
 
 /***/ },
-/* 257 */
-/***/ function(module, exports) {
-
-	module.exports = {
-	  PLAYLISTS_RECEIVED: "PLAYLISTS_RECEIVED",
-	  PLAYLIST_RECEIVED: "PLAYLIST_RECEIVED",
-	  SINGLE_PLAYLIST_RECEIVED: "SINGLE_PLAYLIST_RECEIVED"
-	};
-
-/***/ },
-/* 258 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	
-	var PlaylistSong = React.createClass({
-	  displayName: "PlaylistSong",
-	
-	  getInitialState: function () {
-	    return {
-	      ord: this.props.song.ord,
-	      song: this.props.song.song
-	    };
-	  },
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      null,
-	      this.state.ord,
-	      React.createElement("br", null),
-	      this.state.song.title,
-	      React.createElement("br", null),
-	      React.createElement("img", { src: this.state.song.image_url }),
-	      React.createElement("br", null),
-	      React.createElement(
-	        "audio",
-	        { controls: true },
-	        React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = PlaylistSong;
-
-/***/ },
-/* 259 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PlaylistStore = __webpack_require__(255);
+	var PlaylistStore = __webpack_require__(250);
 	var ApiUtil = __webpack_require__(243);
-	var PlaylistSong = __webpack_require__(258);
-	
-	var Playlist = React.createClass({
-	  displayName: "Playlist",
-	
-	  getInitialState: function () {
-	    return {
-	      playlist: PlaylistStore.find(this.props.id)
-	    };
-	  },
-	  _onChange: function () {
-	    this.setState({ playlists: PlaylistStore.find(this.props.id) });
-	  },
-	  componentDidMount: function () {
-	    this.playlistListener = PlaylistStore.addListener(this._onChange);
-	    PlaylistActions.fetchPlaylist();
-	  },
-	  componentWillUnmount: function () {
-	    this.playlistListener.remove();
-	  },
-	  render: function () {
-	    var songs = this.state.songs;
-	    var songsList = this.state.playlist.songs.map(function (song) {
-	      return React.createElement(PlaylistSong, { key: song.id, id: song.id, song: song });
-	    });
-	    return React.createElement(
-	      "div",
-	      null,
-	      this.state.playlist.title,
-	      React.createElement("br", null),
-	      this.state.playlist.description,
-	      React.createElement("br", null),
-	      songsList
-	    );
-	  }
-	});
-	
-	module.exports = Playlist;
-
-/***/ },
-/* 260 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PlaylistStore = __webpack_require__(255);
-	var ApiUtil = __webpack_require__(243);
-	var PlaylistSong = __webpack_require__(258);
-	var PlaylistActions = __webpack_require__(256);
+	var PlaylistSong = __webpack_require__(253);
+	var PlaylistActions = __webpack_require__(254);
 	
 	var SinglePlaylist = React.createClass({
 	  displayName: "SinglePlaylist",
@@ -32286,7 +32358,7 @@
 	  },
 	  createSongList: function () {
 	    var playlistSongs = this.state.playlist.songs.map(function (song) {
-	      return React.createElement(PlaylistSong, { key: song.id, id: song.id, song: song });
+	      return React.createElement(PlaylistSong, { key: song.id, idx: song.id, song: song });
 	    });
 	    return playlistSongs;
 	  },
@@ -32307,6 +32379,143 @@
 	});
 	
 	module.exports = SinglePlaylist;
+
+/***/ },
+/* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(221);
+	var Store = __webpack_require__(225).Store;
+	var UserConstants = __webpack_require__(257);
+	
+	var SingleUserStore = new Store(AppDispatcher);
+	
+	var _single = {};
+	
+	SingleUserStore.access = function () {
+	  var singledup = $.extend({}, _single);
+	  return singledup;
+	};
+	
+	SingleUserStore.setUser = function (user) {
+	  _single = user;
+	};
+	
+	SingleUserStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case UserConstants.USER_RECEIVED:
+	      SingleUserStore.setUser(payload.user);
+	      SingleUserStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = SingleUserStore;
+
+/***/ },
+/* 257 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  USER_RECEIVED: "USER_RECEIVED",
+	  USER_SONGS_RECEIVED: "USER_SONGS_RECEIVED",
+	  USER_PLAYLISTS_RECEIVED: "USER_PLAYLISTS_RECEIVED"
+	};
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var Song = __webpack_require__(245);
+	var PlaylistIndexItem = __webpack_require__(252);
+	
+	var Feed = React.createClass({
+	  displayName: "Feed",
+	
+	  getInitialState: function () {
+	    return {
+	      feed: this.props.feed
+	    };
+	  },
+	  populateFeed: function (feed) {
+	    var wow = feed.map(function (feedobj) {
+	      if (feedobj.genre === undefined) {
+	        debugger;
+	        return React.createElement(PlaylistIndexItem, { key: feedobj.ord, playlist: feedobj });
+	      } else {
+	        return React.createElement(Song, { key: feedobj.id, song: feedobj });
+	      }
+	    });
+	    return wow;
+	  },
+	  render: function () {
+	    return React.createElement(
+	      "ul",
+	      null,
+	      this.populateFeed(this.state.feed)
+	    );
+	  }
+	});
+	
+	module.exports = Feed;
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(221);
+	var UserConstants = __webpack_require__(257);
+	var userUtil = __webpack_require__(260);
+	
+	var UserActions = {
+	  fetchUserInfo: function (user_id) {
+	    userUtil.fetchUserInfo(user_id, this.receiveUserInfo);
+	  },
+	  receiveUserInfo: function (userinfo) {
+	    Dispatcher.dispatch({
+	      actionType: UserConstants.USER_RECEIVED,
+	      user: userinfo
+	    });
+	  }
+	};
+	
+	module.exports = UserActions;
+
+/***/ },
+/* 260 */
+/***/ function(module, exports) {
+
+	
+	module.exports = {
+	  fetchUserSongs: function (user_id) {
+	    $.ajax({
+	      type: "GET",
+	      url: "api/users/" + user_id + "/songs",
+	      success: function (songs) {
+	        UserActions.receiveUserSongs(songs); //TODO implement this when its actually useful
+	      }
+	    });
+	  },
+	  fetchUserPlaylists: function (user_id) {
+	    $.ajax({
+	      type: "GET",
+	      url: "api/users/" + user_id + "/playlists",
+	      success: function (playlists) {
+	        UserActions.receiveUserPlaylists(playlists); //TODO implement this when its actually useful
+	      }
+	    });
+	  },
+	  fetchUserInfo: function (user_id, callback) {
+	    $.ajax({
+	      type: "GET",
+	      url: "api/users/" + user_id,
+	      success: function (userinfo) {
+	        callback(userinfo);
+	      }
+	    });
+	  }
+	};
 
 /***/ }
 /******/ ]);

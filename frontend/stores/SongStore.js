@@ -6,6 +6,7 @@ var SongStore = new Store(AppDispatcher);
 
 var _songs = {};
 
+
 SongStore.all = function(){
   return Object.keys(_songs).map(function(key){
     return _songs[key];
@@ -27,6 +28,13 @@ SongStore.resetSongs = function(songs){
   }
 };
 
+SongStore.resetToTrending = function(songs){
+  _songs = {};
+  for (var i = 0; i < songs.length; i++) {
+    _songs[i]= songs[i];
+  }
+};
+
 SongStore.__onDispatch = function(payload){
   switch (payload.actionType) {
     case SongConstant.SONGS_RECEIVED:
@@ -38,7 +46,7 @@ SongStore.__onDispatch = function(payload){
       SongStore.__emitChange();
       break;
     case SongConstant.TRENDING_SONGS_RECEIVED:
-      SongStore.resetSongs(payload.songs);
+      SongStore.resetToTrending(payload.songs);
       SongStore.__emitChange();
       break;
       //TODO finish flux loop for trending songs
