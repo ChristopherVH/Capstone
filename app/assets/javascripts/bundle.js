@@ -31810,7 +31810,7 @@
 	var React = __webpack_require__(1);
 	var SongStore = __webpack_require__(220);
 	var ApiUtil = __webpack_require__(243);
-	var SoundCloudAudio = __webpack_require__(246);
+	var Like = __webpack_require__(263);
 	
 	var Song = React.createClass({
 	  displayName: "Song",
@@ -31832,7 +31832,8 @@
 	        "audio",
 	        { controls: true },
 	        React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
-	      )
+	      ),
+	      React.createElement(Like, { songId: this.state.song.id })
 	    );
 	  }
 	});
@@ -31840,183 +31841,7 @@
 	module.exports = Song;
 
 /***/ },
-/* 246 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	function SoundCloud (clientId) {
-	    if (!(this instanceof SoundCloud)) {
-	        return new SoundCloud(clientId);
-	    }
-	
-	    if (!clientId) {
-	        throw new Error('SoundCloud API clientId is required, get it - https://developers.soundcloud.com/');
-	    }
-	
-	    this._events = {};
-	
-	    this._clientId = clientId;
-	    this._baseUrl = 'https://api.soundcloud.com';
-	
-	    this.playing = false;
-	    this.duration = 0;
-	
-	    this.audio = document.createElement('audio');
-	}
-	
-	SoundCloud.prototype.appendQueryParam = function(url, param, value) {
-	    var regex = /\?(?:.*)$/;
-	    var chr = regex.test(url) ? '&' : '?';
-	
-	    return url + chr + param + '=' + value;
-	};
-	
-	SoundCloud.prototype.resolve = function (url, callback) {
-	    if (!url) {
-	        throw new Error('SoundCloud track or playlist url is required');
-	    }
-	
-	    url = this._baseUrl + '/resolve.json?url=' + url + '&client_id=' + this._clientId;
-	
-	    this._jsonp(url, function (data) {
-	        if (Array.isArray(data)) {
-	            var tracks = data;
-	            data = {tracks: tracks};
-	            this._playlist = data;
-	        } else if (data.tracks) {
-	            this._playlist = data;
-	        } else {
-	            this._track = data;
-	        }
-	
-	        this.duration = data.duration && !isNaN(data.duration) ?
-	            data.duration / 1000 : // convert to seconds
-	            0; // no duration is zero
-	
-	        callback(data);
-	    }.bind(this));
-	};
-	
-	SoundCloud.prototype._jsonp = function (url, callback) {
-	    var target = document.getElementsByTagName('script')[0] || document.head;
-	    var script = document.createElement('script');
-	
-	    var id = 'jsonp_callback_' + Math.round(100000 * Math.random());
-	    window[id] = function (data) {
-	        if (script.parentNode) {
-	            script.parentNode.removeChild(script);
-	        }
-	        window[id] = function () {};
-	        callback(data);
-	    };
-	
-	    script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + id;
-	    target.parentNode.insertBefore(script, target);
-	};
-	
-	SoundCloud.prototype.on = function (e, fn) {
-	    this._events[e] = fn;
-	    this.audio.addEventListener(e, fn, false);
-	};
-	
-	SoundCloud.prototype.off = function (e, fn) {
-	    this._events[e] = null;
-	    this.audio.removeEventListener(e, fn);
-	};
-	
-	SoundCloud.prototype.unbindAll = function () {
-	    for (var e in this._events) {
-	        var fn = this._events[e];
-	        if (fn) {
-	            this.off(e, fn);
-	        }
-	    }
-	};
-	
-	SoundCloud.prototype.preload = function (streamUrl) {
-	    this._track = {stream_url: streamUrl};
-	    this.audio.src = streamUrl + '?client_id=' + this._clientId;
-	};
-	
-	SoundCloud.prototype.play = function (options) {
-	    options = options || {};
-	    var src;
-	
-	    if (options.streamUrl) {
-	        src = options.streamUrl;
-	    } else if (this._playlist) {
-	        var length = this._playlist.tracks.length;
-	        if (length) {
-	            this._playlistIndex = options.playlistIndex || 0;
-	
-	            // be silent if index is out of range
-	            if (this._playlistIndex >= length || this._playlistIndex < 0) {
-	                this._playlistIndex = 0;
-	                return;
-	            }
-	            src = this._playlist.tracks[this._playlistIndex].stream_url;
-	        }
-	    } else if (this._track) {
-	        src = this._track.stream_url;
-	    }
-	
-	    if (!src) {
-	        throw new Error('There is no tracks to play, use `streamUrl` option or `load` method');
-	    }
-	
-	    src = this.appendQueryParam(src, 'client_id', this._clientId);
-	
-	    if (src !== this.audio.src) {
-	        this.audio.src = src;
-	    }
-	
-	    this.playing = src;
-	    this.audio.play();
-	};
-	
-	SoundCloud.prototype.pause = function () {
-	    this.audio.pause();
-	    this.playing = false;
-	};
-	
-	SoundCloud.prototype.stop = function () {
-	    this.audio.pause();
-	    this.audio.currentTime = 0;
-	    this.playing = false;
-	};
-	
-	SoundCloud.prototype.next = function () {
-	    var tracksLength = this._playlist.tracks.length;
-	    if (this._playlistIndex >= tracksLength - 1) {
-	        return;
-	    }
-	    if (this._playlist && tracksLength) {
-	        this.play({playlistIndex: ++this._playlistIndex});
-	    }
-	};
-	
-	SoundCloud.prototype.previous = function () {
-	    if (this._playlistIndex <= 0) {
-	        return;
-	    }
-	    if (this._playlist && this._playlist.tracks.length) {
-	        this.play({playlistIndex: --this._playlistIndex});
-	    }
-	};
-	
-	SoundCloud.prototype.seek = function (e) {
-	    if (!this.audio.readyState) {
-	        return false;
-	    }
-	    var percent = e.offsetX / e.target.offsetWidth || (e.layerX - e.target.offsetLeft) / e.target.offsetWidth;
-	    this.audio.currentTime = percent * (this.audio.duration || 0);
-	};
-	
-	module.exports = SoundCloud;
-
-
-/***/ },
+/* 246 */,
 /* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -32664,6 +32489,50 @@
 	});
 	
 	module.exports = SongIndex;
+
+/***/ },
+/* 263 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var SingleUserStore = __webpack_require__(249);
+	
+	var Like = React.createClass({
+	  displayName: "Like",
+	
+	  getInitialState: function () {
+	    return {
+	      liked: undefined
+	    };
+	  },
+	  componentDidMount: function () {
+	    liked = SingleUserStore.currentUser().liked_songs;
+	    if (liked[this.props.songId]) {
+	      this.setState({ liked: true });
+	    } else {
+	      this.setState({ liked: false });
+	    }
+	  },
+	  toggleLike: function () {
+	    this.setState({ liked: !this.state.liked });
+	  },
+	  display: function () {
+	    if (this.state.liked) {
+	      return React.createElement("input", { type: "button", onClick: this.toggleLike, value: "Liked" });
+	    } else {
+	      return React.createElement("input", { type: "button", onClick: this.toggleLike, value: "Unliked" });
+	    }
+	  },
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      null,
+	      this.display()
+	    );
+	  }
+	});
+	
+	module.exports = Like;
 
 /***/ }
 /******/ ]);

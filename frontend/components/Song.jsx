@@ -1,7 +1,7 @@
 var React = require('react');
 var SongStore = require("../stores/SongStore.js");
 var ApiUtil = require("../util/apiUtil.js");
-var SoundCloudAudio = require('soundcloud-audio');
+var Like = require("./Like.jsx");
 
 var Song = React.createClass({
   getInitialState: function(){
@@ -19,6 +19,7 @@ var Song = React.createClass({
         <audio controls>
           <source src={this.state.song.audio_url} type="audio/mpeg"></source>
         </audio>
+        <Like songId={this.state.song.id} />
       </div>
     );
   }
