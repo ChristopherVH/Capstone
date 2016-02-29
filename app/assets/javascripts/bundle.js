@@ -56,8 +56,9 @@
 	var Greeting = __webpack_require__(219);
 	var Collection = __webpack_require__(244);
 	var Profile = __webpack_require__(248);
-	var PlaylistIndex = __webpack_require__(249);
-	var SinglePlaylist = __webpack_require__(255);
+	var PlaylistIndex = __webpack_require__(258);
+	var SinglePlaylist = __webpack_require__(260);
+	var SongIndex = __webpack_require__(262);
 	
 	// <Router history={browserHistory}>
 	//   <Route path="/" component={App}>
@@ -72,15 +73,17 @@
 	// <Route path="songs/:id" component={ Song }/>
 	// <Route path="playlists/:id" component={ Playlist}/>
 	
+	//TODO make it so when they go back it redirects to greeting page
+	
 	var routes = React.createElement(
 	  Route,
 	  { path: '/', component: App },
 	  React.createElement(IndexRoute, { component: Greeting }),
 	  React.createElement(Route, { path: 'user/:user_id', component: Profile }),
 	  React.createElement(Route, { path: 'playlists', component: PlaylistIndex }),
-	  React.createElement(Route, { path: 'playlist/:playlist_id', component: SinglePlaylist }),
-	  React.createElement(Route, { path: 'songs', component: Collection }),
-	  React.createElement(Route, { path: 'song/:song_id', component: SinglePlaylist })
+	  React.createElement(Route, { path: 'playlists/:playlist_id', component: SinglePlaylist }),
+	  React.createElement(Route, { path: 'songs', component: SongIndex }),
+	  React.createElement(Route, { path: 'songs/:song_id', component: SinglePlaylist })
 	);
 	
 	document.addEventListener("DOMContentLoaded", function () {
@@ -24726,26 +24729,6 @@
 	    Playbar = __webpack_require__(218),
 	    Greeting = __webpack_require__(219);
 	
-	// var React = require('react');
-	// var PokemonForm = require('./pokemons/form');
-	// var PokemonIndex = require('./pokemons/index');
-	//
-	// module.exports = React.createClass({
-	//
-	//   render: function () {
-	//     return(
-	//       <div id="pokedex">
-	//         <div className="pokemon-index-pane">
-	//           <PokemonForm />
-	//           <PokemonIndex />
-	//         </div>
-	//
-	//         {this.props.children}
-	//       </div>
-	//     );
-	//   }
-	// });
-	
 	var App = React.createClass({
 	  displayName: "App",
 	
@@ -24767,10 +24750,37 @@
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(159).Link;
+	var SingleUserStore = __webpack_require__(249);
+	var UserActions = __webpack_require__(256);
 	
 	var Navbar = React.createClass({
 	  displayName: 'Navbar',
 	
+	  getInitialState: function () {
+	    return {
+	      currentUser: undefined
+	    };
+	  },
+	  _onChange: function () {
+	    this.setState({ currentUser: SingleUserStore.currentUser() });
+	  },
+	  componentDidMount: function () {
+	    this.userListener = SingleUserStore.addListener(this._onChange);
+	    UserActions.fetchCurrentUser();
+	  },
+	  componentWillUnmount: function () {
+	    this.userListener.remove();
+	  },
+	  createProfile: function () {
+	    if (this.state.currentUser === undefined) {
+	      return React.createElement('div', null);
+	    }
+	    return React.createElement(
+	      Link,
+	      { to: "/user/" + this.state.currentUser.id },
+	      'Profile'
+	    );
+	  },
 	  render: function () {
 	    return React.createElement(
 	      'header',
@@ -24787,7 +24797,18 @@
 	          Link,
 	          { to: '/' },
 	          'Logo, Greetings'
-	        )
+	        ),
+	        React.createElement(
+	          Link,
+	          { to: '/songs' },
+	          'Songs'
+	        ),
+	        React.createElement(
+	          Link,
+	          { to: '/playlists' },
+	          'Playlists'
+	        ),
+	        this.createProfile()
 	      )
 	    );
 	  }
@@ -24872,7 +24893,7 @@
 	SongStore.resetSongs = function (songs) {
 	  _songs = {};
 	  for (var i = 0; i < songs.length; i++) {
-	    _songs[songs[i].id] = songs[i];
+	    _songs[i] = songs[i];
 	  }
 	};
 	
@@ -32042,9 +32063,9 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SingleUserStore = __webpack_require__(256);
-	var Feed = __webpack_require__(258);
-	var UserActions = __webpack_require__(259);
+	var SingleUserStore = __webpack_require__(249);
+	var Feed = __webpack_require__(251);
+	var UserActions = __webpack_require__(256);
 	
 	var Profile = React.createClass({
 	  displayName: "Profile",
@@ -32101,10 +32122,323 @@
 /* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var AppDispatcher = __webpack_require__(221);
+	var Store = __webpack_require__(225).Store;
+	var UserConstants = __webpack_require__(250);
+	
+	var SingleUserStore = new Store(AppDispatcher);
+	
+	var _single = {};
+	var _current = {};
+	var _users = {};
+	
+	SingleUserStore.access = function () {
+	  var singledup = $.extend({}, _single);
+	  return singledup;
+	};
+	
+	SingleUserStore.currentUser = function () {
+	  var currentdup = $.extend({}, _current);
+	  return currentdup;
+	};
+	
+	SingleUserStore.setUser = function (user) {
+	  _single = user;
+	};
+	
+	SingleUserStore.setCurrentUser = function (user) {
+	  _current = user;
+	};
+	
+	SingleUserStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case UserConstants.USER_RECEIVED:
+	      SingleUserStore.setUser(payload.user);
+	      SingleUserStore.__emitChange();
+	      break;
+	    case UserConstants.CURRENT_USER_RECEIVED:
+	      SingleUserStore.setCurrentUser(payload.currentUser);
+	      SingleUserStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = SingleUserStore;
+
+/***/ },
+/* 250 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  USER_RECEIVED: "USER_RECEIVED",
+	  CURRENT_USER_RECEIVED: "CURRENT_USER_RECEIVED",
+	  USER_SONGS_RECEIVED: "USER_SONGS_RECEIVED",
+	  USER_PLAYLISTS_RECEIVED: "USER_PLAYLISTS_RECEIVED"
+	};
+
+/***/ },
+/* 251 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1);
-	var PlaylistStore = __webpack_require__(250);
+	var Song = __webpack_require__(245);
+	var FeedPlaylist = __webpack_require__(261);
+	
+	var Feed = React.createClass({
+	  displayName: "Feed",
+	
+	  getInitialState: function () {
+	    return {
+	      feed: this.props.feed
+	    };
+	  },
+	  populateFeed: function (feed) {
+	    var wow = feed.map(function (feedobj, index) {
+	      if (feedobj.genre === undefined) {
+	        return React.createElement(FeedPlaylist, { key: index, playlistId: feedobj.id });
+	      } else {
+	        return React.createElement(Song, { key: index, song: feedobj });
+	      }
+	    });
+	    return wow;
+	  },
+	  render: function () {
+	    return React.createElement(
+	      "ul",
+	      null,
+	      this.populateFeed(this.state.feed)
+	    );
+	  }
+	});
+	
+	module.exports = Feed;
+
+/***/ },
+/* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PlaylistStore = __webpack_require__(253);
+	var ApiUtil = __webpack_require__(243);
+	var PlaylistSong = __webpack_require__(255);
+	
+	var Playlist = React.createClass({
+	  displayName: "Playlist",
+	
+	  getInitialState: function () {
+	    return {
+	      playlist: this.props.playlist
+	    };
+	  },
+	  render: function () {
+	    var songsList = this.state.playlist.songs.map(function (song) {
+	      return React.createElement(PlaylistSong, { key: song.ord, song: song });
+	    });
+	    return React.createElement(
+	      "div",
+	      null,
+	      this.state.playlist.title,
+	      React.createElement("br", null),
+	      this.state.playlist.description,
+	      React.createElement("br", null),
+	      songsList
+	    );
+	  }
+	});
+	
+	module.exports = Playlist;
+
+/***/ },
+/* 253 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(221);
+	var Store = __webpack_require__(225).Store;
+	var PlaylistConstant = __webpack_require__(254);
+	
+	var PlaylistStore = new Store(AppDispatcher);
+	
+	var _playlists = {};
+	var _playlist = {};
+	
+	PlaylistStore.all = function () {
+	  return Object.keys(_playlists).map(function (key) {
+	    return _playlists[key];
+	  });
+	};
+	
+	PlaylistStore.find = function (id) {
+	  return _playlists[id];
+	};
+	
+	PlaylistStore.oneList = function () {
+	  var playlistdup = $.extend({}, _playlist);
+	  return playlistdup;
+	};
+	
+	PlaylistStore.addPlaylist = function (playlist) {
+	  _playlists[playlist.id] = playlist;
+	};
+	
+	PlaylistStore.resetPlaylists = function (playlists) {
+	  _playlists = {};
+	  for (var i = 0; i < playlists.length; i++) {
+	    _playlists[i] = playlists[i];
+	  }
+	};
+	
+	PlaylistStore.resetOnePlaylist = function (playlist) {
+	  _playlist = playlist;
+	};
+	
+	PlaylistStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case PlaylistConstant.PLAYLISTS_RECEIVED:
+	      PlaylistStore.resetPlaylists(payload.playlists);
+	      PlaylistStore.__emitChange();
+	      break;
+	    case PlaylistConstant.PLAYLIST_RECEIVED:
+	      PlaylistStore.addPlaylist(payload.playlist);
+	      PlaylistStore.__emitChange();
+	      break;
+	    case PlaylistConstant.SINGLE_PLAYLIST_RECEIVED:
+	      PlaylistStore.resetOnePlaylist(payload.playlist);
+	      PlaylistStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = PlaylistStore;
+
+/***/ },
+/* 254 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  PLAYLISTS_RECEIVED: "PLAYLISTS_RECEIVED",
+	  PLAYLIST_RECEIVED: "PLAYLIST_RECEIVED",
+	  SINGLE_PLAYLIST_RECEIVED: "SINGLE_PLAYLIST_RECEIVED"
+	};
+
+/***/ },
+/* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var PlaylistSong = React.createClass({
+	  displayName: "PlaylistSong",
+	
+	  getInitialState: function () {
+	    return {
+	      ord: this.props.song.ord,
+	      song: this.props.song.song
+	    };
+	  },
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      null,
+	      this.state.ord,
+	      React.createElement("br", null),
+	      this.state.song.title,
+	      React.createElement("br", null),
+	      React.createElement("img", { src: this.state.song.image_url }),
+	      React.createElement("br", null),
+	      React.createElement(
+	        "audio",
+	        { controls: true },
+	        React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = PlaylistSong;
+
+/***/ },
+/* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(221);
+	var UserConstants = __webpack_require__(250);
+	var userUtil = __webpack_require__(257);
+	
+	var UserActions = {
+	  fetchUserInfo: function (user_id) {
+	    userUtil.fetchUserInfo(user_id, this.receiveUserInfo);
+	  },
+	  receiveUserInfo: function (userinfo) {
+	    Dispatcher.dispatch({
+	      actionType: UserConstants.USER_RECEIVED,
+	      user: userinfo
+	    });
+	  },
+	  fetchCurrentUser: function () {
+	    userUtil.fetchCurrentUser(this.receiveCurrentUser);
+	  },
+	  receiveCurrentUser: function (currentUser) {
+	    Dispatcher.dispatch({
+	      actionType: UserConstants.CURRENT_USER_RECEIVED,
+	      currentUser: currentUser
+	    });
+	  }
+	};
+	
+	module.exports = UserActions;
+
+/***/ },
+/* 257 */
+/***/ function(module, exports) {
+
+	
+	module.exports = {
+	  fetchUserSongs: function (user_id) {
+	    $.ajax({
+	      type: "GET",
+	      url: "api/users/" + user_id + "/songs",
+	      success: function (songs) {
+	        UserActions.receiveUserSongs(songs); //TODO implement this when its actually useful
+	      }
+	    });
+	  },
+	  fetchUserPlaylists: function (user_id) {
+	    $.ajax({
+	      type: "GET",
+	      url: "api/users/" + user_id + "/playlists",
+	      success: function (playlists) {
+	        UserActions.receiveUserPlaylists(playlists); //TODO implement this when its actually useful
+	      }
+	    });
+	  },
+	  fetchUserInfo: function (user_id, callback) {
+	    $.ajax({
+	      type: "GET",
+	      url: "api/users/" + user_id,
+	      success: function (userinfo) {
+	        callback(userinfo);
+	      }
+	    });
+	  },
+	  fetchCurrentUser: function (callback) {
+	    $.ajax({
+	      type: "GET",
+	      url: "api/sessions",
+	      success: function (currentUser) {
+	        callback(currentUser); //TODO implement this when its actually useful
+	      }
+	    });
+	  }
+	};
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PlaylistStore = __webpack_require__(253);
 	var PlaylistIndexItem = __webpack_require__(252);
-	var PlaylistActions = __webpack_require__(254);
+	var PlaylistActions = __webpack_require__(259);
 	
 	var PlaylistIndex = React.createClass({
 	  displayName: "PlaylistIndex",
@@ -32145,154 +32479,11 @@
 	module.exports = PlaylistIndex;
 
 /***/ },
-/* 250 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(221);
-	var Store = __webpack_require__(225).Store;
-	var PlaylistConstant = __webpack_require__(251);
-	
-	var PlaylistStore = new Store(AppDispatcher);
-	
-	var _playlists = {};
-	var _playlist = {};
-	
-	PlaylistStore.all = function () {
-	  return Object.keys(_playlists).map(function (key) {
-	    return _playlists[key];
-	  });
-	};
-	
-	PlaylistStore.find = function (id) {
-	  return _playlists[id];
-	};
-	
-	PlaylistStore.oneList = function () {
-	  var playlistdup = $.extend({}, _playlist);
-	  return playlistdup;
-	};
-	
-	PlaylistStore.addPlaylist = function (playlist) {
-	  _playlists[playlist.id] = playlist;
-	};
-	
-	PlaylistStore.resetPlaylists = function (playlists) {
-	  _playlists = {};
-	  for (var i = 0; i < playlists.length; i++) {
-	    _playlists[playlists[i].id] = playlists[i];
-	  }
-	};
-	
-	PlaylistStore.resetOnePlaylist = function (playlist) {
-	  _playlist = playlist;
-	};
-	
-	PlaylistStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case PlaylistConstant.PLAYLISTS_RECEIVED:
-	      PlaylistStore.resetPlaylists(payload.playlists);
-	      PlaylistStore.__emitChange();
-	      break;
-	    case PlaylistConstant.PLAYLIST_RECEIVED:
-	      PlaylistStore.addPlaylist(payload.playlist);
-	      PlaylistStore.__emitChange();
-	      break;
-	    case PlaylistConstant.SINGLE_PLAYLIST_RECEIVED:
-	      PlaylistStore.resetOnePlaylist(payload.playlist);
-	      PlaylistStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	module.exports = PlaylistStore;
-
-/***/ },
-/* 251 */
-/***/ function(module, exports) {
-
-	module.exports = {
-	  PLAYLISTS_RECEIVED: "PLAYLISTS_RECEIVED",
-	  PLAYLIST_RECEIVED: "PLAYLIST_RECEIVED",
-	  SINGLE_PLAYLIST_RECEIVED: "SINGLE_PLAYLIST_RECEIVED"
-	};
-
-/***/ },
-/* 252 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PlaylistStore = __webpack_require__(250);
-	var ApiUtil = __webpack_require__(243);
-	var PlaylistSong = __webpack_require__(253);
-	
-	var Playlist = React.createClass({
-	  displayName: "Playlist",
-	
-	  getInitialState: function () {
-	    return {
-	      playlist: this.props.playlist
-	    };
-	  },
-	  render: function () {
-	    var songsList = this.state.playlist.songs.map(function (song) {
-	      return React.createElement(PlaylistSong, { key: song.ord, song: song });
-	    });
-	    return React.createElement(
-	      "div",
-	      null,
-	      this.state.playlist.title,
-	      React.createElement("br", null),
-	      this.state.playlist.description,
-	      React.createElement("br", null),
-	      songsList
-	    );
-	  }
-	});
-	
-	module.exports = Playlist;
-
-/***/ },
-/* 253 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	var PlaylistSong = React.createClass({
-	  displayName: "PlaylistSong",
-	
-	  getInitialState: function () {
-	    return {
-	      ord: this.props.song.ord,
-	      song: this.props.song.song
-	    };
-	  },
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      null,
-	      this.state.ord,
-	      React.createElement("br", null),
-	      this.state.song.title,
-	      React.createElement("br", null),
-	      React.createElement("img", { src: this.state.song.image_url }),
-	      React.createElement("br", null),
-	      React.createElement(
-	        "audio",
-	        { controls: true },
-	        React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = PlaylistSong;
-
-/***/ },
-/* 254 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(221);
-	var PlaylistConstants = __webpack_require__(251);
+	var PlaylistConstants = __webpack_require__(254);
 	var apiUtil = __webpack_require__(243);
 	
 	PlaylistActions = {
@@ -32329,14 +32520,14 @@
 	module.exports = PlaylistActions;
 
 /***/ },
-/* 255 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PlaylistStore = __webpack_require__(250);
+	var PlaylistStore = __webpack_require__(253);
 	var ApiUtil = __webpack_require__(243);
-	var PlaylistSong = __webpack_require__(253);
-	var PlaylistActions = __webpack_require__(254);
+	var PlaylistSong = __webpack_require__(255);
+	var PlaylistActions = __webpack_require__(259);
 	
 	var SinglePlaylist = React.createClass({
 	  displayName: "SinglePlaylist",
@@ -32381,141 +32572,98 @@
 	module.exports = SinglePlaylist;
 
 /***/ },
-/* 256 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(221);
-	var Store = __webpack_require__(225).Store;
-	var UserConstants = __webpack_require__(257);
-	
-	var SingleUserStore = new Store(AppDispatcher);
-	
-	var _single = {};
-	
-	SingleUserStore.access = function () {
-	  var singledup = $.extend({}, _single);
-	  return singledup;
-	};
-	
-	SingleUserStore.setUser = function (user) {
-	  _single = user;
-	};
-	
-	SingleUserStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case UserConstants.USER_RECEIVED:
-	      SingleUserStore.setUser(payload.user);
-	      SingleUserStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	module.exports = SingleUserStore;
-
-/***/ },
-/* 257 */
-/***/ function(module, exports) {
-
-	module.exports = {
-	  USER_RECEIVED: "USER_RECEIVED",
-	  USER_SONGS_RECEIVED: "USER_SONGS_RECEIVED",
-	  USER_PLAYLISTS_RECEIVED: "USER_PLAYLISTS_RECEIVED"
-	};
-
-/***/ },
-/* 258 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var Song = __webpack_require__(245);
-	var PlaylistIndexItem = __webpack_require__(252);
+	var PlaylistStore = __webpack_require__(253);
+	var ApiUtil = __webpack_require__(243);
+	var PlaylistSong = __webpack_require__(255);
+	var PlaylistActions = __webpack_require__(259);
 	
-	var Feed = React.createClass({
-	  displayName: "Feed",
+	var FeedPlaylist = React.createClass({
+	  displayName: "FeedPlaylist",
 	
 	  getInitialState: function () {
 	    return {
-	      feed: this.props.feed
+	      playlist: undefined
 	    };
 	  },
-	  populateFeed: function (feed) {
-	    var wow = feed.map(function (feedobj) {
-	      if (feedobj.genre === undefined) {
-	        debugger;
-	        return React.createElement(PlaylistIndexItem, { key: feedobj.ord, playlist: feedobj });
-	      } else {
-	        return React.createElement(Song, { key: feedobj.id, song: feedobj });
-	      }
+	  _onChange: function () {
+	    this.setState({ playlist: PlaylistStore.find(this.props.playlistId) });
+	  },
+	  componentDidMount: function () {
+	    this.playlistListener = PlaylistStore.addListener(this._onChange);
+	    PlaylistActions.fetchPlaylist(this.props.playlistId);
+	  },
+	  componentWillUnmount: function () {
+	    this.playlistListener.remove();
+	  },
+	  createSongList: function () {
+	    var playlistSongs = this.state.playlist.songs.map(function (song, index) {
+	      return React.createElement(PlaylistSong, { key: index, idx: song.id, song: song });
 	    });
-	    return wow;
+	    return playlistSongs;
 	  },
 	  render: function () {
+	    if (this.state.playlist === undefined) {
+	      return React.createElement("div", null);
+	    }
 	    return React.createElement(
-	      "ul",
+	      "div",
 	      null,
-	      this.populateFeed(this.state.feed)
+	      this.state.playlist.title,
+	      React.createElement("br", null),
+	      this.state.playlist.description,
+	      React.createElement("br", null),
+	      this.createSongList()
 	    );
 	  }
 	});
 	
-	module.exports = Feed;
+	module.exports = FeedPlaylist;
 
 /***/ },
-/* 259 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(221);
-	var UserConstants = __webpack_require__(257);
-	var userUtil = __webpack_require__(260);
+	var React = __webpack_require__(1);
+	var SongStore = __webpack_require__(220);
+	var Song = __webpack_require__(245);
+	var SongActions = __webpack_require__(247);
 	
-	var UserActions = {
-	  fetchUserInfo: function (user_id) {
-	    userUtil.fetchUserInfo(user_id, this.receiveUserInfo);
+	var SongIndex = React.createClass({
+	  displayName: "SongIndex",
+	
+	  getInitialState: function () {
+	    return {
+	      songs: SongStore.all()
+	    };
 	  },
-	  receiveUserInfo: function (userinfo) {
-	    Dispatcher.dispatch({
-	      actionType: UserConstants.USER_RECEIVED,
-	      user: userinfo
+	  _onChange: function () {
+	    this.setState({ songs: SongStore.all() });
+	  },
+	  componentDidMount: function () {
+	    this.songListener = SongStore.addListener(this._onChange);
+	    //didn't match flux pattern when calling util inside
+	    SongActions.fetchAllSongs();
+	  },
+	  componentWillUnmount: function () {
+	    this.songListener.remove();
+	  },
+	  render: function () {
+	    var songsList = this.state.songs.map(function (song, index) {
+	      return React.createElement(Song, { key: song.id, song: song });
 	    });
+	    return React.createElement(
+	      "ul",
+	      null,
+	      songsList
+	    );
 	  }
-	};
+	});
 	
-	module.exports = UserActions;
-
-/***/ },
-/* 260 */
-/***/ function(module, exports) {
-
-	
-	module.exports = {
-	  fetchUserSongs: function (user_id) {
-	    $.ajax({
-	      type: "GET",
-	      url: "api/users/" + user_id + "/songs",
-	      success: function (songs) {
-	        UserActions.receiveUserSongs(songs); //TODO implement this when its actually useful
-	      }
-	    });
-	  },
-	  fetchUserPlaylists: function (user_id) {
-	    $.ajax({
-	      type: "GET",
-	      url: "api/users/" + user_id + "/playlists",
-	      success: function (playlists) {
-	        UserActions.receiveUserPlaylists(playlists); //TODO implement this when its actually useful
-	      }
-	    });
-	  },
-	  fetchUserInfo: function (user_id, callback) {
-	    $.ajax({
-	      type: "GET",
-	      url: "api/users/" + user_id,
-	      success: function (userinfo) {
-	        callback(userinfo);
-	      }
-	    });
-	  }
-	};
+	module.exports = SongIndex;
 
 /***/ }
 /******/ ]);

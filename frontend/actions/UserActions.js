@@ -11,6 +11,15 @@ var UserActions = {
       actionType: UserConstants.USER_RECEIVED,
       user: userinfo
     });
+  },
+  fetchCurrentUser: function () {
+    userUtil.fetchCurrentUser(this.receiveCurrentUser);
+  },
+  receiveCurrentUser: function (currentUser) {
+    Dispatcher.dispatch({
+      actionType: UserConstants.CURRENT_USER_RECEIVED,
+      currentUser: currentUser
+    });
   }
 };
 

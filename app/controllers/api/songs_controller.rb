@@ -53,7 +53,7 @@ class Api::SongsController < ApplicationController
     if @user
       @songs = @user.songs
     else
-      @songs = Song.all
+      @songs = Song.order(created_at: :desc)
     end
   end
 

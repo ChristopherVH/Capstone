@@ -12,6 +12,7 @@
 
 class PlaylistSong < ActiveRecord::Base
   validates :ord, :playlist_id, :song_id, presence: true
+  validates :ord, uniqueness: { scope: :playlist_id }
   belongs_to :playlist
   belongs_to :song
 end

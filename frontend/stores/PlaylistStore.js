@@ -29,7 +29,7 @@ PlaylistStore.addPlaylist = function(playlist) {
 PlaylistStore.resetPlaylists = function(playlists){
   _playlists = {};
   for (var i = 0; i < playlists.length; i++) {
-    _playlists[playlists[i].id]= playlists[i];
+    _playlists[i]= playlists[i];
   }
 };
 

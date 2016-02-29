@@ -24,7 +24,7 @@ SongStore.addSong = function(song) {
 SongStore.resetSongs = function(songs){
   _songs = {};
   for (var i = 0; i < songs.length; i++) {
-    _songs[songs[i].id]= songs[i];
+    _songs[i]= songs[i];
   }
 };
 

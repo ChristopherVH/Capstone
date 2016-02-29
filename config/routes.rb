@@ -13,6 +13,8 @@ Rails.application.routes.draw do
         resource :like, only: [:create, :destroy]
       end
 
+      resource :sessions, only: [:show]
+
       resources :playlists, only: [:index, :show]
 
       resources :users, only: [:show] do

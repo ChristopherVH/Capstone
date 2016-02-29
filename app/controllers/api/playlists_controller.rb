@@ -37,7 +37,7 @@ class Api::PlaylistsController < ApplicationController
     if @user
       @playlists = @user.playlists
     else
-      @playlists = Playlist.all
+      @playlists = Playlist.order(created_at: :desc)
     end
   end
 

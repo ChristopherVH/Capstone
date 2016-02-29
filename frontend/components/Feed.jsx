@@ -1,6 +1,6 @@
 var React = require('react');
 var Song = require("./Song.jsx");
-var PlaylistIndexItem = require("./PlaylistIndexItem.jsx");
+var FeedPlaylist = require("./FeedPlaylist.jsx");
 
 var Feed = React.createClass({
   getInitialState: function(){
@@ -9,12 +9,11 @@ var Feed = React.createClass({
     })
   },
   populateFeed: function(feed){
-    var wow = feed.map(function(feedobj){
+    var wow = feed.map(function(feedobj, index){
       if (feedobj.genre === undefined){
-        debugger;
-        return <PlaylistIndexItem key={feedobj.ord} playlist={feedobj} />;
+        return <FeedPlaylist key={index} playlistId={feedobj.id} />;
       }else{
-        return <Song key={feedobj.id} song={feedobj}/>;
+        return <Song key={index} song={feedobj}/>;
       }
     });
     return wow;

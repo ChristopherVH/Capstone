@@ -26,5 +26,14 @@ module.exports = {
         callback(userinfo);
       }
     })
+  },
+  fetchCurrentUser: function(callback){
+    $.ajax({
+      type:"GET",
+      url:"api/sessions",
+      success:function (currentUser){
+        callback(currentUser) //TODO implement this when its actually useful
+      }
+    })
   }
 }

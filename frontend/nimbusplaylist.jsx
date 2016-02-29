@@ -12,6 +12,7 @@ var React = require('react'),
   var Profile = require("./components/Profile.jsx");
   var PlaylistIndex = require("./components/PlaylistIndex.jsx");
   var SinglePlaylist = require('./components/SinglePlaylist.jsx');
+  var SongIndex = require("./components/SongIndex.jsx");
 
 // <Router history={browserHistory}>
 //   <Route path="/" component={App}>
@@ -26,7 +27,7 @@ var React = require('react'),
 // <Route path="songs/:id" component={ Song }/>
 // <Route path="playlists/:id" component={ Playlist}/>
 
-
+//TODO make it so when they go back it redirects to greeting page
 
 var routes = (
     <Route path="/" component={ App }>
@@ -34,9 +35,9 @@ var routes = (
       <Route path="user/:user_id" component={ Profile }>
       </Route>
       <Route path="playlists" component={PlaylistIndex}/>
-      <Route path="playlist/:playlist_id" component={SinglePlaylist}/>
-      <Route path="songs" component={Collection}/>
-      <Route path="song/:song_id" component={SinglePlaylist}/>
+      <Route path="playlists/:playlist_id" component={SinglePlaylist}/>
+      <Route path="songs" component={SongIndex}/>
+      <Route path="songs/:song_id" component={SinglePlaylist}/>
     </Route>
 );
 
