@@ -21,7 +21,7 @@ var Profile = React.createClass({
     this.userListener.remove();
   },
   render: function(){
-    if (this.state.user === undefined){
+    if (this.state.user === undefined || this.state.user.id === undefined){
       return <div></div>;
     }
     var user = this.state.user;

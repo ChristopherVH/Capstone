@@ -8,8 +8,7 @@ var Like = React.createClass({
     })
   },
   componentDidMount: function(){
-    liked = SingleUserStore.currentUser().liked_songs
-    if (liked[this.props.songId]){
+    if (SingleUserStore.currentUser().liked_songs[this.props.songId]){
       this.setState({liked: true})
     }else{
       this.setState({liked: false})

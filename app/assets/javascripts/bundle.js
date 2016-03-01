@@ -52,13 +52,13 @@
 	var IndexRoute = __webpack_require__(159).IndexRoute;
 	var App = __webpack_require__(216);
 	var Navbar = __webpack_require__(217);
-	var PlayBar = __webpack_require__(218);
-	var Greeting = __webpack_require__(219);
-	var Collection = __webpack_require__(244);
-	var Profile = __webpack_require__(248);
+	var PlayBar = __webpack_require__(243);
+	var Greeting = __webpack_require__(244);
+	var Collection = __webpack_require__(248);
+	var Profile = __webpack_require__(251);
 	var PlaylistIndex = __webpack_require__(258);
 	var SinglePlaylist = __webpack_require__(260);
-	var SongIndex = __webpack_require__(262);
+	var SongIndex = __webpack_require__(261);
 	
 	// <Router history={browserHistory}>
 	//   <Route path="/" component={App}>
@@ -24726,8 +24726,8 @@
 
 	var React = __webpack_require__(1),
 	    Navbar = __webpack_require__(217),
-	    Playbar = __webpack_require__(218),
-	    Greeting = __webpack_require__(219);
+	    Playbar = __webpack_require__(243),
+	    Greeting = __webpack_require__(244);
 	
 	var App = React.createClass({
 	  displayName: "App",
@@ -24750,8 +24750,8 @@
 
 	var React = __webpack_require__(1);
 	var Link = __webpack_require__(159).Link;
-	var SingleUserStore = __webpack_require__(249);
-	var UserActions = __webpack_require__(256);
+	var SingleUserStore = __webpack_require__(218);
+	var UserActions = __webpack_require__(241);
 	
 	var Navbar = React.createClass({
 	  displayName: 'Navbar',
@@ -24820,119 +24820,58 @@
 /* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
+	var AppDispatcher = __webpack_require__(219);
+	var Store = __webpack_require__(223).Store;
+	var UserConstants = __webpack_require__(240);
 	
-	var Playbar = React.createClass({
-	  displayName: 'Playbar',
+	var SingleUserStore = new Store(AppDispatcher);
 	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      '"Something"'
-	    );
+	var _single = {};
+	var _current = {};
+	var _users = {};
+	
+	SingleUserStore.access = function () {
+	  var singledup = $.extend({}, _single);
+	  return singledup;
+	};
+	
+	SingleUserStore.currentUser = function () {
+	  var currentdup = $.extend({}, _current);
+	  return currentdup;
+	};
+	
+	SingleUserStore.setUser = function (user) {
+	  _single = user;
+	};
+	
+	SingleUserStore.setCurrentUser = function (user) {
+	  _current = user;
+	};
+	
+	SingleUserStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case UserConstants.USER_RECEIVED:
+	      SingleUserStore.setUser(payload.user);
+	      SingleUserStore.__emitChange();
+	      break;
+	    case UserConstants.CURRENT_USER_RECEIVED:
+	      SingleUserStore.setCurrentUser(payload.currentUser);
+	      SingleUserStore.__emitChange();
+	      break;
 	  }
-	});
+	};
 	
-	module.exports = Playbar;
+	module.exports = SingleUserStore;
 
 /***/ },
 /* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
-	var SongStore = __webpack_require__(220);
-	var ApiUtil = __webpack_require__(243);
-	var Collection = __webpack_require__(244);
-	
-	var Greeting = React.createClass({
-	  displayName: "Greeting",
-	
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      null,
-	      React.createElement(
-	        "ul",
-	        null,
-	        React.createElement("img", { src: "https://images.unsplash.com/17/unsplash_5252bb51404f8_1.JPG?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=3b4259f5b981c95dd562825566d530a8" }),
-	        React.createElement(Collection, null)
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = Greeting;
-
-/***/ },
-/* 220 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(221);
-	var Store = __webpack_require__(225).Store;
-	var SongConstant = __webpack_require__(242);
-	
-	var SongStore = new Store(AppDispatcher);
-	
-	var _songs = {};
-	
-	SongStore.all = function () {
-	  return Object.keys(_songs).map(function (key) {
-	    return _songs[key];
-	  });
-	};
-	
-	SongStore.find = function (id) {
-	  return _songs[id];
-	};
-	
-	SongStore.addSong = function (song) {
-	  _songs[song.id] = song;
-	};
-	
-	SongStore.resetSongs = function (songs) {
-	  _songs = {};
-	  for (var i = 0; i < songs.length; i++) {
-	    _songs[i] = songs[i];
-	  }
-	};
-	
-	SongStore.resetToTrending = function (songs) {
-	  _songs = {};
-	  for (var i = 0; i < songs.length; i++) {
-	    _songs[i] = songs[i];
-	  }
-	};
-	
-	SongStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case SongConstant.SONGS_RECEIVED:
-	      SongStore.resetSongs(payload.songs);
-	      SongStore.__emitChange();
-	      break;
-	    case SongConstant.SONG_RECEIVED:
-	      SongStore.addSong(payload.song);
-	      SongStore.__emitChange();
-	      break;
-	    case SongConstant.TRENDING_SONGS_RECEIVED:
-	      SongStore.resetToTrending(payload.songs);
-	      SongStore.__emitChange();
-	      break;
-	    //TODO finish flux loop for trending songs
-	  }
-	};
-	
-	module.exports = SongStore;
-
-/***/ },
-/* 221 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Dispatcher = __webpack_require__(222).Dispatcher;
+	var Dispatcher = __webpack_require__(220).Dispatcher;
 	module.exports = new Dispatcher();
 
 /***/ },
-/* 222 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24944,11 +24883,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(223);
+	module.exports.Dispatcher = __webpack_require__(221);
 
 
 /***/ },
-/* 223 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24970,7 +24909,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(224);
+	var invariant = __webpack_require__(222);
 	
 	var _prefix = 'ID_';
 	
@@ -25185,7 +25124,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 224 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25240,7 +25179,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 225 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25252,15 +25191,15 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Container = __webpack_require__(226);
-	module.exports.MapStore = __webpack_require__(229);
-	module.exports.Mixin = __webpack_require__(241);
-	module.exports.ReduceStore = __webpack_require__(230);
-	module.exports.Store = __webpack_require__(231);
+	module.exports.Container = __webpack_require__(224);
+	module.exports.MapStore = __webpack_require__(227);
+	module.exports.Mixin = __webpack_require__(239);
+	module.exports.ReduceStore = __webpack_require__(228);
+	module.exports.Store = __webpack_require__(229);
 
 
 /***/ },
-/* 226 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25282,10 +25221,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStoreGroup = __webpack_require__(227);
+	var FluxStoreGroup = __webpack_require__(225);
 	
-	var invariant = __webpack_require__(224);
-	var shallowEqual = __webpack_require__(228);
+	var invariant = __webpack_require__(222);
+	var shallowEqual = __webpack_require__(226);
 	
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -25443,7 +25382,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 227 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25462,7 +25401,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(224);
+	var invariant = __webpack_require__(222);
 	
 	/**
 	 * FluxStoreGroup allows you to execute a callback on every dispatch after
@@ -25524,7 +25463,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 228 */
+/* 226 */
 /***/ function(module, exports) {
 
 	/**
@@ -25579,7 +25518,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 229 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25600,10 +25539,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxReduceStore = __webpack_require__(230);
-	var Immutable = __webpack_require__(240);
+	var FluxReduceStore = __webpack_require__(228);
+	var Immutable = __webpack_require__(238);
 	
-	var invariant = __webpack_require__(224);
+	var invariant = __webpack_require__(222);
 	
 	/**
 	 * This is a simple store. It allows caching key value pairs. An implementation
@@ -25729,7 +25668,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 230 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25750,10 +25689,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(231);
+	var FluxStore = __webpack_require__(229);
 	
-	var abstractMethod = __webpack_require__(239);
-	var invariant = __webpack_require__(224);
+	var abstractMethod = __webpack_require__(237);
+	var invariant = __webpack_require__(222);
 	
 	var FluxReduceStore = (function (_FluxStore) {
 	  _inherits(FluxReduceStore, _FluxStore);
@@ -25836,7 +25775,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 231 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25855,11 +25794,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(232);
+	var _require = __webpack_require__(230);
 	
 	var EventEmitter = _require.EventEmitter;
 	
-	var invariant = __webpack_require__(224);
+	var invariant = __webpack_require__(222);
 	
 	/**
 	 * This class should be extended by the stores in your application, like so:
@@ -26019,7 +25958,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 232 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26032,14 +25971,14 @@
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(233)
+	  EventEmitter: __webpack_require__(231)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 233 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26058,11 +25997,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(234);
-	var EventSubscriptionVendor = __webpack_require__(236);
+	var EmitterSubscription = __webpack_require__(232);
+	var EventSubscriptionVendor = __webpack_require__(234);
 	
-	var emptyFunction = __webpack_require__(238);
-	var invariant = __webpack_require__(237);
+	var emptyFunction = __webpack_require__(236);
+	var invariant = __webpack_require__(235);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -26236,7 +26175,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 234 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26257,7 +26196,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(235);
+	var EventSubscription = __webpack_require__(233);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -26289,7 +26228,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 235 */
+/* 233 */
 /***/ function(module, exports) {
 
 	/**
@@ -26343,7 +26282,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 236 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26362,7 +26301,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(237);
+	var invariant = __webpack_require__(235);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -26452,7 +26391,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 237 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26507,7 +26446,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 238 */
+/* 236 */
 /***/ function(module, exports) {
 
 	/**
@@ -26549,7 +26488,7 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 239 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26566,7 +26505,7 @@
 	
 	'use strict';
 	
-	var invariant = __webpack_require__(224);
+	var invariant = __webpack_require__(222);
 	
 	function abstractMethod(className, methodName) {
 	   true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Subclasses of %s must override %s() with their own implementation.', className, methodName) : invariant(false) : undefined;
@@ -26576,7 +26515,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 240 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31563,7 +31502,7 @@
 	}));
 
 /***/ },
-/* 241 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -31580,9 +31519,9 @@
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(227);
+	var FluxStoreGroup = __webpack_require__(225);
 	
-	var invariant = __webpack_require__(224);
+	var invariant = __webpack_require__(222);
 	
 	/**
 	 * `FluxContainer` should be preferred over this mixin, but it requires using
@@ -31686,7 +31625,201 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
+/* 240 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  USER_RECEIVED: "USER_RECEIVED",
+	  CURRENT_USER_RECEIVED: "CURRENT_USER_RECEIVED",
+	  USER_SONGS_RECEIVED: "USER_SONGS_RECEIVED",
+	  USER_PLAYLISTS_RECEIVED: "USER_PLAYLISTS_RECEIVED"
+	};
+
+/***/ },
+/* 241 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(219);
+	var UserConstants = __webpack_require__(240);
+	var userUtil = __webpack_require__(242);
+	
+	var UserActions = {
+	  fetchUserInfo: function (user_id) {
+	    userUtil.fetchUserInfo(user_id, this.receiveUserInfo);
+	  },
+	  receiveUserInfo: function (userinfo) {
+	    Dispatcher.dispatch({
+	      actionType: UserConstants.USER_RECEIVED,
+	      user: userinfo
+	    });
+	  },
+	  fetchCurrentUser: function () {
+	    userUtil.fetchCurrentUser(this.receiveCurrentUser);
+	  },
+	  receiveCurrentUser: function (currentUser) {
+	    Dispatcher.dispatch({
+	      actionType: UserConstants.CURRENT_USER_RECEIVED,
+	      currentUser: currentUser
+	    });
+	  }
+	};
+	
+	module.exports = UserActions;
+
+/***/ },
 /* 242 */
+/***/ function(module, exports) {
+
+	
+	module.exports = {
+	  fetchUserSongs: function (user_id) {
+	    $.ajax({
+	      type: "GET",
+	      url: "api/users/" + user_id + "/songs",
+	      success: function (songs) {
+	        UserActions.receiveUserSongs(songs); //TODO implement this when its actually useful
+	      }
+	    });
+	  },
+	  fetchUserPlaylists: function (user_id) {
+	    $.ajax({
+	      type: "GET",
+	      url: "api/users/" + user_id + "/playlists",
+	      success: function (playlists) {
+	        UserActions.receiveUserPlaylists(playlists); //TODO implement this when its actually useful
+	      }
+	    });
+	  },
+	  fetchUserInfo: function (user_id, callback) {
+	    $.ajax({
+	      type: "GET",
+	      url: "api/users/" + user_id,
+	      success: function (userinfo) {
+	        callback(userinfo);
+	      }
+	    });
+	  },
+	  fetchCurrentUser: function (callback) {
+	    $.ajax({
+	      type: "GET",
+	      url: "api/sessions",
+	      success: function (currentUser) {
+	        callback(currentUser); //TODO implement this when its actually useful
+	      }
+	    });
+	  }
+	};
+
+/***/ },
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var Playbar = React.createClass({
+	  displayName: 'Playbar',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      '"Something"'
+	    );
+	  }
+	});
+	
+	module.exports = Playbar;
+
+/***/ },
+/* 244 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var SongStore = __webpack_require__(245);
+	var ApiUtil = __webpack_require__(247);
+	var Collection = __webpack_require__(248);
+	
+	var Greeting = React.createClass({
+	  displayName: "Greeting",
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      null,
+	      React.createElement(
+	        "ul",
+	        null,
+	        React.createElement("img", { src: "https://images.unsplash.com/17/unsplash_5252bb51404f8_1.JPG?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=3b4259f5b981c95dd562825566d530a8" }),
+	        React.createElement(Collection, null)
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = Greeting;
+
+/***/ },
+/* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(219);
+	var Store = __webpack_require__(223).Store;
+	var SongConstant = __webpack_require__(246);
+	
+	var SongStore = new Store(AppDispatcher);
+	
+	var _songs = {};
+	
+	SongStore.all = function () {
+	  return Object.keys(_songs).map(function (key) {
+	    return _songs[key];
+	  });
+	};
+	
+	SongStore.find = function (id) {
+	  return _songs[id];
+	};
+	
+	SongStore.addSong = function (song) {
+	  _songs[song.id] = song;
+	};
+	
+	SongStore.resetSongs = function (songs) {
+	  _songs = {};
+	  for (var i = 0; i < songs.length; i++) {
+	    _songs[i] = songs[i];
+	  }
+	};
+	
+	SongStore.resetToTrending = function (songs) {
+	  _songs = {};
+	  for (var i = 0; i < songs.length; i++) {
+	    _songs[i] = songs[i];
+	  }
+	};
+	
+	SongStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case SongConstant.SONGS_RECEIVED:
+	      SongStore.resetSongs(payload.songs);
+	      SongStore.__emitChange();
+	      break;
+	    case SongConstant.SONG_RECEIVED:
+	      SongStore.addSong(payload.song);
+	      SongStore.__emitChange();
+	      break;
+	    case SongConstant.TRENDING_SONGS_RECEIVED:
+	      SongStore.resetToTrending(payload.songs);
+	      SongStore.__emitChange();
+	      break;
+	    //TODO finish flux loop for trending songs
+	  }
+	};
+	
+	module.exports = SongStore;
+
+/***/ },
+/* 246 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -31696,7 +31829,7 @@
 	};
 
 /***/ },
-/* 243 */
+/* 247 */
 /***/ function(module, exports) {
 
 	var songUtil = {
@@ -31762,13 +31895,13 @@
 	// },
 
 /***/ },
-/* 244 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SongStore = __webpack_require__(220);
-	var Song = __webpack_require__(245);
-	var SongActions = __webpack_require__(247);
+	var SongStore = __webpack_require__(245);
+	var Song = __webpack_require__(249);
+	var SongActions = __webpack_require__(250);
 	
 	var Collection = React.createClass({
 	  displayName: "Collection",
@@ -31804,13 +31937,13 @@
 	module.exports = Collection;
 
 /***/ },
-/* 245 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SongStore = __webpack_require__(220);
-	var ApiUtil = __webpack_require__(243);
-	var Like = __webpack_require__(263);
+	var SongStore = __webpack_require__(245);
+	var ApiUtil = __webpack_require__(247);
+	var Like = __webpack_require__(262);
 	
 	var Song = React.createClass({
 	  displayName: "Song",
@@ -31841,13 +31974,12 @@
 	module.exports = Song;
 
 /***/ },
-/* 246 */,
-/* 247 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(221);
-	var SongConstants = __webpack_require__(242);
-	var apiUtil = __webpack_require__(243);
+	var Dispatcher = __webpack_require__(219);
+	var SongConstants = __webpack_require__(246);
+	var apiUtil = __webpack_require__(247);
 	
 	SongActions = {
 	  receiveSongs: function (songs) {
@@ -31884,13 +32016,13 @@
 	module.exports = SongActions;
 
 /***/ },
-/* 248 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SingleUserStore = __webpack_require__(249);
-	var Feed = __webpack_require__(251);
-	var UserActions = __webpack_require__(256);
+	var SingleUserStore = __webpack_require__(218);
+	var Feed = __webpack_require__(252);
+	var UserActions = __webpack_require__(241);
 	
 	var Profile = React.createClass({
 	  displayName: "Profile",
@@ -31912,7 +32044,7 @@
 	    this.userListener.remove();
 	  },
 	  render: function () {
-	    if (this.state.user === undefined) {
+	    if (this.state.user === undefined || this.state.user.id === undefined) {
 	      return React.createElement("div", null);
 	    }
 	    var user = this.state.user;
@@ -31944,70 +32076,12 @@
 	module.exports = Profile;
 
 /***/ },
-/* 249 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(221);
-	var Store = __webpack_require__(225).Store;
-	var UserConstants = __webpack_require__(250);
-	
-	var SingleUserStore = new Store(AppDispatcher);
-	
-	var _single = {};
-	var _current = {};
-	var _users = {};
-	
-	SingleUserStore.access = function () {
-	  var singledup = $.extend({}, _single);
-	  return singledup;
-	};
-	
-	SingleUserStore.currentUser = function () {
-	  var currentdup = $.extend({}, _current);
-	  return currentdup;
-	};
-	
-	SingleUserStore.setUser = function (user) {
-	  _single = user;
-	};
-	
-	SingleUserStore.setCurrentUser = function (user) {
-	  _current = user;
-	};
-	
-	SingleUserStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case UserConstants.USER_RECEIVED:
-	      SingleUserStore.setUser(payload.user);
-	      SingleUserStore.__emitChange();
-	      break;
-	    case UserConstants.CURRENT_USER_RECEIVED:
-	      SingleUserStore.setCurrentUser(payload.currentUser);
-	      SingleUserStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	module.exports = SingleUserStore;
-
-/***/ },
-/* 250 */
-/***/ function(module, exports) {
-
-	module.exports = {
-	  USER_RECEIVED: "USER_RECEIVED",
-	  CURRENT_USER_RECEIVED: "CURRENT_USER_RECEIVED",
-	  USER_SONGS_RECEIVED: "USER_SONGS_RECEIVED",
-	  USER_PLAYLISTS_RECEIVED: "USER_PLAYLISTS_RECEIVED"
-	};
-
-/***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var Song = __webpack_require__(245);
-	var FeedPlaylist = __webpack_require__(261);
+	var Song = __webpack_require__(249);
+	var FeedPlaylist = __webpack_require__(253);
 	
 	var Feed = React.createClass({
 	  displayName: "Feed",
@@ -32039,26 +32113,43 @@
 	module.exports = Feed;
 
 /***/ },
-/* 252 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PlaylistStore = __webpack_require__(253);
-	var ApiUtil = __webpack_require__(243);
-	var PlaylistSong = __webpack_require__(255);
+	var PlaylistStore = __webpack_require__(254);
+	var ApiUtil = __webpack_require__(247);
+	var PlaylistSong = __webpack_require__(256);
+	var PlaylistActions = __webpack_require__(257);
 	
-	var Playlist = React.createClass({
-	  displayName: "Playlist",
+	var FeedPlaylist = React.createClass({
+	  displayName: "FeedPlaylist",
 	
 	  getInitialState: function () {
 	    return {
-	      playlist: this.props.playlist
+	      playlist: undefined
 	    };
 	  },
-	  render: function () {
-	    var songsList = this.state.playlist.songs.map(function (song) {
-	      return React.createElement(PlaylistSong, { key: song.ord, song: song });
+	  _onChange: function () {
+	    this.setState({ playlist: PlaylistStore.find(this.props.playlistId) });
+	  },
+	  componentDidMount: function () {
+	    this.playlistListener = PlaylistStore.addListener(this._onChange);
+	    PlaylistActions.fetchPlaylist(this.props.playlistId);
+	  },
+	  componentWillUnmount: function () {
+	    this.playlistListener.remove();
+	  },
+	  createSongList: function () {
+	    var playlistSongs = this.state.playlist.songs.map(function (song, index) {
+	      return React.createElement(PlaylistSong, { key: index, idx: song.id, song: song });
 	    });
+	    return playlistSongs;
+	  },
+	  render: function () {
+	    if (this.state.playlist === undefined) {
+	      return React.createElement("div", null);
+	    }
 	    return React.createElement(
 	      "div",
 	      null,
@@ -32066,20 +32157,20 @@
 	      React.createElement("br", null),
 	      this.state.playlist.description,
 	      React.createElement("br", null),
-	      songsList
+	      this.createSongList()
 	    );
 	  }
 	});
 	
-	module.exports = Playlist;
+	module.exports = FeedPlaylist;
 
 /***/ },
-/* 253 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(221);
-	var Store = __webpack_require__(225).Store;
-	var PlaylistConstant = __webpack_require__(254);
+	var AppDispatcher = __webpack_require__(219);
+	var Store = __webpack_require__(223).Store;
+	var PlaylistConstant = __webpack_require__(255);
 	
 	var PlaylistStore = new Store(AppDispatcher);
 	
@@ -32136,7 +32227,7 @@
 	module.exports = PlaylistStore;
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -32146,7 +32237,7 @@
 	};
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32182,88 +32273,54 @@
 	module.exports = PlaylistSong;
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(221);
-	var UserConstants = __webpack_require__(250);
-	var userUtil = __webpack_require__(257);
+	var Dispatcher = __webpack_require__(219);
+	var PlaylistConstants = __webpack_require__(255);
+	var apiUtil = __webpack_require__(247);
 	
-	var UserActions = {
-	  fetchUserInfo: function (user_id) {
-	    userUtil.fetchUserInfo(user_id, this.receiveUserInfo);
-	  },
-	  receiveUserInfo: function (userinfo) {
+	PlaylistActions = {
+	  receivePlaylists: function (playlists) {
 	    Dispatcher.dispatch({
-	      actionType: UserConstants.USER_RECEIVED,
-	      user: userinfo
+	      actionType: PlaylistConstants.PLAYLISTS_RECEIVED,
+	      playlists: playlists
 	    });
 	  },
-	  fetchCurrentUser: function () {
-	    userUtil.fetchCurrentUser(this.receiveCurrentUser);
-	  },
-	  receiveCurrentUser: function (currentUser) {
+	  receivePlaylist: function (playlist) {
 	    Dispatcher.dispatch({
-	      actionType: UserConstants.CURRENT_USER_RECEIVED,
-	      currentUser: currentUser
+	      actionType: PlaylistConstants.PLAYLIST_RECEIVED,
+	      playlist: playlist
 	    });
+	  },
+	  receiveOnePlaylist: function (playlist) {
+	    Dispatcher.dispatch({
+	      actionType: PlaylistConstants.SINGLE_PLAYLIST_RECEIVED,
+	      playlist: playlist
+	    });
+	  },
+	  fetchAllPlaylists: function () {
+	    //dispatch for spinner or something
+	    apiUtil.fetchAllPlaylists(this.receivePlaylists);
+	  },
+	  fetchPlaylist: function (id) {
+	    apiUtil.fetchPlaylist(id, this.receivePlaylist);
+	  },
+	  fetchOnePlaylist: function (id) {
+	    apiUtil.fetchPlaylist(id, this.receiveOnePlaylist);
 	  }
 	};
 	
-	module.exports = UserActions;
-
-/***/ },
-/* 257 */
-/***/ function(module, exports) {
-
-	
-	module.exports = {
-	  fetchUserSongs: function (user_id) {
-	    $.ajax({
-	      type: "GET",
-	      url: "api/users/" + user_id + "/songs",
-	      success: function (songs) {
-	        UserActions.receiveUserSongs(songs); //TODO implement this when its actually useful
-	      }
-	    });
-	  },
-	  fetchUserPlaylists: function (user_id) {
-	    $.ajax({
-	      type: "GET",
-	      url: "api/users/" + user_id + "/playlists",
-	      success: function (playlists) {
-	        UserActions.receiveUserPlaylists(playlists); //TODO implement this when its actually useful
-	      }
-	    });
-	  },
-	  fetchUserInfo: function (user_id, callback) {
-	    $.ajax({
-	      type: "GET",
-	      url: "api/users/" + user_id,
-	      success: function (userinfo) {
-	        callback(userinfo);
-	      }
-	    });
-	  },
-	  fetchCurrentUser: function (callback) {
-	    $.ajax({
-	      type: "GET",
-	      url: "api/sessions",
-	      success: function (currentUser) {
-	        callback(currentUser); //TODO implement this when its actually useful
-	      }
-	    });
-	  }
-	};
+	module.exports = PlaylistActions;
 
 /***/ },
 /* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PlaylistStore = __webpack_require__(253);
-	var PlaylistIndexItem = __webpack_require__(252);
-	var PlaylistActions = __webpack_require__(259);
+	var PlaylistStore = __webpack_require__(254);
+	var PlaylistIndexItem = __webpack_require__(259);
+	var PlaylistActions = __webpack_require__(257);
 	
 	var PlaylistIndex = React.createClass({
 	  displayName: "PlaylistIndex",
@@ -32307,52 +32364,46 @@
 /* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(221);
-	var PlaylistConstants = __webpack_require__(254);
-	var apiUtil = __webpack_require__(243);
+	var React = __webpack_require__(1);
+	var PlaylistStore = __webpack_require__(254);
+	var ApiUtil = __webpack_require__(247);
+	var PlaylistSong = __webpack_require__(256);
 	
-	PlaylistActions = {
-	  receivePlaylists: function (playlists) {
-	    Dispatcher.dispatch({
-	      actionType: PlaylistConstants.PLAYLISTS_RECEIVED,
-	      playlists: playlists
+	var Playlist = React.createClass({
+	  displayName: "Playlist",
+	
+	  getInitialState: function () {
+	    return {
+	      playlist: this.props.playlist
+	    };
+	  },
+	  render: function () {
+	    var songsList = this.state.playlist.songs.map(function (song) {
+	      return React.createElement(PlaylistSong, { key: song.ord, song: song });
 	    });
-	  },
-	  receivePlaylist: function (playlist) {
-	    Dispatcher.dispatch({
-	      actionType: PlaylistConstants.PLAYLIST_RECEIVED,
-	      playlist: playlist
-	    });
-	  },
-	  receiveOnePlaylist: function (playlist) {
-	    Dispatcher.dispatch({
-	      actionType: PlaylistConstants.SINGLE_PLAYLIST_RECEIVED,
-	      playlist: playlist
-	    });
-	  },
-	  fetchAllPlaylists: function () {
-	    //dispatch for spinner or something
-	    apiUtil.fetchAllPlaylists(this.receivePlaylists);
-	  },
-	  fetchPlaylist: function (id) {
-	    apiUtil.fetchPlaylist(id, this.receivePlaylist);
-	  },
-	  fetchOnePlaylist: function (id) {
-	    apiUtil.fetchPlaylist(id, this.receiveOnePlaylist);
+	    return React.createElement(
+	      "div",
+	      null,
+	      this.state.playlist.title,
+	      React.createElement("br", null),
+	      this.state.playlist.description,
+	      React.createElement("br", null),
+	      songsList
+	    );
 	  }
-	};
+	});
 	
-	module.exports = PlaylistActions;
+	module.exports = Playlist;
 
 /***/ },
 /* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PlaylistStore = __webpack_require__(253);
-	var ApiUtil = __webpack_require__(243);
-	var PlaylistSong = __webpack_require__(255);
-	var PlaylistActions = __webpack_require__(259);
+	var PlaylistStore = __webpack_require__(254);
+	var ApiUtil = __webpack_require__(247);
+	var PlaylistSong = __webpack_require__(256);
+	var PlaylistActions = __webpack_require__(257);
 	
 	var SinglePlaylist = React.createClass({
 	  displayName: "SinglePlaylist",
@@ -32401,61 +32452,9 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PlaylistStore = __webpack_require__(253);
-	var ApiUtil = __webpack_require__(243);
-	var PlaylistSong = __webpack_require__(255);
-	var PlaylistActions = __webpack_require__(259);
-	
-	var FeedPlaylist = React.createClass({
-	  displayName: "FeedPlaylist",
-	
-	  getInitialState: function () {
-	    return {
-	      playlist: undefined
-	    };
-	  },
-	  _onChange: function () {
-	    this.setState({ playlist: PlaylistStore.find(this.props.playlistId) });
-	  },
-	  componentDidMount: function () {
-	    this.playlistListener = PlaylistStore.addListener(this._onChange);
-	    PlaylistActions.fetchPlaylist(this.props.playlistId);
-	  },
-	  componentWillUnmount: function () {
-	    this.playlistListener.remove();
-	  },
-	  createSongList: function () {
-	    var playlistSongs = this.state.playlist.songs.map(function (song, index) {
-	      return React.createElement(PlaylistSong, { key: index, idx: song.id, song: song });
-	    });
-	    return playlistSongs;
-	  },
-	  render: function () {
-	    if (this.state.playlist === undefined) {
-	      return React.createElement("div", null);
-	    }
-	    return React.createElement(
-	      "div",
-	      null,
-	      this.state.playlist.title,
-	      React.createElement("br", null),
-	      this.state.playlist.description,
-	      React.createElement("br", null),
-	      this.createSongList()
-	    );
-	  }
-	});
-	
-	module.exports = FeedPlaylist;
-
-/***/ },
-/* 262 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var SongStore = __webpack_require__(220);
-	var Song = __webpack_require__(245);
-	var SongActions = __webpack_require__(247);
+	var SongStore = __webpack_require__(245);
+	var Song = __webpack_require__(249);
+	var SongActions = __webpack_require__(250);
 	
 	var SongIndex = React.createClass({
 	  displayName: "SongIndex",
@@ -32491,11 +32490,11 @@
 	module.exports = SongIndex;
 
 /***/ },
-/* 263 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SingleUserStore = __webpack_require__(249);
+	var SingleUserStore = __webpack_require__(218);
 	
 	var Like = React.createClass({
 	  displayName: "Like",
@@ -32506,8 +32505,7 @@
 	    };
 	  },
 	  componentDidMount: function () {
-	    liked = SingleUserStore.currentUser().liked_songs;
-	    if (liked[this.props.songId]) {
+	    if (SingleUserStore.currentUser().liked_songs[this.props.songId]) {
 	      this.setState({ liked: true });
 	    } else {
 	      this.setState({ liked: false });
