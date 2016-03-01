@@ -31,13 +31,14 @@ var Navbar = React.createClass({
       <header>
         <nav>
           <a href="/session/new">Login</a>
+          <a href="/users/new">Sign Up</a>
+          {this.createProfile()}
           <Link to="/" >Logo, Greetings
           </Link>
           <Link to="/songs" >Songs
           </Link>
           <Link to="/playlists" >Playlists
           </Link>
-          {this.createProfile()}
         </nav>
       </header>
     )

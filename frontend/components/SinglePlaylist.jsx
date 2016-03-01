@@ -11,18 +11,18 @@ var SinglePlaylist = React.createClass({
     })
   },
   _onChange: function(){
-    this.setState({playlist: PlaylistStore.oneList()})
+    this.setState({playlist: PlaylistStore.find(this.props.params.playlist_id)})
   },
   componentDidMount: function(){
     this.playlistListener = PlaylistStore.addListener(this._onChange);
-    PlaylistActions.fetchOnePlaylist(this.props.params.playlist_id);
+    PlaylistActions.fetchPlaylist(this.props.params.playlist_id);
   },
   componentWillUnmount: function(){
     this.playlistListener.remove();
   },
   createSongList: function(){
-     var playlistSongs = this.state.playlist.songs.map(function (song) {
-        return <PlaylistSong key={song.id} idx={song.id} song={song}/>;
+     var playlistSongs = this.state.playlist.songs.map(function (song, index) {
+        return <PlaylistSong key={index} idx={song.id} song={song}/>;
       });
     return playlistSongs;
   },

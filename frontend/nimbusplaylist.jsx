@@ -13,6 +13,7 @@ var React = require('react'),
   var PlaylistIndex = require("./components/PlaylistIndex.jsx");
   var SinglePlaylist = require('./components/SinglePlaylist.jsx');
   var SongIndex = require("./components/SongIndex.jsx");
+  var SingleSong = require("./components/SingleSong.jsx");
 
 // <Router history={browserHistory}>
 //   <Route path="/" component={App}>
@@ -37,7 +38,7 @@ var routes = (
       <Route path="playlists" component={PlaylistIndex}/>
       <Route path="playlists/:playlist_id" component={SinglePlaylist}/>
       <Route path="songs" component={SongIndex}/>
-      <Route path="songs/:song_id" component={SinglePlaylist}/>
+      <Route path="songs/:song_id" component={SingleSong}/>
     </Route>
 );
 

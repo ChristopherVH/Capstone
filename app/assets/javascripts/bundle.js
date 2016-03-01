@@ -59,6 +59,7 @@
 	var PlaylistIndex = __webpack_require__(258);
 	var SinglePlaylist = __webpack_require__(260);
 	var SongIndex = __webpack_require__(261);
+	var SingleSong = __webpack_require__(294);
 	
 	// <Router history={browserHistory}>
 	//   <Route path="/" component={App}>
@@ -83,7 +84,7 @@
 	  React.createElement(Route, { path: 'playlists', component: PlaylistIndex }),
 	  React.createElement(Route, { path: 'playlists/:playlist_id', component: SinglePlaylist }),
 	  React.createElement(Route, { path: 'songs', component: SongIndex }),
-	  React.createElement(Route, { path: 'songs/:song_id', component: SinglePlaylist })
+	  React.createElement(Route, { path: 'songs/:song_id', component: SingleSong })
 	);
 	
 	document.addEventListener("DOMContentLoaded", function () {
@@ -24794,6 +24795,12 @@
 	          'Login'
 	        ),
 	        React.createElement(
+	          'a',
+	          { href: '/users/new' },
+	          'Sign Up'
+	        ),
+	        this.createProfile(),
+	        React.createElement(
 	          Link,
 	          { to: '/' },
 	          'Logo, Greetings'
@@ -24807,8 +24814,7 @@
 	          Link,
 	          { to: '/playlists' },
 	          'Playlists'
-	        ),
-	        this.createProfile()
+	        )
 	      )
 	    );
 	  }
@@ -32023,7 +32029,7 @@
 	    apiUtil.fetchAllSongs(this.receiveSongs);
 	  },
 	  fetchSong: function (id) {
-	    apiUtil.fetchSong(this.receiveSong);
+	    apiUtil.fetchSong(id, this.receiveSong);
 	  }
 	};
 	
@@ -32106,14 +32112,14 @@
 	    };
 	  },
 	  populateFeed: function (feed) {
-	    var wow = feed.map(function (feedobj, index) {
+	    var postFeed = feed.map(function (feedobj, index) {
 	      if (feedobj.genre === undefined) {
 	        return React.createElement(FeedPlaylist, { key: index, playlistId: feedobj.id });
 	      } else {
 	        return React.createElement(Song, { key: index, song: feedobj });
 	      }
 	    });
-	    return wow;
+	    return postFeed;
 	  },
 	  render: function () {
 	    return React.createElement(
@@ -32189,6 +32195,7 @@
 	var PlaylistStore = new Store(AppDispatcher);
 	
 	var _playlists = {};
+	var _userplaylists = {};
 	var _playlist = {};
 	
 	PlaylistStore.all = function () {
@@ -32295,11 +32302,17 @@
 	var apiUtil = __webpack_require__(247);
 	
 	PlaylistActions = {
+	  fetchAllPlaylists: function () {
+	    apiUtil.fetchAllPlaylists(this.receivePlaylists);
+	  },
 	  receivePlaylists: function (playlists) {
 	    Dispatcher.dispatch({
 	      actionType: PlaylistConstants.PLAYLISTS_RECEIVED,
 	      playlists: playlists
 	    });
+	  },
+	  fetchPlaylist: function (id) {
+	    apiUtil.fetchPlaylist(id, this.receivePlaylist);
 	  },
 	  receivePlaylist: function (playlist) {
 	    Dispatcher.dispatch({
@@ -32307,20 +32320,14 @@
 	      playlist: playlist
 	    });
 	  },
+	  fetchOnePlaylist: function (id) {
+	    apiUtil.fetchPlaylist(id, this.receiveOnePlaylist);
+	  },
 	  receiveOnePlaylist: function (playlist) {
 	    Dispatcher.dispatch({
 	      actionType: PlaylistConstants.SINGLE_PLAYLIST_RECEIVED,
 	      playlist: playlist
 	    });
-	  },
-	  fetchAllPlaylists: function () {
-	    apiUtil.fetchAllPlaylists(this.receivePlaylists);
-	  },
-	  fetchPlaylist: function (id) {
-	    apiUtil.fetchPlaylist(id, this.receivePlaylist);
-	  },
-	  fetchOnePlaylist: function (id) {
-	    apiUtil.fetchPlaylist(id, this.receiveOnePlaylist);
 	  }
 	};
 	
@@ -32427,18 +32434,18 @@
 	    };
 	  },
 	  _onChange: function () {
-	    this.setState({ playlist: PlaylistStore.oneList() });
+	    this.setState({ playlist: PlaylistStore.find(this.props.params.playlist_id) });
 	  },
 	  componentDidMount: function () {
 	    this.playlistListener = PlaylistStore.addListener(this._onChange);
-	    PlaylistActions.fetchOnePlaylist(this.props.params.playlist_id);
+	    PlaylistActions.fetchPlaylist(this.props.params.playlist_id);
 	  },
 	  componentWillUnmount: function () {
 	    this.playlistListener.remove();
 	  },
 	  createSongList: function () {
-	    var playlistSongs = this.state.playlist.songs.map(function (song) {
-	      return React.createElement(PlaylistSong, { key: song.id, idx: song.id, song: song });
+	    var playlistSongs = this.state.playlist.songs.map(function (song, index) {
+	      return React.createElement(PlaylistSong, { key: index, idx: song.id, song: song });
 	    });
 	    return playlistSongs;
 	  },
@@ -32563,11 +32570,11 @@
 	LikeActions = {
 	  createLike: function (userId, songId) {
 	    apiUtil.createLike(songId);
-	    UserActions.fetchUserInfo(userId);
+	    UserActions.fetchCurrentUser();
 	  },
 	  deleteLike: function (userId, songId) {
 	    apiUtil.destroyLike(songId);
-	    UserActions.fetchUserInfo(userId);
+	    UserActions.fetchCurrentUser();
 	  }
 	};
 	
@@ -33225,6 +33232,58 @@
 	  return cssVendorPrefix = '-' + pre + '-';
 	}
 
+
+/***/ },
+/* 294 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var SongStore = __webpack_require__(245);
+	var SongActions = __webpack_require__(250);
+	var Like = __webpack_require__(262);
+	var PlaylistModal = __webpack_require__(264);
+	
+	var Song = React.createClass({
+	  displayName: "Song",
+	
+	  getInitialState: function () {
+	    return {
+	      song: undefined
+	    };
+	  },
+	  _onChange: function () {
+	    this.setState({ song: SongStore.find(this.props.params.song_id) });
+	  },
+	  componentDidMount: function () {
+	    this.songListener = SongStore.addListener(this._onChange);
+	    SongActions.fetchSong(this.props.params.song_id);
+	  },
+	  componentWillUnmount: function () {
+	    this.songListener.remove();
+	  },
+	  render: function () {
+	    if (this.state.song === undefined) {
+	      return React.createElement("div", null);
+	    }
+	    return React.createElement(
+	      "div",
+	      null,
+	      this.state.song.title,
+	      React.createElement("br", null),
+	      React.createElement("img", { src: this.state.song.image_url }),
+	      React.createElement("br", null),
+	      React.createElement(
+	        "audio",
+	        { controls: true },
+	        React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
+	      ),
+	      React.createElement(Like, { songId: this.state.song.id }),
+	      React.createElement(PlaylistModal, null)
+	    );
+	  }
+	});
+	
+	module.exports = Song;
 
 /***/ }
 /******/ ]);

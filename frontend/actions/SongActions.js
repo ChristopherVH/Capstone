@@ -30,7 +30,7 @@ SongActions = {
     apiUtil.fetchAllSongs(this.receiveSongs)
   },
   fetchSong: function(id){
-    apiUtil.fetchSong(this.receiveSong)
+    apiUtil.fetchSong(id, this.receiveSong)
   }
 };
 

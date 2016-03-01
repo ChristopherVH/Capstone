@@ -9,14 +9,14 @@ var Feed = React.createClass({
     })
   },
   populateFeed: function(feed){
-    var wow = feed.map(function(feedobj, index){
+    var postFeed = feed.map(function(feedobj, index){
       if (feedobj.genre === undefined){
         return <FeedPlaylist key={index} playlistId={feedobj.id} />;
       }else{
         return <Song key={index} song={feedobj}/>;
       }
     });
-    return wow;
+    return postFeed;
   },
   render: function(){
     return(

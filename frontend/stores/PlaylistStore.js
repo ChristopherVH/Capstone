@@ -5,6 +5,7 @@ var PlaylistConstant = require("../constants/PlaylistConstants");
 var PlaylistStore = new Store(AppDispatcher);
 
 var _playlists = {};
+var _userplaylists = {};
 var _playlist = {};
 
 PlaylistStore.all = function(){
