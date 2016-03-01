@@ -22,7 +22,6 @@ PlaylistActions = {
     });
   },
   fetchAllPlaylists: function () {
-    //dispatch for spinner or something
     apiUtil.fetchAllPlaylists(this.receivePlaylists);
   },
   fetchPlaylist: function(id){

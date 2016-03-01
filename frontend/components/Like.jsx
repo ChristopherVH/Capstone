@@ -1,5 +1,6 @@
 var React = require('react');
 var SingleUserStore = require("../stores/SingleUserStore.js");
+var LikeActions = require("../actions/LikeActions.js");
 
 var Like = React.createClass({
   getInitialState: function(){
@@ -15,7 +16,13 @@ var Like = React.createClass({
     }
   },
   toggleLike: function(){
-    this.setState({liked: !(this.state.liked)})
+    if (!(this.state.liked)){
+      LikeActions.createLike(SingleUserStore.currentUser().id, this.props.songId)
+      this.setState({liked: true})
+    }else{
+      LikeActions.deleteLike(SingleUserStore.currentUser().id, this.props.songId)
+      this.setState({liked: false})
+    }
   },
   display: function(){
     if (this.state.liked){

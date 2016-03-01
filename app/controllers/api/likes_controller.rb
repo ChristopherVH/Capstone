@@ -9,7 +9,7 @@
 #  updated_at :datetime         not null
 #
 
-class LikesController < ApplicationController
+class Api::LikesController < ApplicationController
   before_action :require_signed_in!
 
  def create
@@ -17,7 +17,7 @@ class LikesController < ApplicationController
 
    if like.save
      @song = like.song
-     render api_songs(@songs)
+     render "api/songs/show"
    else
      render json: like.errors.full_messages
    end
@@ -29,7 +29,7 @@ class LikesController < ApplicationController
    if like
      like.destroy
      @song = like.song
-     render api_songs(@songs)
+     render "api/songs/show"
    else
      render json: "You cannot unlike this"
    end

@@ -12,6 +12,7 @@
     "babel-loader": "^6.2.3",
     "babel-preset-react": "^6.5.0",
     "bootstrap": "^3.3.6",
+    "boron": "^0.2.3",
     "flux": "^2.1.1",
     "history": "^2.0.0",
     "nan": "^2.2.0",

@@ -47,6 +47,18 @@ var songUtil = {
       }
     });
   },
+  createLike: function(songId){
+    $.ajax({
+      type:"POST",
+      url: "api/songs/"+ songId + "/like"
+    });
+  },
+  destroyLike: function(songId){
+    $.ajax({
+      type:"DELETE",
+      url: "api/songs/" + songId + "/like"
+    });
+  }
 };
 
 module.exports = songUtil;
