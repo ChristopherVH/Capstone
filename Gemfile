@@ -24,7 +24,6 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'puma'
-gem 'delayed_job_active_record'
 gem 'bcrypt'
 gem 'heroku'
 # Use ActiveModel has_secure_password

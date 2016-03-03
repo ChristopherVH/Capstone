@@ -27,7 +27,7 @@ class Api::SongsController < ApplicationController
   end
 
   def destroy
-    @song = Song.find_by(params[:id])
+    @song = Song.find(params[:id])
     if @song.user_id == current_user.id && @song.destroy
       render :index
     else
@@ -36,7 +36,7 @@ class Api::SongsController < ApplicationController
   end
 
   def update
-    @song = Song.find_by(params[:id])
+    @song = Song.find(params[:id])
     if @song.user_id == current_user.id && @song.update
       render :show
     else

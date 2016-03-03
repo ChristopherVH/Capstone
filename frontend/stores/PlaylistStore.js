@@ -4,33 +4,42 @@ var PlaylistConstant = require("../constants/PlaylistConstants");
 
 var PlaylistStore = new Store(AppDispatcher);
 
-var _playlists = {};
-var _userplaylists = {};
+var _playlists = [];
+var _playlisthash = {};
 var _playlist = {};
 
 PlaylistStore.all = function(){
-  return Object.keys(_playlists).map(function(key){
-    return _playlists[key];
+  return _playlists.map(function(playlist){
+    return playlist;
   });
 };
 
 PlaylistStore.find = function (id) {
-  return _playlists[id];
-};
-
-PlaylistStore.oneList = function(){
-  var playlistdup = $.extend({}, _playlist);
-  return playlistdup;
+  return _playlisthash[id];
 };
 
 PlaylistStore.addPlaylist = function(playlist) {
-  _playlists[playlist.id] = playlist;
+  _playlisthash[playlist.id] = playlist;
+  var added = false;
+  for (var i = 0; i < _playlists.length; i++) {
+    if (_playlists[i].id === playlist.id){
+      _playlists[i] = playlist;
+      added = true;
+    }
+    if (!added){
+      _playlists.push(playlist);
+    }
+  }
 };
 
 PlaylistStore.resetPlaylists = function(playlists){
-  _playlists = {};
+  _playlists = [];
+  _playlisthash = {};
   for (var i = 0; i < playlists.length; i++) {
-    _playlists[i]= playlists[i];
+    _playlists.push(playlists[i]);
+  }
+  for (var i = 0; i < playlists.length; i++) {
+    _playlisthash[playlists[i].id]= playlists[i];
   }
 };
 
@@ -48,8 +57,8 @@ PlaylistStore.__onDispatch = function(payload){
       PlaylistStore.addPlaylist(payload.playlist);
       PlaylistStore.__emitChange();
       break;
-    case PlaylistConstant.SINGLE_PLAYLIST_RECEIVED:
-      PlaylistStore.resetOnePlaylist(payload.playlist);
+    case PlaylistConstant.USER_PLAYLISTS_RECEIVED:
+      PlaylistStore.resetPlaylists(payload.playlists);
       PlaylistStore.__emitChange();
       break;
   }

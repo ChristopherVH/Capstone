@@ -1,45 +1,36 @@
 var React = require('react');
 var Link = require('react-router').Link;
-var SingleUserStore = require("../stores/SingleUserStore.js");
 var UserActions = require("../actions/UserActions.js");
+// var Search = require("../")
+
 
 var Navbar = React.createClass({
   getInitialState: function(){
     return({
-      currentUser: undefined
+      currentUser: this.props.currentUser
     })
   },
-  _onChange: function(){
-    this.setState({currentUser: SingleUserStore.currentUser()})
-  },
-  componentDidMount: function(){
-    this.userListener = SingleUserStore.addListener(this._onChange);
-    UserActions.fetchCurrentUser()
-  },
-  componentWillUnmount: function(){
-    this.userListener.remove();
-  },
   createProfile: function(){
-    if (this.state.currentUser === undefined){
-      return <div></div>;
+    if (this.state.currentUser === undefined || this.state.currentUser.id === undefined){
+      return [<li key={1} ><a href="/session/new">Login</a></li>,
+    <li key={2} ><a href="/users/new">Sign Up</a></li>];
     }
-    return <Link to={"/user/" + this.state.currentUser.id} >Profile
-    </Link>;
+    return [<li key={1} ><Link to={"user/" + this.state.currentUser.id} >Profile
+  </Link></li>, <li key={2} ><a onClick={this.signOut} href="#">Logout</a></li>];
   },
+  signOut: function(){
+		UserActions.signOut()
+    this.setState({currentUser: undefined});
+	},
   render: function(){
     return(
       <header>
-        <nav>
-          <a href="/session/new">Login</a>
-          <a href="/users/new">Sign Up</a>
+        <ul>
           {this.createProfile()}
-          <Link to="/" >Logo, Greetings
-          </Link>
-          <Link to="/songs" >Songs
-          </Link>
-          <Link to="/playlists" >Playlists
-          </Link>
-        </nav>
+          <li><Link to="/" >Logo, Greetings</Link></li>
+          <li><Link to="songs" >Songs</Link></li>
+          <li><Link to="playlists" >Playlists</Link></li>
+        </ul>
       </header>
     )
   }

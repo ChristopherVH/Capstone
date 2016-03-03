@@ -12,27 +12,29 @@
 class Api::LikesController < ApplicationController
   before_action :require_signed_in!
 
- def create
+  def create
    like = current_user.likes.new(song_id: params[:song_id])
 
    if like.save
      @song = like.song
-     render "api/songs/show"
    else
      render json: like.errors.full_messages
    end
- end
+  end
 
- def destroy
-   like = current_user.likes.find_by(song: params[:song_id])
+  def destroy
+   like = current_user.likes.find_by(song_id: params[:song_id])
 
    if like
      like.destroy
      @song = like.song
-     render "api/songs/show"
    else
      render json: "You cannot unlike this"
    end
- end
+  end
 
+  private
+  def song_params
+    params.require(:song).permit(:song_id)
+  end
 end

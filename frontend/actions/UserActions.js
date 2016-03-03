@@ -20,6 +20,15 @@ var UserActions = {
       actionType: UserConstants.CURRENT_USER_RECEIVED,
       currentUser: currentUser
     });
+  },
+  signOut: function(){
+    userUtil.signOut(this.receiveSignOut)
+  },
+  receiveSignOut: function(){
+    Dispatcher.dispatch({
+      actionType: UserConstants.SIGN_OUT_RECEIVED,
+      user: {}
+    });
   }
 };
 

@@ -9,12 +9,12 @@ module.exports = {
       }
     })
   },
-  fetchUserPlaylists: function(user_id){
+  fetchUserPlaylists: function(user_id, callback){
     $.ajax({
       type:"GET",
       url:"api/users/" + user_id + "/playlists",
       success:function (playlists){
-        UserActions.receiveUserPlaylists(playlists) //TODO implement this when its actually useful
+        callback(playlists)
       }
     })
   },
@@ -31,8 +31,20 @@ module.exports = {
     $.ajax({
       type:"GET",
       url:"api/sessions",
+      error: function(){
+        callback({})
+      },
       success:function (currentUser){
         callback(currentUser) //TODO implement this when its actually useful
+      }
+    })
+  },
+  signOut: function(callback){
+    $.ajax({
+      type:"DELETE",
+      url:"session",
+      success: function(){
+        callback()
       }
     })
   }

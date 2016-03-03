@@ -36,7 +36,11 @@ SingleUserStore.__onDispatch = function(payload){
       SingleUserStore.setCurrentUser(payload.currentUser);
       SingleUserStore.__emitChange();
       break;
-  }
+    case UserConstants.SIGN_OUT_RECEIVED:
+      SingleUserStore.setCurrentUser(payload.user);
+      SingleUserStore.__emitChange();
+      break;
+}
 };
 
 module.exports = SingleUserStore;

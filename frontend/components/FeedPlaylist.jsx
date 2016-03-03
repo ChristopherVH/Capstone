@@ -7,36 +7,48 @@ var PlaylistActions = require("../actions/PlaylistActions.js");
 var FeedPlaylist = React.createClass({
   getInitialState: function(){
     return({
-      playlist: undefined
+      playlist: this.props.playlist
     })
   },
   _onChange: function(){
-    this.setState({playlist: PlaylistStore.find(this.props.playlistId)})
+    this.setState({playlist: PlaylistStore.find(this.props.playlist.id)})
   },
   componentDidMount: function(){
     this.playlistListener = PlaylistStore.addListener(this._onChange);
-    PlaylistActions.fetchPlaylist(this.props.playlistId);
   },
   componentWillUnmount: function(){
     this.playlistListener.remove();
   },
   createSongList: function(){
      var playlistSongs = this.state.playlist.songs.map(function (song, index) {
-        return <PlaylistSong key={index} idx={song.id} song={song}/>;
+        return <PlaylistSong key={index} idx={song.id} ord={index} song={song} />;
       });
     return playlistSongs;
   },
-  render: function(){
-    if (this.state.playlist === undefined){
-      return <div></div>;
+  singlePlaylistRedirect: function(){
+    window.location = '/#/playlists/' + this.props.playlist.id
+  },
+  display: function(){
+    if (this.state.playlist.songs === undefined){
+      return[<h3 onDoubleClick = {this.singlePlaylistRedirect}>
+        {this.state.playlist.title}
+      </h3>,<div>
+        {this.state.playlist.description}
+      </div>];
+    }else {
+      return[<h3 onDoubleClick = {this.singlePlaylistRedirect}>
+        {this.state.playlist.title}
+      </h3>,<div>
+        {this.state.playlist.description}
+      </div>,<div>
+        {this.createSongList()}
+      </div>];
     }
+  },
+  render: function(){
     return(
       <div>
-        {this.state.playlist.title}
-        <br/>
-        {this.state.playlist.description}
-        <br/>
-        {this.createSongList()}
+        {this.display()}
       </div>
     );
   }

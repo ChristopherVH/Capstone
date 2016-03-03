@@ -32,8 +32,7 @@ var SinglePlaylist = React.createClass({
     }
     return(
       <div>
-        {this.state.playlist.title}
-        <br/>
+        <h3>{this.state.playlist.title}</h3>
         {this.state.playlist.description}
         <br/>
         {this.createSongList()}

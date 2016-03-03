@@ -9,14 +9,16 @@ var Playlist = React.createClass({
       playlist: this.props.playlist
     })
   },
+  singlePlaylistRedirect: function(){
+    window.location = '/#/playlists/' + this.props.playlist.id
+  },
   render: function(){
     var songsList = this.state.playlist.songs.map(function (song) {
          return <PlaylistSong key={song.ord} song={song}/>;
        });
     return(
       <div>
-        {this.state.playlist.title}
-        <br/>
+        <h3 onDoubleClick = {this.singlePlaylistRedirect} >{this.state.playlist.title}</h3>
         {this.state.playlist.description}
         <br/>
         {songsList}

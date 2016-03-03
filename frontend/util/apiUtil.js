@@ -58,6 +58,20 @@ var songUtil = {
       type:"DELETE",
       url: "api/songs/" + songId + "/like"
     });
+  },
+  addSong:function (songId, playlistId, ord){
+    debugger;
+    $.ajax({
+      type:"POST",
+      data:{playlist_id: playlistId, song_id: songId, ord:ord},
+      url: "api/playlist_songs"
+    });
+  },
+  deleteSong: function(id, playlistId){
+    $.ajax({
+      type:"DELETE",
+      url: "api/playlist_songs/" + id
+    });
   }
 };
 

@@ -3,13 +3,17 @@ var SingleUserStore = require("../stores/SingleUserStore.js");
 var LikeActions = require("../actions/LikeActions.js");
 
 var Like = React.createClass({
+  //TODO maybe get it so likes is a number that goes up/down one based on song's likes
   getInitialState: function(){
     return({
       liked: undefined
     })
   },
   componentDidMount: function(){
-    if (SingleUserStore.currentUser().liked_songs[this.props.songId]){
+    if (SingleUserStore.currentUser().liked_songs === undefined){
+      this.setState({liked: false})
+    }
+    else if (SingleUserStore.currentUser().liked_songs[this.props.songId]){
       this.setState({liked: true})
     }else{
       this.setState({liked: false})

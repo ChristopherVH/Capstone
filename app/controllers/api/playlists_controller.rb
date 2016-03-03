@@ -11,7 +11,7 @@ class Api::PlaylistsController < ApplicationController
   end
 
   def destroy
-    @playlist = Playlist.find_by(params[:id])
+    @playlist = Playlist.find(params[:id])
     if @playlist.user_id == current_user.id && @playlist.destroy
       render :index
     else
@@ -21,10 +21,10 @@ class Api::PlaylistsController < ApplicationController
 
   def update
     @playlist = Playlist.find_by(params[:id])
-    if @playlist.user_id == current_user.id && @playlist.update
+    if @playlist.user_id == current_user.id && @playlist.update(playlist_params)
       render :show
     else
-      render json: "This song cannot be updated by you"
+      render json: "This playlist cannot be updated by you"
     end
   end
 
@@ -43,6 +43,6 @@ class Api::PlaylistsController < ApplicationController
 
   private
   def playlist_params
-    params.require(:song).permit(:title, :description)
+    params.require(:playlist).permit(:title, :description)
   end
 end

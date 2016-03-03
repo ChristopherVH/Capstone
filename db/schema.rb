@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160223232620) do
+ActiveRecord::Schema.define(version: 20160301183401) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,27 +48,27 @@ ActiveRecord::Schema.define(version: 20160223232620) do
   add_index "playlists", ["user_id"], name: "index_playlists_on_user_id", using: :btree
 
   create_table "songs", force: :cascade do |t|
-    t.integer  "user_id",    null: false
-    t.string   "title",      null: false
-    t.string   "artist",     null: false
-    t.string   "genre",      null: false
-    t.string   "image_url"
-    t.string   "audio_url",  null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "user_id",                                                                                                      null: false
+    t.string   "title",                                                                                                        null: false
+    t.string   "artist",                                                                                                       null: false
+    t.string   "genre",                                                                                                        null: false
+    t.string   "image_url",  default: "http://www.lovespirals.com/wp-content/themes/soundcheck212/images/default-artwork.png"
+    t.string   "audio_url",                                                                                                    null: false
+    t.datetime "created_at",                                                                                                   null: false
+    t.datetime "updated_at",                                                                                                   null: false
   end
 
   add_index "songs", ["title"], name: "index_songs_on_title", using: :btree
   add_index "songs", ["user_id"], name: "index_songs_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "username",        null: false
-    t.string   "profile_url"
-    t.string   "cover_url"
-    t.string   "password_digest", null: false
-    t.string   "session_token",   null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.string   "username",                                                                                                         null: false
+    t.string   "profile_url",     default: "http://cutepuppypictures.net/wp-content/uploads/2013/03/cute-samoyed-puppy_thumb.jpg"
+    t.string   "cover_url",       default: "http://www.timelinecoverbanner.com/facebook-covers/2013/02/above-clouds.jpg"
+    t.string   "password_digest",                                                                                                  null: false
+    t.string   "session_token",                                                                                                    null: false
+    t.datetime "created_at",                                                                                                       null: false
+    t.datetime "updated_at",                                                                                                       null: false
   end
 
   add_index "users", ["session_token"], name: "index_users_on_session_token", using: :btree

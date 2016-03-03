@@ -1,6 +1,7 @@
 var Dispatcher = require('../dispatcher/dispatcher.js');
 var PlaylistConstants = require('../constants/PlaylistConstants.js');
 var apiUtil = require("../util/apiUtil.js");
+var userUtil = require("../util/userUtil.js");
 
 PlaylistActions = {
   fetchAllPlaylists: function () {
@@ -21,14 +22,22 @@ PlaylistActions = {
       playlist: playlist
     });
   },
-  fetchOnePlaylist: function(id){
-    apiUtil.fetchPlaylist(id, this.receiveOnePlaylist);
+  fetchUserPlaylists: function (userId) {
+    userUtil.fetchUserPlaylists(userId, this.receiveUserPlaylists);
   },
-  receiveOnePlaylist: function (playlist) {
+  receiveUserPlaylists: function (playlists) {
     Dispatcher.dispatch({
-      actionType: PlaylistConstants.SINGLE_PLAYLIST_RECEIVED,
-      playlist: playlist
+      actionType: PlaylistConstants.USER_PLAYLISTS_RECEIVED,
+      playlists: playlists
     });
+  },
+  addSongToPlaylist: function(songId, playlistId, ord){
+    apiUtil.addSong(songId, playlistId, ord)
+    this.fetchPlaylist(playlistId);
+  },
+  deleteSongFromPlaylist: function(playlistId, playlistSongId){
+    apiUtil.deleteSong(playlistSongId, playlistId);
+    this.fetchPlaylist(playlistId);
   }
 };
 

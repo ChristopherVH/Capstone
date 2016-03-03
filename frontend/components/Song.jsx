@@ -10,18 +10,21 @@ var Song = React.createClass({
       song: this.props.song
     })
   },
+  singleSongRedirect: function(){
+    window.location = '/#/songs/' + this.props.song.id
+  },
   render: function(){
     return(
       <div>
         {this.state.song.title}
         <br/>
-        <img src={this.state.song.image_url}></img>
+        <img src={this.state.song.image_url} onDoubleClick={this.singleSongRedirect} ></img>
         <br/>
         <audio controls>
           <source src={this.state.song.audio_url} type="audio/mpeg"></source>
         </audio>
         <Like songId={this.state.song.id} />
-        <PlaylistModal/>
+        <PlaylistModal songId={this.state.song.id}/>
       </div>
     );
   }
