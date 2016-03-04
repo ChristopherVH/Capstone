@@ -60,7 +60,6 @@ var songUtil = {
     });
   },
   addSong:function (songId, playlistId, ord){
-    debugger;
     $.ajax({
       type:"POST",
       data:{playlist_id: playlistId, song_id: songId, ord:ord},

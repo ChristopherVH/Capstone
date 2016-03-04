@@ -34,9 +34,12 @@ var PlaylistModal = React.createClass({
         this.refs.modal.hide();
     },
     allPlaylists: function(){
+      if (SingleUserStore.currentUser().username === undefined){
+        return <div>You must be signed in to add songs to playlists</div>;
+      }
       var songId = this.props.songId
       var playlistList = this.state.playlists.map(function (playlist, index) {
-           return <AddToPlaylistButton key={index} playlist={playlist} songId={songId}/>;
+           return [<div>{playlist.title}</div>,<AddToPlaylistButton key={index} playlist={playlist} songId={songId}/>];
          });
       return playlistList;
     },

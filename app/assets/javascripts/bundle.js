@@ -24784,19 +24784,19 @@
 	    if (this.state.currentUser === undefined || this.state.currentUser.id === undefined) {
 	      return [React.createElement(
 	        'li',
-	        { key: 1 },
-	        React.createElement(
-	          'a',
-	          { href: '/session/new' },
-	          'Login'
-	        )
-	      ), React.createElement(
-	        'li',
 	        { key: 2 },
 	        React.createElement(
 	          'a',
-	          { href: '/users/new' },
+	          { href: 'users/new' },
 	          'Sign Up'
+	        )
+	      ), React.createElement(
+	        'li',
+	        { key: 1 },
+	        React.createElement(
+	          'a',
+	          { href: 'session/new' },
+	          'Login'
 	        )
 	      )];
 	    }
@@ -24810,17 +24810,16 @@
 	      )
 	    ), React.createElement(
 	      'li',
-	      { key: 2 },
+	      { onClick: this.signOut, key: 2 },
 	      React.createElement(
-	        'a',
-	        { onClick: this.signOut, href: '#' },
+	        'div',
+	        null,
 	        'Logout'
 	      )
 	    )];
 	  },
 	  signOut: function () {
 	    UserActions.signOut();
-	    this.setState({ currentUser: undefined });
 	  },
 	  render: function () {
 	    return React.createElement(
@@ -31766,7 +31765,7 @@
 	      type: "GET",
 	      url: "api/sessions",
 	      error: function () {
-	        callback({});
+	        callback();
 	      },
 	      success: function (currentUser) {
 	        callback(currentUser); //TODO implement this when its actually useful
@@ -31778,6 +31777,7 @@
 	      type: "DELETE",
 	      url: "session",
 	      success: function () {
+	        window.location.reload();
 	        callback();
 	      }
 	    });
@@ -31968,7 +31968,6 @@
 	    });
 	  },
 	  addSong: function (songId, playlistId, ord) {
-	    debugger;
 	    $.ajax({
 	      type: "POST",
 	      data: { playlist_id: playlistId, song_id: songId, ord: ord },
@@ -32650,6 +32649,11 @@
 	var React = __webpack_require__(1);
 	var SingleUserStore = __webpack_require__(218);
 	var LikeActions = __webpack_require__(263);
+	var Modal = __webpack_require__(295);
+	
+	var modalStyle = {
+	  width: '300px'
+	};
 	
 	var Like = React.createClass({
 	  displayName: "Like",
@@ -32678,8 +32682,33 @@
 	      this.setState({ liked: false });
 	    }
 	  },
+	  showModal: function () {
+	    this.refs.modal.show();
+	  },
+	  hideModal: function () {
+	    this.refs.modal.hide();
+	  },
 	  display: function () {
-	    if (this.state.liked) {
+	    if (SingleUserStore.currentUser().username === undefined) {
+	      return [React.createElement(
+	        "button",
+	        { onClick: this.showModal },
+	        "Like"
+	      ), React.createElement(
+	        Modal,
+	        { ref: "modal", modalStyle: modalStyle },
+	        React.createElement(
+	          "div",
+	          null,
+	          "You must be signed in to like songs"
+	        ),
+	        React.createElement(
+	          "button",
+	          { onClick: this.hideModal },
+	          "Close"
+	        )
+	      )];
+	    } else if (this.state.liked) {
 	      return React.createElement("input", { type: "button", onClick: this.toggleLike, value: "Liked" });
 	    } else {
 	      return React.createElement("input", { type: "button", onClick: this.toggleLike, value: "Unliked" });
@@ -32759,9 +32788,20 @@
 	    this.refs.modal.hide();
 	  },
 	  allPlaylists: function () {
+	    if (SingleUserStore.currentUser().username === undefined) {
+	      return React.createElement(
+	        'div',
+	        null,
+	        'You must be signed in to add songs to playlists'
+	      );
+	    }
 	    var songId = this.props.songId;
 	    var playlistList = this.state.playlists.map(function (playlist, index) {
-	      return React.createElement(AddToPlaylistButton, { key: index, playlist: playlist, songId: songId });
+	      return [React.createElement(
+	        'div',
+	        null,
+	        playlist.title
+	      ), React.createElement(AddToPlaylistButton, { key: index, playlist: playlist, songId: songId })];
 	    });
 	    return playlistList;
 	  },

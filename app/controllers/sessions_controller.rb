@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   def new
+    @user = User.new
     if current_user
       redirect_to "/#/user/#{current_user.id}"
     end
@@ -17,7 +18,9 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-   sign_out
-   redirect_to new_session_url
+    if signed_in?
+       sign_out
+    end
+    render :new
   end
 end

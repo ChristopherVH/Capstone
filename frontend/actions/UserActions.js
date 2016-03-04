@@ -22,7 +22,7 @@ var UserActions = {
     });
   },
   signOut: function(){
-    userUtil.signOut(this.receiveSignOut)
+    userUtil.signOut(this.receiveSignOut);
   },
   receiveSignOut: function(){
     Dispatcher.dispatch({

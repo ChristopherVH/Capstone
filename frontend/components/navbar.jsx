@@ -12,15 +12,13 @@ var Navbar = React.createClass({
   },
   createProfile: function(){
     if (this.state.currentUser === undefined || this.state.currentUser.id === undefined){
-      return [<li key={1} ><a href="/session/new">Login</a></li>,
-    <li key={2} ><a href="/users/new">Sign Up</a></li>];
+      return [<li key={2} ><a href="users/new">Sign Up</a></li>,<li key={1} ><a href="session/new">Login</a></li>];
     }
     return [<li key={1} ><Link to={"user/" + this.state.currentUser.id} >Profile
-  </Link></li>, <li key={2} ><a onClick={this.signOut} href="#">Logout</a></li>];
+  </Link></li>, <li onClick={this.signOut} key={2} ><div>Logout</div></li>];
   },
   signOut: function(){
-		UserActions.signOut()
-    this.setState({currentUser: undefined});
+		UserActions.signOut();
 	},
   render: function(){
     return(

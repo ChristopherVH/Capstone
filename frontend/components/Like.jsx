@@ -1,6 +1,11 @@
 var React = require('react');
 var SingleUserStore = require("../stores/SingleUserStore.js");
 var LikeActions = require("../actions/LikeActions.js");
+var Modal = require('boron/FadeModal');
+
+var modalStyle = {
+    width: '300px'
+};
 
 var Like = React.createClass({
   //TODO maybe get it so likes is a number that goes up/down one based on song's likes
@@ -28,8 +33,21 @@ var Like = React.createClass({
       this.setState({liked: false})
     }
   },
+  showModal: function(){
+      this.refs.modal.show();
+  },
+  hideModal: function(){
+      this.refs.modal.hide();
+  },
   display: function(){
-    if (this.state.liked){
+    if (SingleUserStore.currentUser().username === undefined){
+      return [<button onClick={this.showModal}>Like</button>,
+      <Modal ref="modal" modalStyle={modalStyle} >
+          <div>You must be signed in to like songs</div>
+          <button onClick={this.hideModal}>Close</button>
+      </Modal>];
+    }
+    else if (this.state.liked){
       return  <input type="button" onClick={this.toggleLike} value="Liked"/>;
     }else {
       return  <input type="button" onClick={this.toggleLike} value="Unliked"/>;

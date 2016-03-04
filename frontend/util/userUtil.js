@@ -32,7 +32,7 @@ module.exports = {
       type:"GET",
       url:"api/sessions",
       error: function(){
-        callback({})
+        callback()
       },
       success:function (currentUser){
         callback(currentUser) //TODO implement this when its actually useful
@@ -44,7 +44,8 @@ module.exports = {
       type:"DELETE",
       url:"session",
       success: function(){
-        callback()
+        window.location.reload();
+        callback();
       }
     })
   }
