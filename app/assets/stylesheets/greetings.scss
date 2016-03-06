@@ -1,3 +1,69 @@
 // Place all the styles related to the greetings controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+ul {
+  list-style: none;
+}
+
+body {
+  background-color: #BBC3CC;
+  height: 100%;
+  width: 100%;
+}
+
+header {
+  background-color: #FF4500;
+}
+
+header ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #FF4500;
+}
+
+header li{
+  float: left;
+  border-right:1px solid #bbb;
+  padding: 14px 16px;
+  text-align: center;
+}
+
+header li a{
+  display:block;
+  color:black;
+}
+
+header li:hover{
+    background:#FF0000;
+}
+
+#searchbar{
+  float:none;
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.search-result{
+  display:block;
+  cursor: pointer;
+}
+
+#search-results {
+  overflow: hidden;
+  float: none;
+  display: block;
+  position:absolute;
+  padding: 0;
+  top: 50px;
+  left: 50%;
+  transform: translate(-45%, 0%);
+  background: rgba(255,255,255,1);
+  width: 150px;
+}
+
+.search-result:hover {
+    box-shadow: inset 0 0 0 3px black;
+}

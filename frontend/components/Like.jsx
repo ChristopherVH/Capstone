@@ -41,8 +41,8 @@ var Like = React.createClass({
   },
   display: function(){
     if (SingleUserStore.currentUser().username === undefined){
-      return [<button onClick={this.showModal}>Like</button>,
-      <Modal ref="modal" modalStyle={modalStyle} >
+      return [<button key={1} onClick={this.showModal}>Like</button>,
+      <Modal key={2} ref="modal" modalStyle={modalStyle} >
           <div>You must be signed in to like songs</div>
           <button onClick={this.hideModal}>Close</button>
       </Modal>];

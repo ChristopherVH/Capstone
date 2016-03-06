@@ -44,7 +44,7 @@ module.exports = {
       type:"DELETE",
       url:"session",
       success: function(){
-        window.location.reload();
+        window.location.href = ('/#/');
         callback();
       }
     })

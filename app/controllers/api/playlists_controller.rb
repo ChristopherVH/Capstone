@@ -2,7 +2,7 @@ class Api::PlaylistsController < ApplicationController
   before_action :require_signed_in!, only: [:create, :destroy, :update]
 
   def create
-    @playlist = current_user.playlists.new(playlist_params)
+    @playlist = current_user.playlists.new(title: params[:title], description: params[:description])
     if @playlist.save
       render :show
     else

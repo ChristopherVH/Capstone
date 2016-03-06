@@ -33,7 +33,17 @@ var songUtil = {
       type:"GET",
       url:"api/playlists/" + id,
       success:function (playlist){
-        callback(playlist); //TODO implement this when its actually useful
+        callback(playlist);
+      }
+    });
+  },
+  createPlaylist: function(title, description, callback){
+    $.ajax({
+      type:"POST",
+      url: "api/playlists",
+      data: {title: title, description: description},
+      success: function (playlist) {
+        callback(playlist);
       }
     });
   },
@@ -68,10 +78,20 @@ var songUtil = {
   },
   deleteSong: function(id, playlistId){
     $.ajax({
-      type:"DELETE",
+      method:"DELETE",
       url: "api/playlist_songs/" + id
     });
-  }
+  },
+  searchDatabase: function(searchTerm, callback) {
+    $.ajax({
+      url: 'api/searches',
+      type: 'GET',
+      data: {searchTerm: searchTerm},
+      success: function (results) {
+        callback(results);
+      }
+    });
+  },
 };
 
 module.exports = songUtil;

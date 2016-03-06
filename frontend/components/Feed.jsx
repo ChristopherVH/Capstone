@@ -1,6 +1,7 @@
 var React = require('react');
 var Song = require("./Song.jsx");
 var FeedPlaylist = require("./FeedPlaylist.jsx");
+var PlaylistStore = require("../stores/PlaylistStore.js");
 
 var Feed = React.createClass({
   getInitialState: function(){

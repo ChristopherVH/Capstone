@@ -23,6 +23,7 @@
     "react-router": "^2.0.0",
     "react-soundplayer": "^0.3.2",
     "react-waveform": "^0.1.0",
+    "react-wavesurfer": "^0.2.4",
     "soundcloud-audio": "^0.1.7",
     "webpack": "^1.12.14"
   },

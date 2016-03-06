@@ -3,6 +3,8 @@ var SongStore = require("../stores/SongStore.js");
 var ApiUtil = require("../util/apiUtil.js");
 var Like = require("./Like.jsx");
 var PlaylistModal = require("./PlaylistModal.jsx");
+var NewPlaylistModal = require("./NewPlaylistModal.jsx");
+var WaveSurfer = require("./WaveSurfer.jsx");
 
 var Song = React.createClass({
   getInitialState: function(){
@@ -25,6 +27,8 @@ var Song = React.createClass({
         </audio>
         <Like songId={this.state.song.id} />
         <PlaylistModal songId={this.state.song.id}/>
+        <NewPlaylistModal songId={this.state.song.id}/>
+        <WaveSurfer track={this.state.song}/>
       </div>
     );
   }

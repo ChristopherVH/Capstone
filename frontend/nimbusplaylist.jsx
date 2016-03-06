@@ -1,8 +1,9 @@
 var React = require('react'),
     ReactDOM = require('react-dom');
-
+  var Modal = require("react-modal");
   var Router = require('react-router').Router;
   var Route = require('react-router').Route;
+  var hashHistory = require('react-router').hashHistory;
   var IndexRoute = require('react-router').IndexRoute;
   var App = require("./components/App.jsx");
   var Navbar = require("./components/Navbar.jsx");
@@ -14,21 +15,6 @@ var React = require('react'),
   var SinglePlaylist = require('./components/SinglePlaylist.jsx');
   var SongIndex = require("./components/SongIndex.jsx");
   var SingleSong = require("./components/SingleSong.jsx");
-
-// <Router history={browserHistory}>
-//   <Route path="/" component={App}>
-//   <IndexRoute component={Home}/>
-//   <Route path="accounts" component={Accounts}/>
-//   <Route path="statements" component={Statements}/>
-// </Route>
-
-// <IndexRoute component={ Greeting }/>
-// <Route path="collection" component={ Collection }/>
-// <Route path="users/:id" component={ Profile } />
-// <Route path="songs/:id" component={ Song }/>
-// <Route path="playlists/:id" component={ Playlist}/>
-
-//TODO make it so when they go back it redirects to greeting page
 
 var routes = (
     <Route path="/" component={ App }>
@@ -43,8 +29,10 @@ var routes = (
 );
 
 document.addEventListener("DOMContentLoaded", function () {
+  var container = document.getElementById("root");
+  Modal.setAppElement(container);
   ReactDOM.render(
     <Router>{routes}</Router>,
-    document.getElementById('root')
+    container
   )
 });

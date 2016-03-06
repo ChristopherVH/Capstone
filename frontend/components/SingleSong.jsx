@@ -3,6 +3,7 @@ var SongStore = require("../stores/SongStore.js");
 var SongActions = require("../actions/SongActions.js");
 var Like = require("./Like.jsx");
 var PlaylistModal = require("./PlaylistModal.jsx");
+var NewPlaylistModal = require("./NewPlaylistModal.jsx");
 
 var Song = React.createClass({
   getInitialState: function(){
@@ -12,6 +13,9 @@ var Song = React.createClass({
   },
   _onChange: function(){
     this.setState({song: SongStore.find(this.props.params.song_id)})
+  },
+  componentWillReceiveProps: function(newProps){
+    SongActions.fetchSong(newProps.params.song_id)
   },
   componentDidMount: function(){
     this.songListener = SongStore.addListener(this._onChange);
@@ -26,7 +30,9 @@ var Song = React.createClass({
     }
     return(
       <div>
-        {this.state.song.title}
+        <div>{this.state.song.title}</div>
+        <div>{this.state.song.artist}</div>
+        <div>{this.state.song.genre}</div>
         <br/>
         <img src={this.state.song.image_url}></img>
         <br/>
@@ -35,6 +41,7 @@ var Song = React.createClass({
         </audio>
         <Like songId={this.state.song.id} />
         <PlaylistModal/>
+        <NewPlaylistModal songId={this.state.song.id}/>
       </div>
     );
   }

@@ -23,6 +23,10 @@ class User < ActiveRecord::Base
   has_many :playlists
   has_many :songs
 
+  def self.search(query)
+    where("username like ?", "%#{query}%").limit(5)
+  end
+
   def self.find_by_credentials(username, password)
     user = User.find_by(username: username)
     return nil unless user && user.valid_password?(password)

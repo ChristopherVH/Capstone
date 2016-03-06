@@ -38,6 +38,15 @@ PlaylistActions = {
   deleteSongFromPlaylist: function(playlistId, playlistSongId){
     apiUtil.deleteSong(playlistSongId, playlistId);
     this.fetchPlaylist(playlistId);
+  },
+  createPlaylist: function(title, description, songId){
+    apiUtil.createPlaylist(title, description, this.receiveNewPlaylist)
+  },
+  receiveNewPlaylist: function (playlist, songId) {
+    Dispatcher.dispatch({
+      actionType: PlaylistConstants.NEW_PLAYLIST_RECEIVED,
+      playlist: playlist
+    });
   }
 };
 

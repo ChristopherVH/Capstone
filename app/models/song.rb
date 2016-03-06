@@ -18,4 +18,9 @@ class Song < ActiveRecord::Base
   belongs_to :user
   has_many :likes
   has_many :likers, through: :likes, source: :user
+
+  def self.search(query)
+    where("title like ?", "%#{query}%").limit(5)
+  end
+
 end

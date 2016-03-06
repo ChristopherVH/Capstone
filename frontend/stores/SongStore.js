@@ -49,7 +49,6 @@ SongStore.__onDispatch = function(payload){
       SongStore.resetToTrending(payload.songs);
       SongStore.__emitChange();
       break;
-      //TODO finish flux loop for trending songs
   }
 };
 

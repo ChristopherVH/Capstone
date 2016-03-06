@@ -7,6 +7,7 @@ var PlaylistStore = new Store(AppDispatcher);
 var _playlists = [];
 var _playlisthash = {};
 var _playlist = {};
+var _newplaylist = {};
 
 PlaylistStore.all = function(){
   return _playlists.map(function(playlist){
@@ -16,6 +17,15 @@ PlaylistStore.all = function(){
 
 PlaylistStore.find = function (id) {
   return _playlisthash[id];
+};
+
+PlaylistStore.storeNewPlaylist = function(playlist){
+  _newplaylist = playlist;
+};
+
+PlaylistStore.newPlaylist = function(){
+  var playlistdup = $.extend({}, _newplaylist);
+  return playlistdup;
 };
 
 PlaylistStore.addPlaylist = function(playlist) {
@@ -59,6 +69,11 @@ PlaylistStore.__onDispatch = function(payload){
       break;
     case PlaylistConstant.USER_PLAYLISTS_RECEIVED:
       PlaylistStore.resetPlaylists(payload.playlists);
+      PlaylistStore.__emitChange();
+      break;
+    case PlaylistConstant.NEW_PLAYLIST_RECEIVED:
+      PlaylistStore.addPlaylist(payload.playlist);
+      PlaylistStore.storeNewPlaylist(payload.playlist);
       PlaylistStore.__emitChange();
       break;
   }

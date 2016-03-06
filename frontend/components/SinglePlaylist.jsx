@@ -13,6 +13,9 @@ var SinglePlaylist = React.createClass({
   _onChange: function(){
     this.setState({playlist: PlaylistStore.find(this.props.params.playlist_id)})
   },
+  componentWillReceiveProps: function(newProps){
+    PlaylistActions.fetchPlaylist(newProps.params.playlist_id)
+  },
   componentDidMount: function(){
     this.playlistListener = PlaylistStore.addListener(this._onChange);
     PlaylistActions.fetchPlaylist(this.props.params.playlist_id);

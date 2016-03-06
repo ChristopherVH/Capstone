@@ -13,6 +13,9 @@ var Profile = React.createClass({
   _onChange: function(){
     this.setState({user: SingleUserStore.access()})
   },
+  componentWillReceiveProps: function(newProps){
+    UserActions.fetchUserInfo(newProps.params.user_id)
+  },
   componentDidMount: function(){
     this.userListener = SingleUserStore.addListener(this._onChange);
     UserActions.fetchUserInfo(this.props.params.user_id)

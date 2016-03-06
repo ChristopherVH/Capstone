@@ -1,0 +1,19 @@
+---
+development:
+  cloud_name: dzmavimlg
+  api_key: '941697894386556'
+  api_secret: EmfpOIYoBSe7v6hu1c-jpoFWHkE
+  enhance_image_tag: true
+  static_image_support: false
+production:
+  cloud_name: dzmavimlg
+  api_key: '941697894386556'
+  api_secret: EmfpOIYoBSe7v6hu1c-jpoFWHkE
+  enhance_image_tag: true
+  static_image_support: true
+test:
+  cloud_name: dzmavimlg
+  api_key: '941697894386556'
+  api_secret: EmfpOIYoBSe7v6hu1c-jpoFWHkE
+  enhance_image_tag: true
+  static_image_support: false

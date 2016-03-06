@@ -25,7 +25,11 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'puma'
 gem 'bcrypt'
+gem 'cloudinary'
+gem 'sprockets'
+gem 'sprockets-es6', require: 'sprockets/es6'
 gem 'heroku'
+gem 'wavesurfer-rails'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
