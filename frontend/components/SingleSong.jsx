@@ -29,10 +29,12 @@ var Song = React.createClass({
       return <div></div>;
     }
     return(
-      <div className="single-song-container">
-        <div>{this.state.song.title}</div>
-        <div>{this.state.song.artist}</div>
-        <div>{this.state.song.genre}</div>
+      <div className="single-song-container single-song">
+        <div className="song-info">
+          <div className="song-title">{this.state.song.title}</div>
+          <div>{this.state.song.artist}</div>
+          <div>{this.state.song.genre}</div>
+        </div>
         <br/>
         <div className="song-thumbnail"><img src={this.state.song.image_url}></img>
         </div>
@@ -40,6 +42,7 @@ var Song = React.createClass({
           <Like songId={this.state.song.id} />
           <NewPlaylistModal songId={this.state.song.id}/>
           <PlaylistModal/>
+          <br/>
           <audio controls>
             <source src={this.state.song.audio_url} type="audio/mpeg"></source>
           </audio>

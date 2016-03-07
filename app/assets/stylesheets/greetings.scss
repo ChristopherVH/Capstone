@@ -175,7 +175,22 @@ header li:hover{
   left:170px;
 }
 
-.feed, .song-list, .playlist-list, .collection{
+.single-song-container .audio-actions{
+  top: 125px;
+}
+
+.song-info{
+  position:relative;
+  top:25px;
+  left: 80px;
+}
+
+.song-title{
+  position:relative;
+  right: 50px;
+}
+
+.feed, .song-list, .playlist-list, .collection, .single-playlist, .single-song{
   width:75%;
   padding-top: 20px;
   margin:0 auto;

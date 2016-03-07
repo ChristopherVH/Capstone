@@ -34,7 +34,7 @@ var SinglePlaylist = React.createClass({
       return <div></div>;
     }
     return(
-      <div>
+      <div className="single-playlist">
         <h3>{this.state.playlist.title}</h3>
         {this.state.playlist.description}
         <br/>

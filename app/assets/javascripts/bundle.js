@@ -36021,7 +36021,7 @@
 	    }
 	    return React.createElement(
 	      "div",
-	      null,
+	      { className: "single-playlist" },
 	      React.createElement(
 	        "h3",
 	        null,
@@ -36116,21 +36116,25 @@
 	    }
 	    return React.createElement(
 	      "div",
-	      { className: "single-song-container" },
+	      { className: "single-song-container single-song" },
 	      React.createElement(
 	        "div",
-	        null,
-	        this.state.song.title
-	      ),
-	      React.createElement(
-	        "div",
-	        null,
-	        this.state.song.artist
-	      ),
-	      React.createElement(
-	        "div",
-	        null,
-	        this.state.song.genre
+	        { className: "song-info" },
+	        React.createElement(
+	          "div",
+	          { className: "song-title" },
+	          this.state.song.title
+	        ),
+	        React.createElement(
+	          "div",
+	          null,
+	          this.state.song.artist
+	        ),
+	        React.createElement(
+	          "div",
+	          null,
+	          this.state.song.genre
+	        )
 	      ),
 	      React.createElement("br", null),
 	      React.createElement(
@@ -36144,6 +36148,7 @@
 	        React.createElement(Like, { songId: this.state.song.id }),
 	        React.createElement(NewPlaylistModal, { songId: this.state.song.id }),
 	        React.createElement(PlaylistModal, null),
+	        React.createElement("br", null),
 	        React.createElement(
 	          "audio",
 	          { controls: true },
