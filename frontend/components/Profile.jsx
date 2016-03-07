@@ -48,6 +48,7 @@ var Profile = React.createClass({
             <h1 className="username">{user.username}</h1>
             <h2 className="song-count">Songs: {user.songs.length}</h2>
             <h2 className="playlist-count">Playlists: {user.playlists.length}</h2>
+            <h2 className="like-count">Likes: {user.liked_songs.length}</h2>
           </div>
           {profileimage()}
           {profilecover()}

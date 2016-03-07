@@ -30,7 +30,7 @@ var PlaylistIndex = React.createClass({
       return <div></div>
     }
     return(
-      <ul>
+      <ul className="playlist-list">
         {this.createPlaylists(this.state.playlists)}
       </ul>
     )

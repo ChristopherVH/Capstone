@@ -7,8 +7,14 @@ var Greeting = React.createClass({
   render: function(){
     return(
       <div>
-        <ul>
-          <img src="https://images.unsplash.com/17/unsplash_5252bb51404f8_1.JPG?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=3b4259f5b981c95dd562825566d530a8"></img>
+        <ul className="greeting-page">
+          <div className="greeting-vid">
+            <div className="move-up">
+              <video width="100%" autoPlay>
+                <source src="http://mazwai.com/system/posts/videos/000/000/005/original/marc_lorenz--sky_cloudy_time-lapse.mp4" type="video/mp4"/>
+              </video>
+            </div>
+          </div>
           <Collection/>
         </ul>
       </div>

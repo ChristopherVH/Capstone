@@ -25,7 +25,7 @@ var SongIndex = React.createClass({
          return <Song key={song.id} song={song} />;
        });
     return(
-      <ul>
+      <ul className="song-list">
         {songsList}
       </ul>
     )

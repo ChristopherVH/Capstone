@@ -14,7 +14,7 @@ var PlaylistSong = React.createClass({
         <br/>
         {this.state.song.title}
         <br/>
-        <img src={this.state.song.image_url}></img>
+        <div className="song-thumbnail"><img src={this.state.song.image_url}></img></div>
         <br/>
         <audio controls>
           <source src={this.state.song.audio_url} type="audio/mpeg"></source>

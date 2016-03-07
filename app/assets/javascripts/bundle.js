@@ -26669,8 +26669,7 @@
 	      "div",
 	      null,
 	      React.createElement(Navbar, { currentUser: this.state.currentUser }),
-	      this.props.children,
-	      React.createElement(Playbar, null)
+	      this.props.children
 	    );
 	  }
 	});
@@ -26770,8 +26769,7 @@
 	            'Playlists'
 	          )
 	        )
-	      ),
-	      React.createElement('div', { id: 'stay' })
+	      )
 	    );
 	  }
 	});
@@ -33989,8 +33987,20 @@
 	      null,
 	      React.createElement(
 	        "ul",
-	        null,
-	        React.createElement("img", { src: "https://images.unsplash.com/17/unsplash_5252bb51404f8_1.JPG?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&w=1080&fit=max&s=3b4259f5b981c95dd562825566d530a8" }),
+	        { className: "greeting-page" },
+	        React.createElement(
+	          "div",
+	          { className: "greeting-vid" },
+	          React.createElement(
+	            "div",
+	            { className: "move-up" },
+	            React.createElement(
+	              "video",
+	              { width: "100%", autoPlay: true },
+	              React.createElement("source", { src: "http://mazwai.com/system/posts/videos/000/000/005/original/marc_lorenz--sky_cloudy_time-lapse.mp4", type: "video/mp4" })
+	            )
+	          )
+	        ),
 	        React.createElement(Collection, null)
 	      )
 	    );
@@ -34102,7 +34112,7 @@
 	    });
 	    return React.createElement(
 	      "ul",
-	      null,
+	      { className: "collection" },
 	      songsList
 	    );
 	  }
@@ -34136,19 +34146,28 @@
 	  render: function () {
 	    return React.createElement(
 	      "div",
-	      null,
+	      { className: "song-container" },
 	      this.state.song.title,
 	      React.createElement("br", null),
-	      React.createElement("img", { src: this.state.song.image_url, onDoubleClick: this.singleSongRedirect }),
+	      React.createElement(
+	        "div",
+	        { className: "song-thumbnail" },
+	        React.createElement("img", { src: this.state.song.image_url, onDoubleClick: this.singleSongRedirect })
+	      ),
 	      React.createElement("br", null),
 	      React.createElement(
-	        "audio",
-	        { controls: true },
-	        React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
+	        "div",
+	        { className: "audio-actions" },
+	        React.createElement(Like, { songId: this.state.song.id }),
+	        React.createElement(NewPlaylistModal, { songId: this.state.song.id }),
+	        React.createElement(PlaylistModal, { songId: this.state.song.id }),
+	        React.createElement("br", null),
+	        React.createElement(
+	          "audio",
+	          { controls: true },
+	          React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
+	        )
 	      ),
-	      React.createElement(Like, { songId: this.state.song.id }),
-	      React.createElement(PlaylistModal, { songId: this.state.song.id }),
-	      React.createElement(NewPlaylistModal, { songId: this.state.song.id }),
 	      React.createElement(WaveSurfer, { track: this.state.song })
 	    );
 	  }
@@ -34937,7 +34956,7 @@
 	      React.createElement(
 	        'button',
 	        { onClick: this.showModal },
-	        'Add Song To Playlist'
+	        'Add Or Remove Song From Playlist'
 	      ),
 	      React.createElement(
 	        Modal,
@@ -35693,6 +35712,12 @@
 	            { className: "playlist-count" },
 	            "Playlists: ",
 	            user.playlists.length
+	          ),
+	          React.createElement(
+	            "h2",
+	            { className: "like-count" },
+	            "Likes: ",
+	            user.liked_songs.length
 	          )
 	        ),
 	        profileimage(),
@@ -35725,9 +35750,17 @@
 	  populateFeed: function (feed) {
 	    var postFeed = feed.map(function (feedobj, index) {
 	      if (feedobj.genre === undefined) {
-	        return React.createElement(FeedPlaylist, { key: index, playlist: feedobj });
+	        return React.createElement(
+	          "li",
+	          { className: "feed-element" },
+	          React.createElement(FeedPlaylist, { key: index, playlist: feedobj })
+	        );
 	      } else {
-	        return React.createElement(Song, { key: index, song: feedobj });
+	        return React.createElement(
+	          "li",
+	          { className: "feed-element" },
+	          React.createElement(Song, { key: index, song: feedobj })
+	        );
 	      }
 	    });
 	    return postFeed;
@@ -35735,7 +35768,7 @@
 	  render: function () {
 	    return React.createElement(
 	      "ul",
-	      null,
+	      { className: "feed" },
 	      this.populateFeed(this.state.feed)
 	    );
 	  }
@@ -35840,7 +35873,11 @@
 	      React.createElement("br", null),
 	      this.state.song.title,
 	      React.createElement("br", null),
-	      React.createElement("img", { src: this.state.song.image_url }),
+	      React.createElement(
+	        "div",
+	        { className: "song-thumbnail" },
+	        React.createElement("img", { src: this.state.song.image_url })
+	      ),
 	      React.createElement("br", null),
 	      React.createElement(
 	        "audio",
@@ -35892,7 +35929,7 @@
 	    }
 	    return React.createElement(
 	      "ul",
-	      null,
+	      { className: "playlist-list" },
 	      this.createPlaylists(this.state.playlists)
 	    );
 	  }
@@ -36033,7 +36070,7 @@
 	    });
 	    return React.createElement(
 	      "ul",
-	      null,
+	      { className: "song-list" },
 	      songsList
 	    );
 	  }
@@ -36079,7 +36116,7 @@
 	    }
 	    return React.createElement(
 	      "div",
-	      null,
+	      { className: "single-song-container" },
 	      React.createElement(
 	        "div",
 	        null,
@@ -36096,16 +36133,23 @@
 	        this.state.song.genre
 	      ),
 	      React.createElement("br", null),
-	      React.createElement("img", { src: this.state.song.image_url }),
-	      React.createElement("br", null),
 	      React.createElement(
-	        "audio",
-	        { controls: true },
-	        React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
+	        "div",
+	        { className: "song-thumbnail" },
+	        React.createElement("img", { src: this.state.song.image_url })
 	      ),
-	      React.createElement(Like, { songId: this.state.song.id }),
-	      React.createElement(PlaylistModal, null),
-	      React.createElement(NewPlaylistModal, { songId: this.state.song.id })
+	      React.createElement(
+	        "div",
+	        { className: "audio-actions" },
+	        React.createElement(Like, { songId: this.state.song.id }),
+	        React.createElement(NewPlaylistModal, { songId: this.state.song.id }),
+	        React.createElement(PlaylistModal, null),
+	        React.createElement(
+	          "audio",
+	          { controls: true },
+	          React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
+	        )
+	      )
 	    );
 	  }
 	});

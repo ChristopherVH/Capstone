@@ -25,7 +25,7 @@ var Collection = React.createClass({
          return <Song key={song.id} song={song} />;
        });
     return(
-      <ul>
+      <ul className="collection">
         {songsList}
       </ul>
     )

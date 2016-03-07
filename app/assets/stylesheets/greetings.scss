@@ -33,6 +33,7 @@ img{
   clear:both;
 }
 
+//navbar
 header ul{
     list-style-type: none;
     margin: 0 auto;
@@ -58,7 +59,6 @@ header li:hover{
 
 #logout, #login{
   float:right;
-  display: inline-block;
   margin: 0 auto;
   border-left:1px solid #bbb;
 }
@@ -79,7 +79,6 @@ header li:hover{
 #search-results {
   overflow: hidden;
   float: none;
-  display: block;
   position:absolute;
   padding: 0;
   top: 50px;
@@ -89,9 +88,9 @@ header li:hover{
 }
 
 
+// profile
 
 .profile-container{
-  background-color: blue;
   position:relative;
   top:50px;
 }
@@ -110,7 +109,6 @@ header li:hover{
 }
 
 .profile-info{
-  background-color: green;
   position: relative;
 }
 
@@ -119,7 +117,7 @@ header li:hover{
   width:100%;
 }
 
-.username, .song-count, .playlist-count{
+.username, .song-count, .playlist-count, .like-count{
   position: absolute;
   display: block;
   background-color: white;
@@ -129,17 +127,81 @@ header li:hover{
 }
 
 .username{
-  top:100px;
+  top:30px;
+}
+
+.like-count{
+  top:183px;
 }
 
 .song-count{
-  top:200px;
+  top:233px;
 }
 
 .playlist-count{
-  top:250px;
+  top:283px;
 }
 
 .search-result:hover {
     box-shadow: inset 0 0 0 3px black;
+}
+
+// songs
+
+.song-thumbnail{
+  width:150px;
+  height: 150px;
+}
+
+.song-container{
+  position:relative;
+  padding-top: 20px;
+}
+
+.single-song-container{
+  position:relative;
+  top:10px;
+  padding-top: 20px;
+}
+
+.song-list{
+  position:relative;
+  top:35px;
+}
+
+.audio-actions{
+  position:absolute;
+  top: 68px;
+  left:170px;
+}
+
+.feed, .song-list, .playlist-list, .collection{
+  width:75%;
+  padding-top: 20px;
+  margin:0 auto;
+  background-color: #d3d3d3;
+}
+
+.playlist-list{
+  margin-top: 30px;
+}
+
+.greeting-page{
+  padding:0;
+}
+
+
+.greeting-vid{
+  position:relative;
+  width:100%;
+  height: 500px;
+  overflow:hidden;
+  margin:0;
+}
+
+.move-up{
+  width:100%;
+  height:100%;
+  position:absolute;
+  bottom: 305px;
 }

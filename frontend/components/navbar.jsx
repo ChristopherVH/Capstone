@@ -31,8 +31,6 @@ var Navbar = React.createClass({
           <li><Link to="playlists" >Playlists</Link></li>
 
         </ul>
-        <div id="stay">
-        </div>
       </header>
     )
   }

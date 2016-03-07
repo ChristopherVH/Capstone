@@ -17,17 +17,20 @@ var Song = React.createClass({
   },
   render: function(){
     return(
-      <div>
+      <div className="song-container">
         {this.state.song.title}
         <br/>
-        <img src={this.state.song.image_url} onDoubleClick={this.singleSongRedirect} ></img>
+        <div className="song-thumbnail"><img src={this.state.song.image_url} onDoubleClick={this.singleSongRedirect} ></img></div>
         <br/>
-        <audio controls>
-          <source src={this.state.song.audio_url} type="audio/mpeg"></source>
-        </audio>
-        <Like songId={this.state.song.id} />
-        <PlaylistModal songId={this.state.song.id}/>
-        <NewPlaylistModal songId={this.state.song.id}/>
+        <div className="audio-actions">
+          <Like songId={this.state.song.id} />
+          <NewPlaylistModal songId={this.state.song.id}/>
+          <PlaylistModal songId={this.state.song.id}/>
+          <br/>
+          <audio controls>
+            <source src={this.state.song.audio_url} type="audio/mpeg"></source>
+          </audio>
+        </div>
         <WaveSurfer track={this.state.song}/>
       </div>
     );

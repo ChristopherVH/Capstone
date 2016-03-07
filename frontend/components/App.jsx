@@ -27,7 +27,6 @@ var App = React.createClass({
     <div>
       <Navbar currentUser ={this.state.currentUser}/>
       {this.props.children}
-      <Playbar/>
     </div>
   );
   }

@@ -12,16 +12,16 @@ var Feed = React.createClass({
   populateFeed: function(feed){
     var postFeed = feed.map(function(feedobj, index){
       if (feedobj.genre === undefined){
-        return <FeedPlaylist key={index} playlist={feedobj} />;
+        return <li className="feed-element"><FeedPlaylist key={index} playlist={feedobj} /></li>;
       }else{
-        return <Song key={index} song={feedobj}/>;
+        return <li className="feed-element"><Song key={index} song={feedobj}/></li>;
       }
     });
     return postFeed;
   },
   render: function(){
     return(
-      <ul>
+      <ul className="feed">
         {this.populateFeed(this.state.feed)}
       </ul>
     )
