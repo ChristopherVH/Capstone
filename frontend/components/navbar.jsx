@@ -12,23 +12,24 @@ var Navbar = React.createClass({
   },
   createProfile: function(){
     if (this.props.currentUser === undefined || this.props.currentUser.id === undefined){
-      return [<li key={2} ><a href="users/new">Sign Up</a></li>,<li key={1} ><a href="session/new">Login</a></li>];
+      return [<li key={2} ><a href="users/new">Sign Up</a></li>,<li id="login" key={1} ><a href="session/new">Login</a></li>];
     }
     return [<li key={1} ><Link to={"user/" + this.state.currentUser.id} >Profile
-  </Link></li>, <li onClick={this.signOut} key={2} ><div id="logout" >Logout</div></li>];
+  </Link></li>, <li id="logout" onClick={this.signOut} key={2} >Logout</li>];
   },
   signOut: function(){
 		UserActions.signOut();
 	},
   render: function(){
     return(
-      <header>
-        <ul>
+      <header className="clearfix">
+        <ul className="clearfix">
           <li id="logo"><Link to="/" >Sound Nimbus</Link></li>
+          {this.createProfile()}
           <li id="searchbar"><SearchBar/></li>
           <li><Link to="songs" >Songs</Link></li>
           <li><Link to="playlists" >Playlists</Link></li>
-          {this.createProfile()}
+
         </ul>
         <div id="stay">
         </div>

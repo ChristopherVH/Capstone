@@ -1,4 +1,4 @@
-# FresherNote
+# NimbusPlaylist
 
 [Heroku link][heroku] **NB:** This should be a link to your production site
 
@@ -39,34 +39,34 @@ progress. Put an x between the brackets for a checkmark: [x] -->
 
 **Objective:** Functioning rails project with Authentication
 
-- [ ] create new project
-- [ ] create `User` model
-- [ ] authentication
-- [ ] user signup/signin pages
-- [ ] blank landing page after sign in
+- [X] create new project
+- [X] create `User` model
+- [X] authentication
+- [X] user signup/signin pages
+- [X] blank landing page after sign in
 
 ### Phase 2: Song Model, API, and basic APIUtil (2 days)
 
 **Objective:** Play & like songs using the embedded media player at the bottom of the page.
 
-- [ ] create `Song` model
-- [ ] seed the database with a small amount of test data
-- [ ] CRUD API for Songs (`SongsController`)
-- [ ] jBuilder views for songs
-- [ ] setup Webpack & Flux scaffold
-- [ ] setup `APIUtil` to interact with the API
-- [ ] test out API interaction in the console.
+- [X] create `Song` model
+- [X] seed the database with a small amount of test data
+- [X] CRUD API for Songs (`SongsController`)
+- [X] jBuilder views for songs
+- [X] setup Webpack & Flux scaffold
+- [X] setup `APIUtil` to interact with the API
+- [X] test out API interaction in the console.
 
 ### Phase 3: Flux Architecture and Router (2 days)
 
 **Objective:** Songs can be Liked, Played, and added to playlist with the
 user interface.
 
-- [ ] setup the flux loop with skeleton files
-- [ ] setup React Router
+- [X] setup the flux loop with skeleton files
+- [X] setup React Router
 - implement each Song component, building out the flux loop as needed.
-  - [ ] `SongIndex`
-  - [ ] `SongIndexItem`
+  - [X] `SongIndex`
+  - [X] `SongIndexItem`
 
 ### Phase 4: Start Styling (1 days)
 
@@ -80,32 +80,22 @@ user interface.
 
 **Objective:** Songs belong to playlists, and can be viewed by User.
 
-- [ ] create `PlayList` model
+- [X] create `PlayList` model
 - build out API, Flux loop, and components for:
-  - [ ] Playlist CRUD
-  - [ ] adding Songs requires a Playlist
-  - [ ] moving Songs to a different Playlist
-  - [ ] viewing Songs by Playlist
+  - [X] Playlist CRUD
+  - [X] adding Songs requires a Playlist
+  - [X] moving Songs to a different Playlist
+  - [X] viewing Songs by Playlist
 - Use CSS to style new views
 
-
-### Phase 6: Tags (1.5 days)
-
-**Objective:** Songs can be tagged by genre, and tags are searchable.
-
-- [ ] create `Tag` model and join table
-- build out API, Flux loop, and components for:
-  - [ ] fetching tags for Songs
-  - [ ] searching Songs by tag
-- [ ] Style new elements
 
 ### Phase 7: Allow Complex Styling in Songs (0.5 days)
 
 **objective:** Enable complex styling of songs.
 
-- [ ] Integrate `react-quill` (based on Quill.js).
+- [ ] Integrate `react-waveform` (based on waveform.js).
 - [ ] Use Rails helpers to sanitize HTML before rendering.
-- [ ] Style the new Quill elements.
+- [ ] Style the new waveform elements.
 
 ### Phase 8: Styling Cleanup and Seeding (1 day)
 

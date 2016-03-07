@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160301183401) do
+ActiveRecord::Schema.define(version: 20160307070729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,7 +64,7 @@ ActiveRecord::Schema.define(version: 20160301183401) do
   create_table "users", force: :cascade do |t|
     t.string   "username",                                                                                                         null: false
     t.string   "profile_url",     default: "http://cutepuppypictures.net/wp-content/uploads/2013/03/cute-samoyed-puppy_thumb.jpg"
-    t.string   "cover_url",       default: "http://www.timelinecoverbanner.com/facebook-covers/2013/02/above-clouds.jpg"
+    t.string   "cover_url",       default: "https://images.unsplash.com/reserve/qw4JvEnzT3iyU1HR9Ed5_DSC02436.jpg"
     t.string   "password_digest",                                                                                                  null: false
     t.string   "session_token",                                                                                                    null: false
     t.datetime "created_at",                                                                                                       null: false

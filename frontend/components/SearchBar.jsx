@@ -28,7 +28,7 @@ var SearchBar = React.createClass({
   },
   render: function() {
     return (
-      <div className='searchInput' >
+      <div id="header-seach-div" >
         <input type='text'
           id='header-search-input'
           placeholder='Search...'

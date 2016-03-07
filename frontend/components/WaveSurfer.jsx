@@ -2,7 +2,6 @@ var React = require('react');
 
  WaveSurfer = React.createClass({
   componentDidMount: function () {
-    debugger;
   },
   _initWavesurfer: function () {
     // var track = this.props.track;
