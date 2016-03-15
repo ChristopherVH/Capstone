@@ -15,23 +15,35 @@ var Navbar = React.createClass({
       return [<li key={2} ><a href="users/new">Sign Up</a></li>,<li id="login" key={1} ><a href="session/new">Login</a></li>];
     }
     return [<li key={1} ><Link to={"user/" + this.state.currentUser.id} >Profile
-  </Link></li>, <li id="logout" onClick={this.signOut} key={2} >Logout</li>];
+  </Link></li>, <li id="logout" key={2}><a onClick={this.signOut}>Logout</a></li>];
   },
   signOut: function(){
 		UserActions.signOut();
 	},
   render: function(){
     return(
-      <header className="clearfix">
-        <ul className="clearfix">
-          <li id="logo"><Link to="/" >Sound Nimbus</Link></li>
-          {this.createProfile()}
-          <li id="searchbar"><SearchBar/></li>
-          <li><Link to="songs" >Songs</Link></li>
-          <li><Link to="playlists" >Playlists</Link></li>
+      <nav className="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div className="container-fluid nav-container">
+          <ul className="navbar-header">
+            <li><Link className="navbar-brand" to="/" >Sound Nimbus</Link></li>
+          </ul>
+          <div className="navbar-collapse">
+            <ul className="nav navbar-nav">
 
-        </ul>
-      </header>
+              <li><Link to="songs" >Songs</Link></li>
+              <li><Link to="playlists" >Playlists</Link></li>
+            </ul>
+            <ul className="nav navbar-nav navbar-right">
+              {this.createProfile()}
+            </ul>
+            <form className="navbar-form navbar-left" role="search">
+              <div className="form-group">
+                <SearchBar/>
+              </div>
+            </form>
+          </div>
+        </div>
+      </nav>
     )
   }
 })

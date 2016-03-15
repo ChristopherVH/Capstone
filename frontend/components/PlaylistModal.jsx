@@ -23,7 +23,6 @@ var PlaylistModal = React.createClass({
     },
     componentDidMount: function(){
       this.playlistListener = PlaylistStore.addListener(this._onChange)
-      PlaylistActions.fetchUserPlaylists(SingleUserStore.currentUser().id)
     },
     componentWillUnmount: function(){
       this.playlistListener.remove()

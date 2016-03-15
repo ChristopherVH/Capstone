@@ -19,7 +19,7 @@ var CommentForm = React.createClass({
   componentWillUnmount: function(){
     this.playlistListener.remove()
   },
-  createComment: function (event) {
+  createPlaylist: function (event) {
     event.preventDefault();
 
     PlaylistActions.createPlaylist(this.state.title, this.state.description, this.state.songId)
@@ -31,7 +31,7 @@ var CommentForm = React.createClass({
     return (
       <div className="commentformwrapper">
 
-        <form className='newPlaylistForm' onSubmit={this.createComment}>
+        <form className='newPlaylistForm' onSubmit={this.createPlaylist}>
           <div className="playlistArea">
             <input
               type='text'

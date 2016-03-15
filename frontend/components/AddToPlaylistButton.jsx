@@ -26,7 +26,8 @@ var playlistSongAdd = React.createClass({
       }
     })
   },
-  toggleAdd: function(){
+  toggleAdd: function(event){
+    event.preventDefault();
     if (!(this.state.added)){
       PlaylistActions.addSongToPlaylist(this.props.songId, this.props.playlist.id, this.props.playlist.songs.length + 1)
       this.setState({added: true})

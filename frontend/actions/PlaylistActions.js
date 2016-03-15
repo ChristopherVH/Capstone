@@ -32,7 +32,7 @@ PlaylistActions = {
     });
   },
   addSongToPlaylist: function(songId, playlistId, ord){
-    apiUtil.addSong(songId, playlistId, ord)
+    apiUtil.addSong(songId, playlistId, ord);
     this.fetchPlaylist(playlistId);
   },
   deleteSongFromPlaylist: function(playlistId, playlistSongId){
@@ -40,7 +40,7 @@ PlaylistActions = {
     this.fetchPlaylist(playlistId);
   },
   createPlaylist: function(title, description, songId){
-    apiUtil.createPlaylist(title, description, this.receiveNewPlaylist)
+    apiUtil.createPlaylist(title, description, this.receiveNewPlaylist);
   },
   receiveNewPlaylist: function (playlist, songId) {
     Dispatcher.dispatch({

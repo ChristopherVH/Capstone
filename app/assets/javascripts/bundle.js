@@ -26722,8 +26722,12 @@
 	      )
 	    ), React.createElement(
 	      'li',
-	      { id: 'logout', onClick: this.signOut, key: 2 },
-	      'Logout'
+	      { id: 'logout', key: 2 },
+	      React.createElement(
+	        'a',
+	        { onClick: this.signOut },
+	        'Logout'
+	      )
 	    )];
 	  },
 	  signOut: function () {
@@ -26731,42 +26735,62 @@
 	  },
 	  render: function () {
 	    return React.createElement(
-	      'header',
-	      { className: 'clearfix' },
+	      'nav',
+	      { className: 'navbar navbar-inverse navbar-fixed-top', role: 'navigation' },
 	      React.createElement(
-	        'ul',
-	        { className: 'clearfix' },
+	        'div',
+	        { className: 'container-fluid nav-container' },
 	        React.createElement(
-	          'li',
-	          { id: 'logo' },
+	          'ul',
+	          { className: 'navbar-header' },
 	          React.createElement(
-	            Link,
-	            { to: '/' },
-	            'Sound Nimbus'
-	          )
-	        ),
-	        this.createProfile(),
-	        React.createElement(
-	          'li',
-	          { id: 'searchbar' },
-	          React.createElement(SearchBar, null)
-	        ),
-	        React.createElement(
-	          'li',
-	          null,
-	          React.createElement(
-	            Link,
-	            { to: 'songs' },
-	            'Songs'
+	            'li',
+	            null,
+	            React.createElement(
+	              Link,
+	              { className: 'navbar-brand', to: '/' },
+	              'Sound Nimbus'
+	            )
 	          )
 	        ),
 	        React.createElement(
-	          'li',
-	          null,
+	          'div',
+	          { className: 'navbar-collapse' },
 	          React.createElement(
-	            Link,
-	            { to: 'playlists' },
-	            'Playlists'
+	            'ul',
+	            { className: 'nav navbar-nav' },
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: 'songs' },
+	                'Songs'
+	              )
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              React.createElement(
+	                Link,
+	                { to: 'playlists' },
+	                'Playlists'
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            'ul',
+	            { className: 'nav navbar-nav navbar-right' },
+	            this.createProfile()
+	          ),
+	          React.createElement(
+	            'form',
+	            { className: 'navbar-form navbar-left', role: 'search' },
+	            React.createElement(
+	              'div',
+	              { className: 'form-group' },
+	              React.createElement(SearchBar, null)
+	            )
 	          )
 	        )
 	      )
@@ -34143,6 +34167,9 @@
 	  singleSongRedirect: function () {
 	    window.location = '/#/songs/' + this.props.song.id;
 	  },
+	  componentWillReceiveProps: function (newProps) {
+	    this.setState({ song: newProps.song });
+	  },
 	  render: function () {
 	    return React.createElement(
 	      "div",
@@ -34206,7 +34233,8 @@
 	      this.setState({ liked: false });
 	    }
 	  },
-	  toggleLike: function () {
+	  toggleLike: function (event) {
+	    event.preventDefault();
 	    if (!this.state.liked) {
 	      LikeActions.createLike(SingleUserStore.currentUser().id, this.props.songId);
 	      this.setState({ liked: true });
@@ -34917,7 +34945,6 @@
 	  },
 	  componentDidMount: function () {
 	    this.playlistListener = PlaylistStore.addListener(this._onChange);
-	    PlaylistActions.fetchUserPlaylists(SingleUserStore.currentUser().id);
 	  },
 	  componentWillUnmount: function () {
 	    this.playlistListener.remove();
@@ -35016,9 +35043,9 @@
 	      _playlists[i] = playlist;
 	      added = true;
 	    }
-	    if (!added) {
-	      _playlists.push(playlist);
-	    }
+	  }
+	  if (!added) {
+	    _playlists.push(playlist);
 	  }
 	};
 	
@@ -35164,7 +35191,8 @@
 	      }
 	    });
 	  },
-	  toggleAdd: function () {
+	  toggleAdd: function (event) {
+	    event.preventDefault();
 	    if (!this.state.added) {
 	      PlaylistActions.addSongToPlaylist(this.props.songId, this.props.playlist.id, this.props.playlist.songs.length + 1);
 	      this.setState({ added: true });
@@ -35246,7 +35274,7 @@
 	      ),
 	      React.createElement(
 	        Modal,
-	        { ref: 'modal', modalStyle: modalStyle },
+	        { ref: 'modal', modalStyle: modalStyle, hideModal: this.hideModal },
 	        React.createElement(NewPlaylistForm, { songId: this.props.songId }),
 	        React.createElement(
 	          'button',
@@ -35287,7 +35315,7 @@
 	  componentWillUnmount: function () {
 	    this.playlistListener.remove();
 	  },
-	  createComment: function (event) {
+	  createPlaylist: function (event) {
 	    event.preventDefault();
 	
 	    PlaylistActions.createPlaylist(this.state.title, this.state.description, this.state.songId);
@@ -35301,7 +35329,7 @@
 	      { className: 'commentformwrapper' },
 	      React.createElement(
 	        'form',
-	        { className: 'newPlaylistForm', onSubmit: this.createComment },
+	        { className: 'newPlaylistForm', onSubmit: this.createPlaylist },
 	        React.createElement(
 	          'div',
 	          { className: 'playlistArea' },
@@ -35738,6 +35766,7 @@
 	var Song = __webpack_require__(273);
 	var FeedPlaylist = __webpack_require__(301);
 	var PlaylistStore = __webpack_require__(287);
+	var SingleUserStore = __webpack_require__(275);
 	
 	var Feed = React.createClass({
 	  displayName: "Feed",
@@ -35746,6 +35775,9 @@
 	    return {
 	      feed: this.props.feed
 	    };
+	  },
+	  componentWillReceiveProps: function (newProps) {
+	    this.setState({ feed: newProps.feed });
 	  },
 	  populateFeed: function (feed) {
 	    var postFeed = feed.map(function (feedobj, index) {
@@ -35796,6 +35828,9 @@
 	  },
 	  _onChange: function () {
 	    this.setState({ playlist: PlaylistStore.find(this.props.playlist.id) });
+	  },
+	  componentWillReceiveProps: function (newProps) {
+	    this.setState({ playlist: newProps.playlist });
 	  },
 	  componentDidMount: function () {
 	    this.playlistListener = PlaylistStore.addListener(this._onChange);
@@ -35864,6 +35899,10 @@
 	      ord: this.props.song.ord,
 	      song: this.props.song.song
 	    };
+	  },
+	  componentWillReceiveProps: function (newProps) {
+	    this.setState({ ord: newProps.song.ord,
+	      song: newProps.song.song });
 	  },
 	  render: function () {
 	    return React.createElement(

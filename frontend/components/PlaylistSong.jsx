@@ -7,6 +7,10 @@ var PlaylistSong = React.createClass({
       song: this.props.song.song
     })
   },
+  componentWillReceiveProps: function(newProps){
+    this.setState({ ord: newProps.song.ord,
+      song: newProps.song.song});
+  },
   render: function(){
     return(
       <div>

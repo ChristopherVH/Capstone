@@ -15,6 +15,9 @@ var Song = React.createClass({
   singleSongRedirect: function(){
     window.location = '/#/songs/' + this.props.song.id
   },
+  componentWillReceiveProps: function(newProps){
+    this.setState({song: newProps.song});
+  },
   render: function(){
     return(
       <div className="song-container">

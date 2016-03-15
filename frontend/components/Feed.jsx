@@ -2,12 +2,16 @@ var React = require('react');
 var Song = require("./Song.jsx");
 var FeedPlaylist = require("./FeedPlaylist.jsx");
 var PlaylistStore = require("../stores/PlaylistStore.js");
+var SingleUserStore = require("../stores/SingleUserStore.js");
 
 var Feed = React.createClass({
   getInitialState: function(){
     return({
       feed: this.props.feed
     })
+  },
+  componentWillReceiveProps: function(newProps){
+    this.setState({feed: newProps.feed});
   },
   populateFeed: function(feed){
     var postFeed = feed.map(function(feedobj, index){

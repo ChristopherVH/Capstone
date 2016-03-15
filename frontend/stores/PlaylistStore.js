@@ -36,9 +36,9 @@ PlaylistStore.addPlaylist = function(playlist) {
       _playlists[i] = playlist;
       added = true;
     }
-    if (!added){
-      _playlists.push(playlist);
-    }
+  }
+  if (!added){
+    _playlists.push(playlist);
   }
 };
 

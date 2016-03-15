@@ -4,4 +4,5 @@ Todo:
 - move logic out of render method so that the html reads like english
 - go to the song show page, refresh, and make sure it still works
 - aws s3 or paperclip for file upload
--make a new index mage for songs sorted by most recent!!
+- flexbox for navbar
+- playlist modal close on enter

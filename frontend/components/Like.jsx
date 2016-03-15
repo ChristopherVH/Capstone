@@ -24,7 +24,8 @@ var Like = React.createClass({
       this.setState({liked: false})
     }
   },
-  toggleLike: function(){
+  toggleLike: function(event){
+    event.preventDefault();
     if (!(this.state.liked)){
       LikeActions.createLike(SingleUserStore.currentUser().id, this.props.songId)
       this.setState({liked: true})

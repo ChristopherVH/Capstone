@@ -1,7 +1,7 @@
 // Place all the styles related to the greetings controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-
+//
 ul {
   list-style: none;
 }
@@ -12,14 +12,10 @@ body {
   width: 100%;
 }
 
-header {
-  background-color: #FF4500;
-  position:fixed;
-  top: 0px;
-  width:100%;
-  margin: 0 auto;
-  z-index: 50;
-}
+// header {
+//   background-color: #FF4500;
+//   z-index: 50;
+// }
 
 img{
   display:block;
@@ -33,43 +29,50 @@ img{
   clear:both;
 }
 
+#logout{
+  cursor: pointer;
+}
+
+
 //navbar
-header ul{
-    list-style-type: none;
-    margin: 0 auto;
-    padding: 0;
-    background-color: #FF4500;
-    width:100%;
-}
+// header ul{
+//     list-style-type: none;
+//     margin: 0 auto;
+//     padding: 0;
+//     background-color: #FF4500;
+//     width:100%;
+// }
+//
+// header li{
+//   border-right:1px solid #bbb;
+//   padding: 14px 16px;
+//   text-align: center;
+// }
+//
+// header li a{
+//   color:black;
+// }
+//
+// header li:hover{
+//     background:#FF0000;
+// }
 
-header li{
-  float: left;
-  border-right:1px solid #bbb;
-  padding: 14px 16px;
-  text-align: center;
+// #logout, #login{
+//   float:right;
+//   margin: 0 auto;
+//   border-left:1px solid #bbb;
+// }
+//
+// #searchbar{
+//   float:none;
+//   position:relative;
+//   display: inline-block;
+//   margin: 0px auto;
+// }
+//
+.navbar-brand {
+  line-height: 2em;
 }
-
-header li a{
-  color:black;
-}
-
-header li:hover{
-    background:#FF0000;
-}
-
-#logout, #login{
-  float:right;
-  margin: 0 auto;
-  border-left:1px solid #bbb;
-}
-
-#searchbar{
-  float:none;
-  position:relative;
-  display: inline-block;
-  margin: 0px auto;
-}
-
 .search-result{
   display:flex;
   width: 81%;
@@ -195,6 +198,10 @@ header li:hover{
   padding-top: 20px;
   margin:0 auto;
   background-color: #d3d3d3;
+}
+
+.single-playlist{
+  padding-top: 50px;
 }
 
 .playlist-list{

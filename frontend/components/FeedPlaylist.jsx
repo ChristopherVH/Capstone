@@ -13,6 +13,9 @@ var FeedPlaylist = React.createClass({
   _onChange: function(){
     this.setState({playlist: PlaylistStore.find(this.props.playlist.id)})
   },
+  componentWillReceiveProps: function(newProps){
+    this.setState({playlist: newProps.playlist});
+  },
   componentDidMount: function(){
     this.playlistListener = PlaylistStore.addListener(this._onChange);
   },
