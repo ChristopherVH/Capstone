@@ -27374,13 +27374,13 @@
 	      }
 	    });
 	  },
-	  createLike: function (songId) {
+	  createLike: function (songId, callback) {
 	    $.ajax({
 	      type: "POST",
 	      url: "api/songs/" + songId + "/like"
 	    });
 	  },
-	  destroyLike: function (songId) {
+	  destroyLike: function (songId, callback) {
 	    $.ajax({
 	      type: "DELETE",
 	      url: "api/songs/" + songId + "/like"
@@ -34174,7 +34174,21 @@
 	    return React.createElement(
 	      "div",
 	      { className: "song-container" },
-	      this.state.song.title,
+	      React.createElement(
+	        "div",
+	        { className: "feed-song-info" },
+	        React.createElement(
+	          "div",
+	          { className: "feed-song-title" },
+	          this.state.song.title
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "feed-song-artist" },
+	          "Artist: ",
+	          this.state.song.artist
+	        )
+	      ),
 	      React.createElement("br", null),
 	      React.createElement(
 	        "div",
@@ -34185,8 +34199,8 @@
 	      React.createElement(
 	        "div",
 	        { className: "audio-actions" },
-	        React.createElement(Like, { songId: this.state.song.id }),
-	        React.createElement(NewPlaylistModal, { songId: this.state.song.id }),
+	        React.createElement(Like, { songId: this.state.song.id, userId: this.props.userId }),
+	        React.createElement(NewPlaylistModal, { songId: this.state.song.id, userId: this.props.userId }),
 	        React.createElement(PlaylistModal, { songId: this.state.song.id }),
 	        React.createElement("br", null),
 	        React.createElement(
@@ -34343,16 +34357,13 @@
 
 	var Dispatcher = __webpack_require__(239);
 	var apiUtil = __webpack_require__(248);
-	var UserActions = __webpack_require__(238);
 	
 	LikeActions = {
 	  createLike: function (userId, songId) {
 	    apiUtil.createLike(songId);
-	    UserActions.fetchCurrentUser();
 	  },
 	  deleteLike: function (userId, songId) {
 	    apiUtil.destroyLike(songId);
-	    UserActions.fetchCurrentUser();
 	  }
 	};
 	
@@ -35224,66 +35235,66 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SingleUserStore = __webpack_require__(275);
 	var Modal = __webpack_require__(277);
 	var PlaylistStore = __webpack_require__(287);
 	var PlaylistActions = __webpack_require__(289);
 	var NewPlaylistForm = __webpack_require__(292);
+	var SingleUserStore = __webpack_require__(275);
 	
 	var modalStyle = {
-	  width: '300px'
+	    width: '300px'
 	};
 	// backdropStyle={backdropStyle} contentStyle={contentStyle}
 	var NewPlaylistModal = React.createClass({
-	  displayName: 'NewPlaylistModal',
+	    displayName: 'NewPlaylistModal',
 	
-	  getInitialState: function () {
-	    return {
-	      playlists: PlaylistStore.all()
-	    };
-	  },
-	  _onChange: function () {
-	    this.setState({
-	      playlists: PlaylistStore.all()
-	    });
-	  },
-	  componentDidMount: function () {
-	    this.playlistListener = PlaylistStore.addListener(this._onChange);
-	    PlaylistActions.fetchUserPlaylists(SingleUserStore.currentUser().id);
-	  },
-	  componentWillUnmount: function () {
-	    this.playlistListener.remove();
-	  },
-	  showModal: function () {
-	    this.refs.modal.show();
-	  },
-	  hideModal: function () {
-	    this.refs.modal.hide();
-	  },
-	  render: function () {
-	    if (this.state.playlists === undefined) {
-	      return React.createElement('div', null);
+	    // getInitialState: function (){
+	    //   return({
+	    //     playlists: SingleUserStore.currentUser().playlists
+	    //   })
+	    // },
+	    // _onChange: function(){
+	    //   this.setState({
+	    //     playlists: PlaylistStore.all()
+	    //   })
+	    // },
+	    // componentDidMount: function(){
+	    //   this.playlistListener = PlaylistStore.addListener(this._onChange)
+	    //   // PlaylistActions.fetchUserPlaylists(SingleUserStore.currentUser().id)
+	    // },
+	    // componentWillUnmount: function(){
+	    //   this.playlistListener.remove()
+	    // },
+	    showModal: function () {
+	        this.refs.modal.show();
+	    },
+	    hideModal: function () {
+	        this.refs.modal.hide();
+	    },
+	    render: function () {
+	        // if (this.state.playlists === undefined){
+	        //   return <div></div>;
+	        // }
+	        return React.createElement(
+	            'div',
+	            null,
+	            React.createElement(
+	                'button',
+	                { onClick: this.showModal },
+	                'Create Playlist With Song'
+	            ),
+	            React.createElement(
+	                Modal,
+	                { ref: 'modal', modalStyle: modalStyle, hideModal: this.hideModal },
+	                React.createElement(NewPlaylistForm, { songId: this.props.songId, userId: this.props.userId }),
+	                React.createElement(
+	                    'button',
+	                    { onClick: this.hideModal },
+	                    'Close'
+	                )
+	            )
+	        );
 	    }
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'button',
-	        { onClick: this.showModal },
-	        'Create Playlist With Song'
-	      ),
-	      React.createElement(
-	        Modal,
-	        { ref: 'modal', modalStyle: modalStyle, hideModal: this.hideModal },
-	        React.createElement(NewPlaylistForm, { songId: this.props.songId }),
-	        React.createElement(
-	          'button',
-	          { onClick: this.hideModal },
-	          'Close'
-	        )
-	      )
-	    );
-	  }
 	});
 	
 	module.exports = NewPlaylistModal;
@@ -35321,6 +35332,7 @@
 	    PlaylistActions.createPlaylist(this.state.title, this.state.description, this.state.songId);
 	    this.setState({ title: '' });
 	    this.setState({ description: '' });
+	    UserActions.fetchUserInfo(this.props.userId);
 	  },
 	
 	  render: function () {
@@ -35751,7 +35763,7 @@
 	        profileimage(),
 	        profilecover()
 	      ),
-	      React.createElement(Feed, { feed: user.feed })
+	      React.createElement(Feed, { feed: user.feed, userId: user.id })
 	    );
 	  }
 	});
@@ -35780,6 +35792,7 @@
 	    this.setState({ feed: newProps.feed });
 	  },
 	  populateFeed: function (feed) {
+	    var that = this;
 	    var postFeed = feed.map(function (feedobj, index) {
 	      if (feedobj.genre === undefined) {
 	        return React.createElement(
@@ -35791,7 +35804,7 @@
 	        return React.createElement(
 	          "li",
 	          { className: "feed-element" },
-	          React.createElement(Song, { key: index, song: feedobj })
+	          React.createElement(Song, { key: index, song: feedobj, userId: that.props.userId })
 	        );
 	      }
 	    });
@@ -35823,17 +35836,18 @@
 	
 	  getInitialState: function () {
 	    return {
-	      playlist: this.props.playlist
+	      playlist: undefined
 	    };
 	  },
 	  _onChange: function () {
 	    this.setState({ playlist: PlaylistStore.find(this.props.playlist.id) });
 	  },
 	  componentWillReceiveProps: function (newProps) {
-	    this.setState({ playlist: newProps.playlist });
+	    PlaylistActions.fetchPlaylist(newProps.playlist.id);
 	  },
 	  componentDidMount: function () {
 	    this.playlistListener = PlaylistStore.addListener(this._onChange);
+	    PlaylistActions.fetchPlaylist(this.props.playlist.id);
 	  },
 	  componentWillUnmount: function () {
 	    this.playlistListener.remove();
@@ -35848,15 +35862,15 @@
 	    window.location = '/#/playlists/' + this.props.playlist.id;
 	  },
 	  display: function () {
-	    if (this.state.playlist.songs === undefined) {
+	    if (this.state.playlist === undefined) {
 	      return [React.createElement(
 	        "h3",
 	        { key: 1, onDoubleClick: this.singlePlaylistRedirect },
-	        this.state.playlist.title
+	        this.props.playlist.title
 	      ), React.createElement(
 	        "div",
 	        { key: 2 },
-	        this.state.playlist.description
+	        this.props.playlist.description
 	      )];
 	    } else {
 	      return [React.createElement(
@@ -35900,28 +35914,39 @@
 	      song: this.props.song.song
 	    };
 	  },
-	  componentWillReceiveProps: function (newProps) {
-	    this.setState({ ord: newProps.song.ord,
-	      song: newProps.song.song });
-	  },
 	  render: function () {
 	    return React.createElement(
 	      "div",
-	      null,
-	      this.state.ord,
-	      React.createElement("br", null),
-	      this.state.song.title,
+	      { className: "playlist-song" },
+	      React.createElement(
+	        "div",
+	        { className: "playlist-song-info" },
+	        React.createElement(
+	          "div",
+	          { className: "playlist-song-title" },
+	          this.state.song.title
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "playlist-song-genre" },
+	          this.state.song.genre
+	        )
+	      ),
 	      React.createElement("br", null),
 	      React.createElement(
 	        "div",
-	        { className: "song-thumbnail" },
+	        { className: "playlist-song-thumbnail" },
 	        React.createElement("img", { src: this.state.song.image_url })
 	      ),
 	      React.createElement("br", null),
 	      React.createElement(
-	        "audio",
-	        { controls: true },
-	        React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
+	        "div",
+	        { className: "playlist-song-audio" },
+	        React.createElement(
+	          "audio",
+	          { controls: true },
+	          React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
+	        )
 	      )
 	    );
 	  }

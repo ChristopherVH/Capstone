@@ -7,17 +7,18 @@ var PlaylistActions = require("../actions/PlaylistActions.js");
 var FeedPlaylist = React.createClass({
   getInitialState: function(){
     return({
-      playlist: this.props.playlist
+      playlist: undefined
     })
   },
   _onChange: function(){
     this.setState({playlist: PlaylistStore.find(this.props.playlist.id)})
   },
   componentWillReceiveProps: function(newProps){
-    this.setState({playlist: newProps.playlist});
+    PlaylistActions.fetchPlaylist(newProps.playlist.id);
   },
   componentDidMount: function(){
     this.playlistListener = PlaylistStore.addListener(this._onChange);
+    PlaylistActions.fetchPlaylist(this.props.playlist.id);
   },
   componentWillUnmount: function(){
     this.playlistListener.remove();
@@ -32,11 +33,11 @@ var FeedPlaylist = React.createClass({
     window.location = '/#/playlists/' + this.props.playlist.id
   },
   display: function(){
-    if (this.state.playlist.songs === undefined){
+    if (this.state.playlist === undefined){
       return[<h3 key={1} onDoubleClick = {this.singlePlaylistRedirect}>
-        {this.state.playlist.title}
+        {this.props.playlist.title}
       </h3>,<div key={2}>
-        {this.state.playlist.description}
+        {this.props.playlist.description}
       </div>];
     }else {
       return[<h3 key={1} onDoubleClick = {this.singlePlaylistRedirect}>

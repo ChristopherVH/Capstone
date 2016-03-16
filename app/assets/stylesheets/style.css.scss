@@ -188,6 +188,24 @@ img{
   left: 80px;
 }
 
+.feed-song-info{
+  position: absolute;
+  width: 100%
+}
+
+.feed-song-artist{
+  position: absolute;
+  left: 170px;
+}
+
+.feed-song-title{
+  width: 150px;
+  text-align: center;
+  color: white;
+  background-color: black;
+  border-bottom: 2px solid #AFB8AE;
+}
+
 .song-title{
   position:relative;
   right: 50px;
@@ -226,4 +244,30 @@ img{
   height:100%;
   position:absolute;
   bottom: 305px;
+}
+
+.playlist-song{
+  position: relative;
+  left: 20px;
+}
+
+.playlist-song-info{
+  position: absolute;
+  left: 90px;
+  top: 20px;
+}
+
+.playlist-song-genre{
+  margin-bottom: 3px;
+}
+
+.playlist-song-thumbnail{
+  width: 80px;
+  height: 80px;
+}
+
+.playlist-song-audio{
+  position:absolute;
+  left: 90px;
+  bottom: 15px;
 }

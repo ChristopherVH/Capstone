@@ -17,6 +17,7 @@ class Api::LikesController < ApplicationController
 
    if like.save
      @song = like.song
+     render json: "liked!"
    else
      render json: like.errors.full_messages
    end
@@ -28,6 +29,7 @@ class Api::LikesController < ApplicationController
    if like
      like.destroy
      @song = like.song
+     render json: "unliked!"
    else
      render json: "You cannot unlike this"
    end

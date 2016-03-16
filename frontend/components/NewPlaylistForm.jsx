@@ -25,6 +25,7 @@ var CommentForm = React.createClass({
     PlaylistActions.createPlaylist(this.state.title, this.state.description, this.state.songId)
     this.setState({title: ''});
     this.setState({description: ''});
+    UserActions.fetchUserInfo(this.props.userId);
   },
 
   render: function() {

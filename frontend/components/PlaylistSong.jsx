@@ -7,22 +7,25 @@ var PlaylistSong = React.createClass({
       song: this.props.song.song
     })
   },
-  componentWillReceiveProps: function(newProps){
-    this.setState({ ord: newProps.song.ord,
-      song: newProps.song.song});
-  },
   render: function(){
     return(
-      <div>
-        {this.state.ord}
+      <div className="playlist-song">
+        <div className="playlist-song-info">
+          <div className="playlist-song-title">
+            {this.state.song.title}
+          </div>
+          <div className="playlist-song-genre">
+            {this.state.song.genre}
+          </div>
+        </div>
         <br/>
-        {this.state.song.title}
+        <div className="playlist-song-thumbnail"><img src={this.state.song.image_url}></img></div>
         <br/>
-        <div className="song-thumbnail"><img src={this.state.song.image_url}></img></div>
-        <br/>
-        <audio controls>
-          <source src={this.state.song.audio_url} type="audio/mpeg"></source>
-        </audio>
+        <div className="playlist-song-audio">
+          <audio controls>
+            <source src={this.state.song.audio_url} type="audio/mpeg"></source>
+          </audio>
+        </div>
       </div>
     );
   }

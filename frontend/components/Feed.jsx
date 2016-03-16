@@ -14,11 +14,12 @@ var Feed = React.createClass({
     this.setState({feed: newProps.feed});
   },
   populateFeed: function(feed){
+    var that = this;
     var postFeed = feed.map(function(feedobj, index){
       if (feedobj.genre === undefined){
         return <li className="feed-element"><FeedPlaylist key={index} playlist={feedobj} /></li>;
       }else{
-        return <li className="feed-element"><Song key={index} song={feedobj}/></li>;
+        return <li className="feed-element"><Song key={index} song={feedobj} userId={that.props.userId}/></li>;
       }
     });
     return postFeed;

@@ -52,7 +52,7 @@ var Profile = React.createClass({
           {profileimage()}
           {profilecover()}
         </div>
-        <Feed feed={user.feed}/>
+        <Feed feed={user.feed} userId={user.id}/>
       </div>
     );
   }

@@ -57,13 +57,13 @@ var songUtil = {
       }
     });
   },
-  createLike: function(songId){
+  createLike: function(songId, callback){
     $.ajax({
       type:"POST",
       url: "api/songs/"+ songId + "/like"
     });
   },
-  destroyLike: function(songId){
+  destroyLike: function(songId, callback){
     $.ajax({
       type:"DELETE",
       url: "api/songs/" + songId + "/like"

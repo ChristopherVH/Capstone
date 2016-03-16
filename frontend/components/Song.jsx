@@ -21,13 +21,20 @@ var Song = React.createClass({
   render: function(){
     return(
       <div className="song-container">
-        {this.state.song.title}
+        <div className="feed-song-info">
+          <div className="feed-song-title">
+            {this.state.song.title}
+          </div>
+          <div className="feed-song-artist">
+            Artist: {this.state.song.artist}
+          </div>
+        </div>
         <br/>
         <div className="song-thumbnail"><img src={this.state.song.image_url} onDoubleClick={this.singleSongRedirect} ></img></div>
         <br/>
         <div className="audio-actions">
-          <Like songId={this.state.song.id} />
-          <NewPlaylistModal songId={this.state.song.id}/>
+          <Like songId={this.state.song.id} userId={this.props.userId} />
+          <NewPlaylistModal songId={this.state.song.id} userId={this.props.userId}/>
           <PlaylistModal songId={this.state.song.id}/>
           <br/>
           <audio controls>
