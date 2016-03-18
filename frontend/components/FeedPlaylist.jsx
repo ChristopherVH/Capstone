@@ -34,17 +34,22 @@ var FeedPlaylist = React.createClass({
   },
   display: function(){
     if (this.state.playlist === undefined){
-      return[<h3 key={1} onDoubleClick = {this.singlePlaylistRedirect}>
+      return[<h3 key={1} onDoubleClick={this.singlePlaylistRedirect} className="playlist-title">
         {this.props.playlist.title}
       </h3>,<div key={2}>
         {this.props.playlist.description}
       </div>];
     }else {
-      return[<h3 key={1} onDoubleClick = {this.singlePlaylistRedirect}>
-        {this.state.playlist.title}
-      </h3>,<div key={2} >
-        {this.state.playlist.description}
-      </div>,<div key={3} >
+      return[
+      <div className="playlist-info">
+        <h3 key={1} onDoubleClick = {this.singlePlaylistRedirect} className="playlist-title">
+          {this.state.playlist.title}
+        </h3>
+      </div>,
+      <div key={2}  className="playlist-description">
+          {this.state.playlist.description}
+      </div>
+      ,<div key={3} >
         {this.createSongList()}
       </div>];
     }

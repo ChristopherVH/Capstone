@@ -39,7 +39,7 @@ var NewPlaylistModal = React.createClass({
       // }
         return (
             <div>
-                <button onClick={this.showModal}>Create Playlist With Song</button>
+                <button onClick={this.showModal}>Add To New Playlist</button>
                 <Modal ref="modal" modalStyle={modalStyle} hideModal={this.hideModal}>
                   <NewPlaylistForm songId={this.props.songId} userId={this.props.userId}/>
                   <button onClick={this.hideModal}>Close</button>

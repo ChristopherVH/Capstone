@@ -26,7 +26,7 @@ PlaylistSong.create!(playlist_id:1, song_id:3,ord:2)
 Song.create!(user_id:3, title:"Twist and Shout", artist:"The Beatles", genre:"Rock", audio_url:"https://s3.amazonaws.com/nimbusplaylist/The+Beatles+-+Twist+and+Shout+%5BBBC+Sessions%2C+Remastered%5D_165C2VGWqjA_youtube.mp3", image_url: "https://upload.wikimedia.org/wikipedia/en/6/61/BeatlesTwistanShoutSingle.jpg")
 Song.create!(user_id:1, title:"Sweet Life", artist:"Frank Ocean", genre:"rap", audio_url:"https://s3.amazonaws.com/nimbusplaylist/Sweet+LIFE_52001640_soundcloud.mp3", image_url:"https://upload.wikimedia.org/wikipedia/en/2/28/Channel_ORANGE.jpg")
 Song.create!(user_id:4, title:"Sir Duke", artist:"Stevie Wonder", genre:"R&B", audio_url:"https://s3.amazonaws.com/nimbusplaylist/Stevie+Wonder++You+can+feel+it+all+over_qtgF1w5LsZY_youtube.mp3",
-image_url: "http://cdn.discogs.com/rpsjdSO5z3POCExU1-VpUHRQTTU=/fit-in/300x300/filters:strip_icc():format(jpeg):mode_rgb()/discogs-images/R-1550146-1439011991-8436.jpeg.jpg")
+image_url: "http://techdeephouse.com/uploads/Stevie%20Wonder%20Sir%20Duke%20Remix%20Stems%20FLAC.jpg")
 Like.create!(user_id:1, song_id:3)
 Song.create!(user_id:3, title:"Bohemian Rhapsody", artist:"Queen", genre:"Rock", audio_url:"https://s3.amazonaws.com/nimbusplaylist/Queen+-+Bohemian+Rhapsody+(Official+Video)_fJ9rUzIMcZQ_youtube.mp3", image_url: "http://img03.deviantart.net/31d4/i/2009/347/c/a/bohemian_rhapsody_by_nazurinshya.jpg")
 Playlist.create!(user_id:1, title:"Relaxing afternoon", description:" - v - ")

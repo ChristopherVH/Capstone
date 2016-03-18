@@ -34010,7 +34010,7 @@
 	      "div",
 	      null,
 	      React.createElement(
-	        "ul",
+	        "div",
 	        { className: "greeting-page" },
 	        React.createElement(
 	          "div",
@@ -34020,12 +34020,16 @@
 	            { className: "move-up" },
 	            React.createElement(
 	              "video",
-	              { width: "100%", autoPlay: true },
+	              { autoPlay: true, loop: true },
 	              React.createElement("source", { src: "http://mazwai.com/system/posts/videos/000/000/005/original/marc_lorenz--sky_cloudy_time-lapse.mp4", type: "video/mp4" })
 	            )
 	          )
 	        ),
-	        React.createElement(Collection, null)
+	        React.createElement(
+	          "div",
+	          { className: "collection-container" },
+	          React.createElement(Collection, null)
+	        )
 	      )
 	    );
 	  }
@@ -34213,6 +34217,7 @@
 	    );
 	  }
 	});
+	// numbLikes={this.state.song.likers.length}
 	
 	module.exports = Song;
 
@@ -34223,6 +34228,7 @@
 	var React = __webpack_require__(1);
 	var SingleUserStore = __webpack_require__(275);
 	var LikeActions = __webpack_require__(276);
+	var UserActions = __webpack_require__(238);
 	var Modal = __webpack_require__(277);
 	
 	var modalStyle = {
@@ -34247,14 +34253,31 @@
 	      this.setState({ liked: false });
 	    }
 	  },
+	  componentWillReceiveProps: function (newProps) {
+	    if (SingleUserStore.currentUser().liked_songs[newProps.songId]) {
+	      this.setState({ liked: true });
+	    } else {
+	      this.setState({ liked: false });
+	    }
+	  },
 	  toggleLike: function (event) {
 	    event.preventDefault();
 	    if (!this.state.liked) {
 	      LikeActions.createLike(SingleUserStore.currentUser().id, this.props.songId);
 	      this.setState({ liked: true });
+	      if (this.props.userId === undefined) {
+	        UserActions.fetchCurrentUser();
+	      } else {
+	        UserActions.fetchUserInfo(this.props.userId);
+	      }
 	    } else {
 	      LikeActions.deleteLike(SingleUserStore.currentUser().id, this.props.songId);
 	      this.setState({ liked: false });
+	      if (this.props.userId === undefined) {
+	        UserActions.fetchCurrentUser();
+	      } else {
+	        UserActions.fetchUserInfo(this.props.userId);
+	      }
 	    }
 	  },
 	  showModal: function () {
@@ -34285,9 +34308,11 @@
 	      )];
 	    } else if (this.state.liked) {
 	      return React.createElement("input", { type: "button", onClick: this.toggleLike, value: "Liked" });
+	      //this.props.numbLikes + 1
 	    } else {
-	      return React.createElement("input", { type: "button", onClick: this.toggleLike, value: "Unliked" });
-	    }
+	        return React.createElement("input", { type: "button", onClick: this.toggleLike, value: "Unliked" });
+	        //this.props.numbLikes
+	      }
 	  },
 	  render: function () {
 	    return React.createElement(
@@ -34994,7 +35019,7 @@
 	      React.createElement(
 	        'button',
 	        { onClick: this.showModal },
-	        'Add Or Remove Song From Playlist'
+	        'Add Remove From Playlist'
 	      ),
 	      React.createElement(
 	        Modal,
@@ -35281,7 +35306,7 @@
 	            React.createElement(
 	                'button',
 	                { onClick: this.showModal },
-	                'Create Playlist With Song'
+	                'Add To New Playlist'
 	            ),
 	            React.createElement(
 	                Modal,
@@ -35865,7 +35890,7 @@
 	    if (this.state.playlist === undefined) {
 	      return [React.createElement(
 	        "h3",
-	        { key: 1, onDoubleClick: this.singlePlaylistRedirect },
+	        { key: 1, onDoubleClick: this.singlePlaylistRedirect, className: "playlist-title" },
 	        this.props.playlist.title
 	      ), React.createElement(
 	        "div",
@@ -35874,12 +35899,16 @@
 	      )];
 	    } else {
 	      return [React.createElement(
-	        "h3",
-	        { key: 1, onDoubleClick: this.singlePlaylistRedirect },
-	        this.state.playlist.title
+	        "div",
+	        { className: "playlist-info" },
+	        React.createElement(
+	          "h3",
+	          { key: 1, onDoubleClick: this.singlePlaylistRedirect, className: "playlist-title" },
+	          this.state.playlist.title
+	        )
 	      ), React.createElement(
 	        "div",
-	        { key: 2 },
+	        { key: 2, className: "playlist-description" },
 	        this.state.playlist.description
 	      ), React.createElement(
 	        "div",
@@ -36029,11 +36058,19 @@
 	      "div",
 	      null,
 	      React.createElement(
-	        "h3",
-	        { onDoubleClick: this.singlePlaylistRedirect },
-	        this.state.playlist.title
+	        "div",
+	        { className: "playlist-info" },
+	        React.createElement(
+	          "h3",
+	          { className: "playlist-title", onDoubleClick: this.singlePlaylistRedirect },
+	          this.state.playlist.title
+	        )
 	      ),
-	      this.state.playlist.description,
+	      React.createElement(
+	        "div",
+	        { className: "playlist-description" },
+	        this.state.playlist.description
+	      ),
 	      React.createElement("br", null),
 	      songsList
 	    );

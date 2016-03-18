@@ -2,6 +2,15 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 //
+html, body, div, span, object, iframe,
+blockquote, figure, pre {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-family: 'Oswald', sans-serif;
+}
+
 ul {
   list-style: none;
 }
@@ -12,12 +21,54 @@ body {
   width: 100%;
 }
 
+.login-backer {
+  background-image: url(https://images.unsplash.com/photo-1444090542259-0af8fa96557e);
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+}
+
+.sign-up-header, .sign-in-header{
+  text-align: center;
+}
+
+
+// .enterform{
+//   position: relative;;
+//   top: 250px;
+//   display: block;
+//   background-color: blue;
+// }
+//
+// .enterform {
+//   background-color: rgba(237, 237, 165, 0.5);
+//   border-radius: 25px;
+//   display: inline-block;
+// }
+// label {
+//     width:180px;
+//     clear:left;
+//     text-align:right;
+//     padding:10px;
+// }
+//
+// .guestandin, .enterform input{
+//   margin-top: 10px;
+//   margin-bottom: 10px;
+// }
 // header {
 //   background-color: #FF4500;
 //   z-index: 50;
 // }
 
 img{
+  display:block;
+  width:100%;
+  height:100%;
+}
+
+video{
   display:block;
   width:100%;
   height:100%;
@@ -64,19 +115,32 @@ img{
 // }
 //
 // #searchbar{
-//   float:none;
-//   position:relative;
-//   display: inline-block;
-//   margin: 0px auto;
+//   // float:none;
+//   // position:relative;
+//   // display: inline-block;
+//   // margin: 0px auto;
 // }
 //
-.navbar-brand {
-  line-height: 2em;
+// .navbar-brand {
+//   line-height: 2em;
+// }
+
+.navbar-form{
+  margin-top: 10px;
+  margin-left: 30px;
 }
+
 .search-result{
   display:flex;
-  width: 81%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
   cursor: pointer;
+  text-align: center;
+}
+
+#header-search-input{
+  width: 250px;
 }
 
 #search-results {
@@ -84,10 +148,9 @@ img{
   float: none;
   position:absolute;
   padding: 0;
-  top: 50px;
-  left: 0px;
   background: rgba(255,255,255,1);
-  width: 165px;
+  width: 250px;
+  text-align: center;
 }
 
 
@@ -159,12 +222,15 @@ img{
 .song-container{
   position:relative;
   padding-top: 20px;
+  margin: 0, auto;
+  text-align: center;
 }
 
 .single-song-container{
   position:relative;
   top:10px;
   padding-top: 20px;
+  margin: 0, auto;
 }
 
 .song-list{
@@ -174,7 +240,7 @@ img{
 
 .audio-actions{
   position:absolute;
-  top: 68px;
+  top: 53px;
   left:170px;
 }
 
@@ -195,7 +261,13 @@ img{
 
 .feed-song-artist{
   position: absolute;
+  display:inline-block;
+  color: white;
+  background-color: black;
+  border-bottom: 2px solid #AFB8AE;
+  padding: 0px 10px;
   left: 170px;
+  top:0;
 }
 
 .feed-song-title{
@@ -204,6 +276,28 @@ img{
   color: white;
   background-color: black;
   border-bottom: 2px solid #AFB8AE;
+}
+
+.playlist-title{
+  display: inline-block;
+  color: white;
+  background-color: black;
+  border-bottom: 2px solid #AFB8AE;
+  padding: 5px 10px;
+  margin-bottom: 0;
+}
+
+.playlist-description{
+  display: inline-block;
+  color: white;
+  background-color: black;
+  border-bottom: 2px solid #AFB8AE;
+  padding: 5px 10px;
+  margin-bottom: 0;
+}
+
+.playlist-info{
+  text-align: left;
 }
 
 .song-title{
@@ -220,10 +314,11 @@ img{
 
 .single-playlist{
   padding-top: 50px;
+  padding-left: 40px;
 }
 
 .playlist-list{
-  margin-top: 30px;
+  margin-top: 50px;
 }
 
 .greeting-page{
@@ -232,18 +327,21 @@ img{
 
 
 .greeting-vid{
-  position:relative;
   width:100%;
-  height: 500px;
+  height: 400px;
   overflow:hidden;
   margin:0;
 }
 
+.collection-container{
+  margin-top: 0;
+  padding-top: 0
+}
+
 .move-up{
   width:100%;
-  height:100%;
   position:absolute;
-  bottom: 305px;
+  bottom: 550px;
 }
 
 .playlist-song{
@@ -269,5 +367,5 @@ img{
 .playlist-song-audio{
   position:absolute;
   left: 90px;
-  bottom: 15px;
+  bottom: 18px;
 }

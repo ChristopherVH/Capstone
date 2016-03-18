@@ -1,6 +1,7 @@
 var React = require('react');
 var SingleUserStore = require("../stores/SingleUserStore.js");
 var LikeActions = require("../actions/LikeActions.js");
+var UserActions = require("../actions/UserActions.js");
 var Modal = require('boron/FadeModal');
 
 var modalStyle = {
@@ -24,14 +25,31 @@ var Like = React.createClass({
       this.setState({liked: false})
     }
   },
+  componentWillReceiveProps: function(newProps){
+    if (SingleUserStore.currentUser().liked_songs[newProps.songId]){
+      this.setState({liked: true})
+    }else{
+      this.setState({liked: false})
+    }
+  },
   toggleLike: function(event){
     event.preventDefault();
     if (!(this.state.liked)){
       LikeActions.createLike(SingleUserStore.currentUser().id, this.props.songId)
       this.setState({liked: true})
+      if (this.props.userId === undefined){
+        UserActions.fetchCurrentUser();
+      }else{
+        UserActions.fetchUserInfo(this.props.userId);
+      }
     }else{
       LikeActions.deleteLike(SingleUserStore.currentUser().id, this.props.songId)
       this.setState({liked: false})
+      if (this.props.userId === undefined){
+        UserActions.fetchCurrentUser();
+      }else{
+        UserActions.fetchUserInfo(this.props.userId);
+      }
     }
   },
   showModal: function(){
@@ -49,9 +67,11 @@ var Like = React.createClass({
       </Modal>];
     }
     else if (this.state.liked){
-      return  <input type="button" onClick={this.toggleLike} value="Liked"/>;
+      return  <input type="button" onClick={this.toggleLike} value={"Liked"}/>;
+      //this.props.numbLikes + 1
     }else {
       return  <input type="button" onClick={this.toggleLike} value="Unliked"/>;
+      //this.props.numbLikes
     }
   },
   render: function(){

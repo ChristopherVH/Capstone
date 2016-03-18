@@ -34,6 +34,7 @@ var Song = React.createClass({
         <br/>
         <div className="audio-actions">
           <Like songId={this.state.song.id} userId={this.props.userId} />
+
           <NewPlaylistModal songId={this.state.song.id} userId={this.props.userId}/>
           <PlaylistModal songId={this.state.song.id}/>
           <br/>
@@ -46,5 +47,6 @@ var Song = React.createClass({
     );
   }
 })
+// numbLikes={this.state.song.likers.length}
 
 module.exports = Song;

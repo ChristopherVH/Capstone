@@ -49,7 +49,7 @@ var PlaylistModal = React.createClass({
       }
         return (
             <div>
-                <button onClick={this.showModal}>Add Or Remove Song From Playlist</button>
+                <button onClick={this.showModal}>Add Remove From Playlist</button>
                 <Modal ref="modal" modalStyle={modalStyle}>
                     {this.allPlaylists()}
                     <button onClick={this.hideModal}>Close</button>

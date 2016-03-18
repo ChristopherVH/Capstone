@@ -7,16 +7,18 @@ var Greeting = React.createClass({
   render: function(){
     return(
       <div>
-        <ul className="greeting-page">
+        <div className="greeting-page">
           <div className="greeting-vid">
             <div className="move-up">
-              <video width="100%" autoPlay>
+              <video autoPlay loop>
                 <source src="http://mazwai.com/system/posts/videos/000/000/005/original/marc_lorenz--sky_cloudy_time-lapse.mp4" type="video/mp4"/>
               </video>
             </div>
           </div>
-          <Collection/>
-        </ul>
+          <div className="collection-container">
+            <Collection/>
+          </div>
+        </div>
       </div>
     )
   }
