@@ -1,31 +1,33 @@
-<div class="errors" >
-    <% if flash.now[:errors]%>
-      <% flash.now[:errors].each do |error| %>
-      <%= p error %><br/>
-      <% end %>
-    <%end%>
-<div/>
+
 
 <br/>
 <br/>
+<div class="enter-form-container">
+  <section class="enter-form">
+    <form class="form" action="<%= url %>" method='POST'>
+      <%= auth_token_input %>
+      <div class="error">
+             <%= flash[:errors].join("<br>").html_safe if flash[:errors] %>
+      </div>
+      <input id="username" type="text" name="user[username]" value="" placeholder="Username">
 
-<section class="enterform">
-  <form class="form" action="<%= url %>" method='POST'>
-    <%= auth_token_input %>
+      <br/>
+      <input id="password" type="password" name="user[password]" value="" placeholder="Password">
+      <br/>
+      <article class='no-account'>
+          </form>
+            <form action='<%=session_url%>' method="post" class='demo-user-form'>
+              <input type="hidden" name="authenticity_token" value= '<%=form_authenticity_token%>'>
+              <input type="hidden"  name="user[username]" value= 'guest'  >
+              <input type="hidden"  name="user[password]" value= '123456'  >
+              <input type="submit" value="Demo Account" class='button'>
+            </form>
+      </article>
+      <div class="guestandin">
+        <input class="button" type="submit" value="Sign In">
+      </div>
+    </form>
 
-    <label>
-      Username
-      <input type="text" name="user[username]" value="" placeholder="Username:guest">
-    </label>
 
-    <br/>
-    <label>
-      Password
-      <input type="password" name="user[password]" value="" placeholder="Guest pass:123456">
-    </label>
-    <br/>
-    <div class="guestandin">
-      <input type="submit" value="Sign In">
-    </div>
-  </form>
-</section>
+  </section>
+</div>

@@ -26,7 +26,9 @@ var Like = React.createClass({
     }
   },
   componentWillReceiveProps: function(newProps){
-    if (SingleUserStore.currentUser().liked_songs[newProps.songId]){
+    if (SingleUserStore.currentUser().liked_songs === undefined){
+      this.setState({liked: false})
+    }else if (SingleUserStore.currentUser().liked_songs[newProps.songId]){
       this.setState({liked: true})
     }else{
       this.setState({liked: false})
@@ -37,16 +39,18 @@ var Like = React.createClass({
     if (!(this.state.liked)){
       LikeActions.createLike(SingleUserStore.currentUser().id, this.props.songId)
       this.setState({liked: true})
-      if (this.props.userId === undefined){
+      if (this.props.userId === undefined || this.props.userId === SingleUserStore.currentUser().id){
         UserActions.fetchCurrentUser();
+        UserActions.fetchUserInfo(this.props.userId);
       }else{
         UserActions.fetchUserInfo(this.props.userId);
       }
     }else{
       LikeActions.deleteLike(SingleUserStore.currentUser().id, this.props.songId)
       this.setState({liked: false})
-      if (this.props.userId === undefined){
+      if (this.props.userId === undefined || this.props.userId === SingleUserStore.currentUser().id){
         UserActions.fetchCurrentUser();
+        UserActions.fetchUserInfo(this.props.userId);
       }else{
         UserActions.fetchUserInfo(this.props.userId);
       }
@@ -67,10 +71,10 @@ var Like = React.createClass({
       </Modal>];
     }
     else if (this.state.liked){
-      return  <input type="button" onClick={this.toggleLike} value={"Liked"}/>;
+      return  <input className="like-button" type="button" onClick={this.toggleLike} value={"Liked"}/>;
       //this.props.numbLikes + 1
     }else {
-      return  <input type="button" onClick={this.toggleLike} value="Unliked"/>;
+      return  <input className="like-button" type="button" onClick={this.toggleLike} value="Unliked"/>;
       //this.props.numbLikes
     }
   },

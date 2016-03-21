@@ -1,9 +1,12 @@
 var React = require('react');
-var WaveSurfer = require("react-wavesurfer").WaveSurfer;
 
 WaveSurfer = React.createClass({
+  getInitialState: function(){
+    return({
+
+    })
+  },
   componentDidMount: function () {
-    debugger;
   },
   _initWavesurfer: function () {
     // var track = this.props.track;
@@ -22,7 +25,7 @@ WaveSurfer = React.createClass({
     // this.wavesurfer.load(track.audio_url);
   },
   render: function () {
-    return <div className={"wave-" + this.props.track.id }></div>;
+    return <div className="waveform" + {this.props.song.id}></div>
   }
 });
 

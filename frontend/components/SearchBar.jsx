@@ -31,7 +31,7 @@ var SearchBar = React.createClass({
       <div id="header-seach-div" >
         <input type='text'
           id='header-search-input'
-          placeholder='Search...'
+          placeholder='Search... Songs, Playlists, and Users'
           value={this.state.searchPartial}
           onChange={this._searchChanged} >
         </input>

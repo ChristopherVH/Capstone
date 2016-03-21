@@ -20,7 +20,7 @@ class Song < ActiveRecord::Base
   has_many :likers, through: :likes, source: :user
 
   def self.search(query)
-    where("title like ?", "%#{query}%").limit(5)
+    where("lower(title) like ?", "%#{query}%").limit(5)
   end
 
 end

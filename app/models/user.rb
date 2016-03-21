@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
   has_many :songs
 
   def self.search(query)
-    where("username like ?", "%#{query}%").limit(5)
+    where("lower(username) like ?", "%#{query}%").limit(5)
   end
 
   def self.find_by_credentials(username, password)

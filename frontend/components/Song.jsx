@@ -4,7 +4,6 @@ var ApiUtil = require("../util/apiUtil.js");
 var Like = require("./Like.jsx");
 var PlaylistModal = require("./PlaylistModal.jsx");
 var NewPlaylistModal = require("./NewPlaylistModal.jsx");
-var WaveSurfer = require("./WaveSurfer.jsx");
 
 var Song = React.createClass({
   getInitialState: function(){
@@ -38,11 +37,12 @@ var Song = React.createClass({
           <NewPlaylistModal songId={this.state.song.id} userId={this.props.userId}/>
           <PlaylistModal songId={this.state.song.id}/>
           <br/>
-          <audio controls>
-            <source src={this.state.song.audio_url} type="audio/mpeg"></source>
-          </audio>
+          <div className="audio-tag">
+            <audio controls>
+              <source src={this.state.song.audio_url} type="audio/mpeg"></source>
+            </audio>
+          </div>
         </div>
-        <WaveSurfer track={this.state.song}/>
       </div>
     );
   }

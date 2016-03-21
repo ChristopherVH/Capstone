@@ -35,9 +35,10 @@ var SinglePlaylist = React.createClass({
     }
     return(
       <div className="single-playlist">
-        <h3>{this.state.playlist.title}</h3>
-        {this.state.playlist.description}
-        <br/>
+        <div className="playlist-info">
+          <h3 className="playlist-title" onDoubleClick = {this.singlePlaylistRedirect} >{this.state.playlist.title}</h3>
+        </div>
+        <div className="playlist-description">{this.state.playlist.description}</div>
         {this.createSongList()}
       </div>
     );
