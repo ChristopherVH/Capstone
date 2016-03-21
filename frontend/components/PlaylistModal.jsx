@@ -1,19 +1,53 @@
 var React = require('react');
 
 var SingleUserStore = require("../stores/SingleUserStore.js");
-var Modal = require('boron/FadeModal');
+// var Modal = require('boron/FadeModal');
+var Modal = require('react-modal');
 var PlaylistStore = require("../stores/PlaylistStore.js");
 var PlaylistActions = require("../actions/PlaylistActions.js");
 var AddToPlaylistButton = require("./AddToPlaylistButton.jsx");
 
-var modalStyle = {
-    width: '300px'
+
+
+var appElement = document.getElementById('root');
+
+const customStyles = {
+  overlay : {
+    position          : 'fixed',
+    top               : 0,
+    left              : 0,
+    right             : 0,
+    bottom            : 0,
+    backgroundColor   : 'rgba(0, 0, 0, 0.7)',
+    zIndex            : 10
+  },
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    background            : "rgba(50,41,41,0.8)",
+    transform             : 'translate(-50%, -50%)',
+    padding               : 0,
+    border                : 0
+  }
 };
+
+// var modalStyle = {
+//     width: '300px'
+// };
+
+// var contentStyle = {
+//     backgroundColor: 'grey',
+//     height: '100%'
+// };
 // backdropStyle={backdropStyle} contentStyle={contentStyle}
 var PlaylistModal = React.createClass({
     getInitialState: function (){
       return({
-        playlists: PlaylistStore.all()
+        playlists: PlaylistStore.all(),
+        modalIsOpen: false
       })
     },
     _onChange: function(){
@@ -27,11 +61,11 @@ var PlaylistModal = React.createClass({
     componentWillUnmount: function(){
       this.playlistListener.remove()
     },
-    showModal: function(){
-        this.refs.modal.show();
+    openModal: function() {
+      this.setState({modalIsOpen: true});
     },
-    hideModal: function(){
-        this.refs.modal.hide();
+    closeModal: function() {
+      this.setState({modalIsOpen: false});
     },
     allPlaylists: function(){
       if (SingleUserStore.currentUser().username === undefined){
@@ -39,7 +73,7 @@ var PlaylistModal = React.createClass({
       }
       var songId = this.props.songId
       var playlistList = this.state.playlists.map(function (playlist, index) {
-           return [<div>{playlist.title}</div>,<AddToPlaylistButton key={index} playlist={playlist} songId={songId}/>];
+           return [<div className="modal-playlist-title">{playlist.title}</div>,<AddToPlaylistButton className="modal-playlist-button" key={index} playlist={playlist} songId={songId}/>];
          });
       return playlistList;
     },
@@ -49,10 +83,25 @@ var PlaylistModal = React.createClass({
       }
         return (
             <div>
-                <button onClick={this.showModal}>Add Or Remove From Playlist</button>
-                <Modal ref="modal" modalStyle={modalStyle}>
-                    {this.allPlaylists()}
-                    <button onClick={this.hideModal}>Close</button>
+                <button onClick={this.openModal}>Add Or Remove From Playlist</button>
+                <Modal
+                  isOpen={this.state.modalIsOpen}
+                  onRequestClose={this.closeModal}
+                  className="Modal__Bootstrap modal-dialog"
+                  style={customStyles}>
+
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h4 className="modal-title">Playlists</h4>
+                    </div>
+                    <div className="modal-body">
+                      {this.allPlaylists()}
+                    </div>
+                    <div className="modal-footer">
+                      <button type="button" className="btn btn-default button" onClick={this.closeModal}>Close</button>
+                    </div>
+                  </div>
+
                 </Modal>
             </div>
         );

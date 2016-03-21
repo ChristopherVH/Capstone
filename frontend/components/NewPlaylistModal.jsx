@@ -1,20 +1,40 @@
 var React = require('react');
-var Modal = require('boron/FadeModal');
+// var Modal = require('boron/FadeModal');
+var Modal = require('react-modal');
 var PlaylistStore = require("../stores/PlaylistStore.js");
 var PlaylistActions = require("../actions/PlaylistActions.js");
 var NewPlaylistForm = require("./NewPlaylistForm.jsx");
 var SingleUserStore = require("../stores/SingleUserStore.js");
 
-var modalStyle = {
-    width: '300px'
+const customStyles = {
+  overlay : {
+    position          : 'fixed',
+    top               : 0,
+    left              : 0,
+    right             : 0,
+    bottom            : 0,
+    backgroundColor   : 'rgba(0, 0, 0, 0.7)',
+    zIndex            : 10
+  },
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    background            : "rgba(50,41,41,0.8)",
+    transform             : 'translate(-50%, -50%)',
+    padding               : 0,
+    border                : 0
+  }
 };
 // backdropStyle={backdropStyle} contentStyle={contentStyle}
 var NewPlaylistModal = React.createClass({
-    // getInitialState: function (){
-    //   return({
-    //     playlists: SingleUserStore.currentUser().playlists
-    //   })
-    // },
+    getInitialState: function (){
+      return({
+        modalIsOpen: false
+      })
+    },
     // _onChange: function(){
     //   this.setState({
     //     playlists: PlaylistStore.all()
@@ -27,11 +47,11 @@ var NewPlaylistModal = React.createClass({
     // componentWillUnmount: function(){
     //   this.playlistListener.remove()
     // },
-    showModal: function(){
-        this.refs.modal.show();
+    openModal: function() {
+      this.setState({modalIsOpen: true});
     },
-    hideModal: function(){
-        this.refs.modal.hide();
+    closeModal: function() {
+      this.setState({modalIsOpen: false});
     },
     render: function() {
       // if (this.state.playlists === undefined){
@@ -39,10 +59,24 @@ var NewPlaylistModal = React.createClass({
       // }
         return (
             <div>
-                <button onClick={this.showModal}>Add To New Playlist</button>
-                <Modal ref="modal" modalStyle={modalStyle} hideModal={this.hideModal}>
-                  <NewPlaylistForm songId={this.props.songId} userId={this.props.userId}/>
-                  <button onClick={this.hideModal}>Close</button>
+                <button onClick={this.openModal}>Add To New Playlist</button>
+                <Modal
+                  isOpen={this.state.modalIsOpen}
+                  onRequestClose={this.closeModal}
+                  className="Modal__Bootstrap modal-dialog"
+                  style={customStyles}>
+
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h4 className="modal-title">Please specify the name and description</h4>
+                    </div>
+                    <div className="modal-body">
+                      <NewPlaylistForm songId={this.props.songId} userId={this.props.userId}/>
+                    </div>
+                    <div className="modal-footer">
+                      <button type="button" className="btn btn-default button" onClick={this.closeModal}>Close</button>
+                    </div>
+                  </div>
                 </Modal>
             </div>
         );

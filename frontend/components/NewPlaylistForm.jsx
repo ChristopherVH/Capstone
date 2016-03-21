@@ -4,7 +4,7 @@ var PlaylistActions = require('../actions/PlaylistActions.js');
 var PlaylistStore = require("../stores/PlaylistStore.js");
 var UserActions = require("../actions/UserActions.js");
 
-var CommentForm = React.createClass({
+var PlaylistForm = React.createClass({
   mixins: [LinkedStateMixin],
 
   getInitialState: function() {
@@ -36,17 +36,17 @@ var CommentForm = React.createClass({
           <div className="playlistArea">
             <input
               type='text'
-              id='playlistBody'
+              id='playlist-form-title'
               valueLink={this.linkState("title")}
               placeholder="New Playlist Name"
             />
-            <input
-              type='textarea'
-              id='playlistBody'
+          <textarea
+              rows="3"
+              id='playlist-form-description'
               valueLink={this.linkState("description")}
               placeholder="New Playlist Description"
             />
-          <input type="submit" value="submit" ></input>
+          <input className='playlist-form-submit' type="submit" value="submit" ></input>
         </div>
       </form>
     </div>
@@ -55,4 +55,4 @@ var CommentForm = React.createClass({
 
 });
 
-module.exports = CommentForm;
+module.exports = PlaylistForm;

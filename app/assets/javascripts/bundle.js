@@ -34119,6 +34119,7 @@
 	var SongStore = __webpack_require__(270);
 	var Song = __webpack_require__(273);
 	var SongActions = __webpack_require__(298);
+	var SingleUserStore = __webpack_require__(275);
 	
 	var Collection = React.createClass({
 	  displayName: "Collection",
@@ -34141,7 +34142,7 @@
 	  },
 	  render: function () {
 	    var songsList = this.state.songs.map(function (song, index) {
-	      return React.createElement(Song, { key: song.id, song: song });
+	      return React.createElement(Song, { key: song.id, song: song, userId: SingleUserStore.currentUser.id });
 	    });
 	    return React.createElement(
 	      "ul",
@@ -34968,21 +34969,53 @@
 	var React = __webpack_require__(1);
 	
 	var SingleUserStore = __webpack_require__(275);
-	var Modal = __webpack_require__(277);
+	// var Modal = require('boron/FadeModal');
+	var Modal = __webpack_require__(159);
 	var PlaylistStore = __webpack_require__(287);
 	var PlaylistActions = __webpack_require__(289);
 	var AddToPlaylistButton = __webpack_require__(290);
 	
-	var modalStyle = {
-	  width: '300px'
+	var appElement = document.getElementById('root');
+	
+	const customStyles = {
+	  overlay: {
+	    position: 'fixed',
+	    top: 0,
+	    left: 0,
+	    right: 0,
+	    bottom: 0,
+	    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+	    zIndex: 10
+	  },
+	  content: {
+	    top: '50%',
+	    left: '50%',
+	    right: 'auto',
+	    bottom: 'auto',
+	    marginRight: '-50%',
+	    background: "rgba(50,41,41,0.8)",
+	    transform: 'translate(-50%, -50%)',
+	    padding: 0,
+	    border: 0
+	  }
 	};
+	
+	// var modalStyle = {
+	//     width: '300px'
+	// };
+	
+	// var contentStyle = {
+	//     backgroundColor: 'grey',
+	//     height: '100%'
+	// };
 	// backdropStyle={backdropStyle} contentStyle={contentStyle}
 	var PlaylistModal = React.createClass({
 	  displayName: 'PlaylistModal',
 	
 	  getInitialState: function () {
 	    return {
-	      playlists: PlaylistStore.all()
+	      playlists: PlaylistStore.all(),
+	      modalIsOpen: false
 	    };
 	  },
 	  _onChange: function () {
@@ -34996,11 +35029,11 @@
 	  componentWillUnmount: function () {
 	    this.playlistListener.remove();
 	  },
-	  showModal: function () {
-	    this.refs.modal.show();
+	  openModal: function () {
+	    this.setState({ modalIsOpen: true });
 	  },
-	  hideModal: function () {
-	    this.refs.modal.hide();
+	  closeModal: function () {
+	    this.setState({ modalIsOpen: false });
 	  },
 	  allPlaylists: function () {
 	    if (SingleUserStore.currentUser().username === undefined) {
@@ -35014,9 +35047,9 @@
 	    var playlistList = this.state.playlists.map(function (playlist, index) {
 	      return [React.createElement(
 	        'div',
-	        null,
+	        { className: 'modal-playlist-title' },
 	        playlist.title
-	      ), React.createElement(AddToPlaylistButton, { key: index, playlist: playlist, songId: songId })];
+	      ), React.createElement(AddToPlaylistButton, { className: 'modal-playlist-button', key: index, playlist: playlist, songId: songId })];
 	    });
 	    return playlistList;
 	  },
@@ -35029,17 +35062,42 @@
 	      null,
 	      React.createElement(
 	        'button',
-	        { onClick: this.showModal },
+	        { onClick: this.openModal },
 	        'Add Or Remove From Playlist'
 	      ),
 	      React.createElement(
 	        Modal,
-	        { ref: 'modal', modalStyle: modalStyle },
-	        this.allPlaylists(),
+	        {
+	          isOpen: this.state.modalIsOpen,
+	          onRequestClose: this.closeModal,
+	          className: 'Modal__Bootstrap modal-dialog',
+	          style: customStyles },
 	        React.createElement(
-	          'button',
-	          { onClick: this.hideModal },
-	          'Close'
+	          'div',
+	          { className: 'modal-content' },
+	          React.createElement(
+	            'div',
+	            { className: 'modal-header' },
+	            React.createElement(
+	              'h4',
+	              { className: 'modal-title' },
+	              'Playlists'
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'modal-body' },
+	            this.allPlaylists()
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'modal-footer' },
+	            React.createElement(
+	              'button',
+	              { type: 'button', className: 'btn btn-default button', onClick: this.closeModal },
+	              'Close'
+	            )
+	          )
 	        )
 	      )
 	    );
@@ -35271,66 +35329,111 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var Modal = __webpack_require__(277);
+	// var Modal = require('boron/FadeModal');
+	var Modal = __webpack_require__(159);
 	var PlaylistStore = __webpack_require__(287);
 	var PlaylistActions = __webpack_require__(289);
 	var NewPlaylistForm = __webpack_require__(292);
 	var SingleUserStore = __webpack_require__(275);
 	
-	var modalStyle = {
-	    width: '300px'
+	const customStyles = {
+	  overlay: {
+	    position: 'fixed',
+	    top: 0,
+	    left: 0,
+	    right: 0,
+	    bottom: 0,
+	    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+	    zIndex: 10
+	  },
+	  content: {
+	    top: '50%',
+	    left: '50%',
+	    right: 'auto',
+	    bottom: 'auto',
+	    marginRight: '-50%',
+	    background: "rgba(50,41,41,0.8)",
+	    transform: 'translate(-50%, -50%)',
+	    padding: 0,
+	    border: 0
+	  }
 	};
 	// backdropStyle={backdropStyle} contentStyle={contentStyle}
 	var NewPlaylistModal = React.createClass({
-	    displayName: 'NewPlaylistModal',
+	  displayName: 'NewPlaylistModal',
 	
-	    // getInitialState: function (){
-	    //   return({
-	    //     playlists: SingleUserStore.currentUser().playlists
-	    //   })
-	    // },
-	    // _onChange: function(){
-	    //   this.setState({
-	    //     playlists: PlaylistStore.all()
-	    //   })
-	    // },
-	    // componentDidMount: function(){
-	    //   this.playlistListener = PlaylistStore.addListener(this._onChange)
-	    //   // PlaylistActions.fetchUserPlaylists(SingleUserStore.currentUser().id)
-	    // },
-	    // componentWillUnmount: function(){
-	    //   this.playlistListener.remove()
-	    // },
-	    showModal: function () {
-	        this.refs.modal.show();
-	    },
-	    hideModal: function () {
-	        this.refs.modal.hide();
-	    },
-	    render: function () {
-	        // if (this.state.playlists === undefined){
-	        //   return <div></div>;
-	        // }
-	        return React.createElement(
+	  getInitialState: function () {
+	    return {
+	      modalIsOpen: false
+	    };
+	  },
+	  // _onChange: function(){
+	  //   this.setState({
+	  //     playlists: PlaylistStore.all()
+	  //   })
+	  // },
+	  // componentDidMount: function(){
+	  //   this.playlistListener = PlaylistStore.addListener(this._onChange)
+	  //   // PlaylistActions.fetchUserPlaylists(SingleUserStore.currentUser().id)
+	  // },
+	  // componentWillUnmount: function(){
+	  //   this.playlistListener.remove()
+	  // },
+	  openModal: function () {
+	    this.setState({ modalIsOpen: true });
+	  },
+	  closeModal: function () {
+	    this.setState({ modalIsOpen: false });
+	  },
+	  render: function () {
+	    // if (this.state.playlists === undefined){
+	    //   return <div></div>;
+	    // }
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'button',
+	        { onClick: this.openModal },
+	        'Add To New Playlist'
+	      ),
+	      React.createElement(
+	        Modal,
+	        {
+	          isOpen: this.state.modalIsOpen,
+	          onRequestClose: this.closeModal,
+	          className: 'Modal__Bootstrap modal-dialog',
+	          style: customStyles },
+	        React.createElement(
+	          'div',
+	          { className: 'modal-content' },
+	          React.createElement(
 	            'div',
-	            null,
+	            { className: 'modal-header' },
 	            React.createElement(
-	                'button',
-	                { onClick: this.showModal },
-	                'Add To New Playlist'
-	            ),
-	            React.createElement(
-	                Modal,
-	                { ref: 'modal', modalStyle: modalStyle, hideModal: this.hideModal },
-	                React.createElement(NewPlaylistForm, { songId: this.props.songId, userId: this.props.userId }),
-	                React.createElement(
-	                    'button',
-	                    { onClick: this.hideModal },
-	                    'Close'
-	                )
+	              'h4',
+	              { className: 'modal-title' },
+	              'Please specify the name and description'
 	            )
-	        );
-	    }
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'modal-body' },
+	            React.createElement(NewPlaylistForm, { songId: this.props.songId, userId: this.props.userId })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'modal-footer' },
+	            React.createElement(
+	              'button',
+	              { type: 'button', className: 'btn btn-default button', onClick: this.closeModal },
+	              'Close'
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
 	});
 	
 	module.exports = NewPlaylistModal;
@@ -35345,8 +35448,8 @@
 	var PlaylistStore = __webpack_require__(287);
 	var UserActions = __webpack_require__(238);
 	
-	var CommentForm = React.createClass({
-	  displayName: 'CommentForm',
+	var PlaylistForm = React.createClass({
+	  displayName: 'PlaylistForm',
 	
 	  mixins: [LinkedStateMixin],
 	
@@ -35383,17 +35486,17 @@
 	          { className: 'playlistArea' },
 	          React.createElement('input', {
 	            type: 'text',
-	            id: 'playlistBody',
+	            id: 'playlist-form-title',
 	            valueLink: this.linkState("title"),
 	            placeholder: 'New Playlist Name'
 	          }),
-	          React.createElement('input', {
-	            type: 'textarea',
-	            id: 'playlistBody',
+	          React.createElement('textarea', {
+	            rows: '3',
+	            id: 'playlist-form-description',
 	            valueLink: this.linkState("description"),
 	            placeholder: 'New Playlist Description'
 	          }),
-	          React.createElement('input', { type: 'submit', value: 'submit' })
+	          React.createElement('input', { className: 'playlist-form-submit', type: 'submit', value: 'submit' })
 	        )
 	      )
 	    );
@@ -35401,7 +35504,7 @@
 	
 	});
 	
-	module.exports = CommentForm;
+	module.exports = PlaylistForm;
 
 /***/ },
 /* 293 */
@@ -36221,43 +36324,46 @@
 	    }
 	    return React.createElement(
 	      "div",
-	      { className: "single-song-container single-song" },
+	      { className: "single-song" },
 	      React.createElement(
 	        "div",
-	        { className: "song-info" },
+	        { className: "song-container" },
 	        React.createElement(
 	          "div",
-	          { className: "song-title" },
-	          this.state.song.title
+	          { className: "feed-song-info" },
+	          React.createElement(
+	            "div",
+	            { className: "feed-song-title" },
+	            this.state.song.title
+	          ),
+	          React.createElement(
+	            "div",
+	            { className: "feed-song-artist" },
+	            this.state.song.artist
+	          )
 	        ),
-	        React.createElement(
-	          "div",
-	          null,
-	          this.state.song.artist
-	        ),
-	        React.createElement(
-	          "div",
-	          null,
-	          this.state.song.genre
-	        )
-	      ),
-	      React.createElement("br", null),
-	      React.createElement(
-	        "div",
-	        { className: "song-thumbnail" },
-	        React.createElement("img", { src: this.state.song.image_url })
-	      ),
-	      React.createElement(
-	        "div",
-	        { className: "audio-actions" },
-	        React.createElement(Like, { songId: this.state.song.id }),
-	        React.createElement(NewPlaylistModal, { songId: this.state.song.id }),
-	        React.createElement(PlaylistModal, null),
 	        React.createElement("br", null),
 	        React.createElement(
-	          "audio",
-	          { controls: true },
-	          React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
+	          "div",
+	          { className: "song-thumbnail" },
+	          React.createElement("img", { src: this.state.song.image_url })
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "audio-actions" },
+	          React.createElement(Like, { songId: this.state.song.id }),
+	          React.createElement(NewPlaylistModal, { songId: this.state.song.id }),
+	          React.createElement(PlaylistModal, null),
+	          React.createElement("br", null),
+	          React.createElement(
+	            "div",
+	            { className: "audio-tag" },
+	            React.createElement(
+	              "audio",
+	              { controls: true },
+	              React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
+	            )
+	          )
 	        )
 	      )
 	    );
