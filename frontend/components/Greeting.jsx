@@ -7,6 +7,7 @@ var Greeting = React.createClass({
   render: function(){
     return(
       <div>
+        <h2 className="fade-in greeting-text"> Welcome to Nimbus Playlist </h2>
         <div className="greeting-page">
           <div className="greeting-vid">
             <div className="move-up">

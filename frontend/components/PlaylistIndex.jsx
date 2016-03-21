@@ -30,9 +30,12 @@ var PlaylistIndex = React.createClass({
       return <div></div>
     }
     return(
-      <ul className="playlist-list">
-        {this.createPlaylists(this.state.playlists)}
-      </ul>
+      <div>
+        <h3 className="playlist-index-header" >All Playlists</h3>
+        <ul className="playlist-list">
+          {this.createPlaylists(this.state.playlists)}
+        </ul>
+      </div>
     )
   }
 })

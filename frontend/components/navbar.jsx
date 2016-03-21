@@ -25,7 +25,7 @@ var Navbar = React.createClass({
       <nav className="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div className="container-fluid nav-container">
           <ul className="navbar-header">
-            <li><Link className="navbar-brand" to="/" >Sound Nimbus</Link></li>
+            <li><Link className="navbar-brand" to="/" >Nimbus Playlist</Link></li>
           </ul>
           <div className="navbar-collapse">
             <ul className="nav navbar-nav">

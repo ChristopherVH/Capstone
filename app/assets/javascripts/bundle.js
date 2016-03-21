@@ -26749,7 +26749,7 @@
 	            React.createElement(
 	              Link,
 	              { className: 'navbar-brand', to: '/' },
-	              'Sound Nimbus'
+	              'Nimbus Playlist'
 	            )
 	          )
 	        ),
@@ -34010,6 +34010,11 @@
 	      "div",
 	      null,
 	      React.createElement(
+	        "h2",
+	        { className: "fade-in greeting-text" },
+	        " Welcome to Nimbus Playlist "
+	      ),
+	      React.createElement(
 	        "div",
 	        { className: "greeting-page" },
 	        React.createElement(
@@ -35995,9 +36000,18 @@
 	      return React.createElement("div", null);
 	    }
 	    return React.createElement(
-	      "ul",
-	      { className: "playlist-list" },
-	      this.createPlaylists(this.state.playlists)
+	      "div",
+	      null,
+	      React.createElement(
+	        "h3",
+	        { className: "playlist-index-header" },
+	        "All Playlists"
+	      ),
+	      React.createElement(
+	        "ul",
+	        { className: "playlist-list" },
+	        this.createPlaylists(this.state.playlists)
+	      )
 	    );
 	  }
 	});
@@ -36151,9 +36165,18 @@
 	      return React.createElement(Song, { key: song.id, song: song });
 	    });
 	    return React.createElement(
-	      "ul",
-	      { className: "song-list" },
-	      songsList
+	      "div",
+	      null,
+	      React.createElement(
+	        "h3",
+	        { className: "song-index-header" },
+	        "All Songs"
+	      ),
+	      React.createElement(
+	        "ul",
+	        { className: "song-list" },
+	        songsList
+	      )
 	    );
 	  }
 	});

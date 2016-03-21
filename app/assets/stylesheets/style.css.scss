@@ -23,6 +23,7 @@ body {
 
 button, .like-button, .button, input{
   border-radius: 5px;
+  background-color: #fdfdfb;
 }
 
 button:focus, .like-button:focus, input:focus{
@@ -69,7 +70,7 @@ button:focus, .like-button:focus, input:focus{
   margin: 0px auto;
   width: 280px;
   height: 180px;
-  background-color: white;
+  background-color: rgba(50,41,41,0.8);
   padding: 10px;
   border-radius: 4px;
 }
@@ -91,12 +92,12 @@ button:focus, .like-button:focus, input:focus{
 .error{
   position: absolute;
   color: red;
-  bottom: 230px;
-  margin-left: auto;
-  margin-right: auto;
-  left: 0;
-  right: 0;
-  text-align: center;
+  // bottom: 230px;
+  // margin-left: auto;
+  // margin-right: auto;
+  // left: 0;
+  // right: 0;
+  // text-align: center;
 }
 
 // .guestandin{
@@ -242,6 +243,10 @@ img{
   left:50px;
 }
 
+.profile-photo-container > img{
+  border-radius: 10px;
+}
+
 .cover-photo-container{
   width:100%;
   height: 400px;
@@ -267,6 +272,7 @@ img{
 
 .username{
   top:30px;
+  width: 76.2%;
 }
 
 .like-count{
@@ -398,12 +404,38 @@ img{
   margin-top: 50px;
 }
 
+.song-list{
+  margin-top: 15px;
+}
+
 .greeting-page{
   padding:0;
 }
 
+.greeting-text{
+  position:absolute;
+  width: 100%;
+  text-align: center;
+  font-size: 55px;
+  font-style: italic;
+  color: white;
+  -webkit-text-stroke-width: 1.5px;
+  -webkit-text-stroke-color: black;
+  top: 200px;
+  z-index: 4;
+}
 
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
+.fade-in {
+    opacity:0;  /* make things invisible upon start */
+    animation:fadeIn ease-in 1; /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+
+    animation-fill-mode:forwards;  /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+
+    animation-duration:3s;
+    animation-delay: 1.5s
+}
 
 .greeting-vid{
   width:100%;
@@ -418,14 +450,13 @@ img{
 }
 
 video{
-  width: 1080px;
   height: 100%;
 }
 
 .move-up{
   width:100%;
+  height: 1000px;
   position: relative;
-  text-align: center;
 }
 
 .playlist-song{
@@ -452,4 +483,18 @@ video{
   position:absolute;
   left: 90px;
   bottom: 18px;
+}
+
+.playlist-index-header, .song-index-header{
+  position: relative;
+  top: 60px;
+  text-align: center;
+  color: white;
+  background-color: black;
+  margin: 0;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-top: 3px solid white;
+  border-bottom: 3px solid white;
+  z-index: 2;
 }
