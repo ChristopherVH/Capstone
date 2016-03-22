@@ -34170,7 +34170,8 @@
 	
 	  getInitialState: function () {
 	    return {
-	      song: this.props.song
+	      song: this.props.song,
+	      showAudio: false
 	    };
 	  },
 	  singleSongRedirect: function () {
@@ -34178,6 +34179,24 @@
 	  },
 	  componentWillReceiveProps: function (newProps) {
 	    this.setState({ song: newProps.song });
+	  },
+	  renderAudioTag: function () {
+	    if (this.state.showAudio === false) {
+	      return React.createElement(
+	        "button",
+	        { className: "play-button" },
+	        "▶"
+	      );
+	    } else {
+	      return React.createElement(
+	        "audio",
+	        { controls: true, autoPlay: true },
+	        React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
+	      );
+	    }
+	  },
+	  showAudioTag: function () {
+	    this.setState({ showAudio: true });
 	  },
 	  render: function () {
 	    return React.createElement(
@@ -34214,12 +34233,8 @@
 	        React.createElement("br", null),
 	        React.createElement(
 	          "div",
-	          { className: "audio-tag" },
-	          React.createElement(
-	            "audio",
-	            { controls: true },
-	            React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
-	          )
+	          { className: "audio-tag", onClick: this.showAudioTag },
+	          this.renderAudioTag()
 	        )
 	      )
 	    );
@@ -36002,7 +36017,7 @@
 	  render: function () {
 	    return React.createElement(
 	      "div",
-	      null,
+	      { className: "playlist-container" },
 	      this.display()
 	    );
 	  }
@@ -36022,8 +36037,27 @@
 	  getInitialState: function () {
 	    return {
 	      ord: this.props.song.ord,
-	      song: this.props.song.song
+	      song: this.props.song.song,
+	      showAudio: false
 	    };
+	  },
+	  renderAudioTag: function () {
+	    if (this.state.showAudio === false) {
+	      return React.createElement(
+	        "button",
+	        { className: "play-button" },
+	        "▶"
+	      );
+	    } else {
+	      return React.createElement(
+	        "audio",
+	        { controls: true, autoPlay: true },
+	        React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
+	      );
+	    }
+	  },
+	  showAudioTag: function () {
+	    this.setState({ showAudio: true });
 	  },
 	  render: function () {
 	    return React.createElement(
@@ -36052,12 +36086,8 @@
 	      React.createElement("br", null),
 	      React.createElement(
 	        "div",
-	        { className: "playlist-song-audio" },
-	        React.createElement(
-	          "audio",
-	          { controls: true },
-	          React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
-	        )
+	        { className: "playlist-song-audio", onClick: this.showAudioTag },
+	        this.renderAudioTag()
 	      )
 	    );
 	  }
@@ -36147,7 +36177,7 @@
 	    });
 	    return React.createElement(
 	      "div",
-	      null,
+	      { className: "playlist-container" },
 	      React.createElement(
 	        "div",
 	        { className: "playlist-info" },
@@ -36302,7 +36332,8 @@
 	
 	  getInitialState: function () {
 	    return {
-	      song: undefined
+	      song: undefined,
+	      showAudio: false
 	    };
 	  },
 	  _onChange: function () {
@@ -36310,6 +36341,24 @@
 	  },
 	  componentWillReceiveProps: function (newProps) {
 	    SongActions.fetchSong(newProps.params.song_id);
+	  },
+	  renderAudioTag: function () {
+	    if (this.state.showAudio === false) {
+	      return React.createElement(
+	        "button",
+	        { className: "play-button" },
+	        "▶"
+	      );
+	    } else {
+	      return React.createElement(
+	        "audio",
+	        { controls: true, autoPlay: true },
+	        React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
+	      );
+	    }
+	  },
+	  showAudioTag: function () {
+	    this.setState({ showAudio: true });
 	  },
 	  componentDidMount: function () {
 	    this.songListener = SongStore.addListener(this._onChange);
@@ -36357,12 +36406,8 @@
 	          React.createElement("br", null),
 	          React.createElement(
 	            "div",
-	            { className: "audio-tag" },
-	            React.createElement(
-	              "audio",
-	              { controls: true },
-	              React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
-	            )
+	            { className: "audio-tag", onClick: this.showAudioTag },
+	            this.renderAudioTag()
 	          )
 	        )
 	      )

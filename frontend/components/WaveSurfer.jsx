@@ -1,4 +1,5 @@
 var React = require('react');
+var WaveSurfer = require('react-wavesurfer').Wavesurfer;
 
 WaveSurfer = React.createClass({
   getInitialState: function(){

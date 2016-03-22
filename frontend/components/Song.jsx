@@ -8,7 +8,8 @@ var NewPlaylistModal = require("./NewPlaylistModal.jsx");
 var Song = React.createClass({
   getInitialState: function(){
     return({
-      song: this.props.song
+      song: this.props.song,
+      showAudio: false
     })
   },
   singleSongRedirect: function(){
@@ -16,6 +17,18 @@ var Song = React.createClass({
   },
   componentWillReceiveProps: function(newProps){
     this.setState({song: newProps.song});
+  },
+  renderAudioTag: function(){
+    if (this.state.showAudio === false){
+      return <button className="play-button">▶</button>;
+    }else {
+      return  <audio controls autoPlay>
+                <source src={this.state.song.audio_url} type="audio/mpeg"></source>
+              </audio>;
+    }
+  },
+  showAudioTag: function(){
+    this.setState({showAudio: true})
   },
   render: function(){
     return(
@@ -37,10 +50,8 @@ var Song = React.createClass({
           <NewPlaylistModal songId={this.state.song.id} userId={this.props.userId}/>
           <PlaylistModal songId={this.state.song.id}/>
           <br/>
-          <div className="audio-tag">
-            <audio controls>
-              <source src={this.state.song.audio_url} type="audio/mpeg"></source>
-            </audio>
+          <div className="audio-tag" onClick={this.showAudioTag}>
+            {this.renderAudioTag()}
           </div>
         </div>
       </div>

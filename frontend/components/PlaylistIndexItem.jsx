@@ -17,7 +17,7 @@ var Playlist = React.createClass({
          return <PlaylistSong key={song.ord} song={song}/>;
        });
     return(
-      <div>
+      <div className="playlist-container">
         <div className="playlist-info">
           <h3 className="playlist-title" onDoubleClick = {this.singlePlaylistRedirect} >{this.state.playlist.title}</h3>
         </div>

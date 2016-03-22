@@ -56,7 +56,7 @@ var FeedPlaylist = React.createClass({
   },
   render: function(){
     return(
-      <div>
+      <div className="playlist-container">
         {this.display()}
       </div>
     );
