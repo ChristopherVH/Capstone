@@ -23,19 +23,29 @@ NimbusPlaylist is a single-page web app inspired by Soundcloud, where users can 
 
 # Features
 
-- Hand rolled user authentication
+Hand rolled user authentication
 
+Utilizing BCrypt's methods to hash and salt sensitive user information I was able to create a secure rails-side auth that also passes current user information to a Flux store to communicate wether a user has been logged in or not.
 ![sign_in]
-- Ability to play any songs and view profiles without needing an account, error messages for if user-type actions are attempted while not logged in.
+
+Users have the ability to play any songs and view profiles without needing an account, error messages appear if user-type actions are attempted while not logged in.
 
 ![errors]
-- Searching for users, playlists,  and songs
+
+Searching for users, playlists,  and songs.
+
+Each searchable model contains a special method that uses active-record to query the database for a maximum of 5 results of each respective search item.
 
 ![search]
-- Personal feed composed of liked songs and created playlists
+
+Personal feed composed of liked songs and created playlists.
+
+Each time any user-associated element is created (ie like or playlist) it updates the users feed in real time, putting the most recently created element at the top of the feed.
 
 ![profile]
-- Splash page with most liked songs
+Splash page with most liked songs.
+
+Each song has a like association from which we can judge which songs are currently "trending" based on the number of likes, here they are displayed within the feed in descending order.
 
 ![front_page]
 
