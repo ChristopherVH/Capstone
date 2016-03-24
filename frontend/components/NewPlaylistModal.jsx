@@ -53,6 +53,44 @@ var NewPlaylistModal = React.createClass({
     closeModal: function() {
       this.setState({modalIsOpen: false});
     },
+    display: function(){
+      if (SingleUserStore.currentUser() === undefined)
+      {
+      return <Modal
+              isOpen={this.state.modalIsOpen}
+              onRequestClose={this.closeModal}
+              className="Modal__Bootstrap modal-dialog"
+              style={customStyles}>
+
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h4 className="modal-title">Please specify the name and description</h4>
+                </div>
+                <div className="modal-body">
+                  <NewPlaylistForm songId={this.props.songId} userId={this.props.userId}/>
+                </div>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-default button" onClick={this.closeModal}>Close</button>
+                </div>
+              </div>
+            </Modal>;
+        }
+        else {
+          return   <Modal
+              isOpen={this.state.modalIsOpen}
+              onRequestClose={this.closeModal}
+              className="Modal__Bootstrap modal-dialog"
+              style={customStyles}>
+
+              <div className="modal-content">
+                <div className="modal-body">
+                  You must be signed in to like songs.
+                </div>
+                <button type="button" className="btn btn-default button error-modal-button" onClick={this.closeModal}>Close</button>
+              </div>
+            </Modal>;
+        }
+    },
     render: function() {
       // if (this.state.playlists === undefined){
       //   return <div></div>;
@@ -60,24 +98,7 @@ var NewPlaylistModal = React.createClass({
         return (
             <div>
                 <button onClick={this.openModal}>Add To New Playlist</button>
-                <Modal
-                  isOpen={this.state.modalIsOpen}
-                  onRequestClose={this.closeModal}
-                  className="Modal__Bootstrap modal-dialog"
-                  style={customStyles}>
-
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h4 className="modal-title">Please specify the name and description</h4>
-                    </div>
-                    <div className="modal-body">
-                      <NewPlaylistForm songId={this.props.songId} userId={this.props.userId}/>
-                    </div>
-                    <div className="modal-footer">
-                      <button type="button" className="btn btn-default button" onClick={this.closeModal}>Close</button>
-                    </div>
-                  </div>
-                </Modal>
+                {this.display()}
             </div>
         );
     }

@@ -2,17 +2,43 @@ var React = require('react');
 var SingleUserStore = require("../stores/SingleUserStore.js");
 var LikeActions = require("../actions/LikeActions.js");
 var UserActions = require("../actions/UserActions.js");
-var Modal = require('boron/FadeModal');
+var Modal = require('react-modal');
 
 var modalStyle = {
     width: '300px'
+};
+
+var appElement = document.getElementById('root');
+
+const customStyles = {
+  overlay : {
+    position          : 'fixed',
+    top               : 0,
+    left              : 0,
+    right             : 0,
+    bottom            : 0,
+    backgroundColor   : 'rgba(0, 0, 0, 0.7)',
+    zIndex            : 10
+  },
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    background            : "rgba(0,0,0)",
+    transform             : 'translate(-50%, -50%)',
+    padding               : 0,
+    border                : 0
+  }
 };
 
 var Like = React.createClass({
   //TODO maybe get it so likes is a number that goes up/down one based on song's likes
   getInitialState: function(){
     return({
-      liked: undefined
+      liked: undefined,
+      modalIsOpen: false
     })
   },
   componentDidMount: function(){
@@ -56,19 +82,28 @@ var Like = React.createClass({
       }
     }
   },
-  showModal: function(){
-      this.refs.modal.show();
+  openModal: function() {
+    this.setState({modalIsOpen: true});
   },
-  hideModal: function(){
-      this.refs.modal.hide();
+  closeModal: function() {
+    this.setState({modalIsOpen: false});
   },
   display: function(){
     if (SingleUserStore.currentUser().username === undefined){
-      return [<button key={1} onClick={this.showModal}>Like</button>,
-      <Modal key={2} ref="modal" modalStyle={modalStyle} >
-          <div>You must be signed in to like songs</div>
-          <button onClick={this.hideModal}>Close</button>
-      </Modal>];
+      return [<button key={1} onClick={this.openModal}>Like</button>,
+        <Modal
+          isOpen={this.state.modalIsOpen}
+          onRequestClose={this.closeModal}
+          className="Modal__Bootstrap modal-dialog"
+          style={customStyles}>
+
+          <div className="modal-content">
+            <div className="modal-body">
+              You must be signed in to like songs.
+            </div>
+            <button type="button" className="btn btn-default button error-modal-button" onClick={this.closeModal}>Close</button>
+          </div>
+        </Modal>];
     }
     else if (this.state.liked){
       return  <input className="like-button" type="button" onClick={this.toggleLike} value={"Liked"}/>;
