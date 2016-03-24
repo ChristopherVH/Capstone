@@ -1,18 +1,5 @@
 # NimbusPlaylist
 
-[Heroku link][heroku]
-
-[heroku]: nimbusplaylist.herokuapp.com
-
----
-
-NimbusPlaylist is a web application inspired by Soundcloud built using Ruby on Rails
-and React.js.
-
-
-
-# NimbusPlaylist
-
 Link to live site: [NimbusPlaylist][heroku]
 
 [heroku]: nimbusplaylist.herokuapp.com
@@ -45,7 +32,7 @@ Each searchable model contains a special method that uses active-record to do a 
 Each time any user-associated element is created (ie like or playlist) it updates the users feed in real time, putting the most recently created element at the top of the feed.
 
 ![profile]
-- Splash page 
+- Splash page
 
 Each song has a like association from which we can judge which songs are currently "trending" based on the number of likes, here they are displayed within the feed in descending order.
 
