@@ -84,7 +84,7 @@ var NewPlaylistModal = React.createClass({
 
               <div className="modal-content">
                 <div className="modal-body">
-                  You must be signed in to like songs.
+                  You must be signed in to create new playlist with song.
                 </div>
                 <button type="button" className="btn btn-default button error-modal-button" onClick={this.closeModal}>Close</button>
               </div>
