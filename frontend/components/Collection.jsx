@@ -8,15 +8,14 @@ var Collection = React.createClass({
   getInitialState: function(){
     return({
       songs: SongStore.all()
-    })
+    });
   },
   _onChange: function(){
-    this.setState({songs: SongStore.all()})
+    this.setState({songs: SongStore.all()});
   },
   componentDidMount: function(){
     this.songListener = SongStore.addListener(this._onChange);
-    //didn't match flux pattern when calling util inside
-    SongActions.fetchTrendingSongs()
+    SongActions.fetchTrendingSongs();
   },
   componentWillUnmount: function(){
     this.songListener.remove();
@@ -29,8 +28,8 @@ var Collection = React.createClass({
       <ul className="collection">
         {songsList}
       </ul>
-    )
+    );
   }
-})
+});
 
 module.exports = Collection;

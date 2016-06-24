@@ -1,6 +1,6 @@
 var React = require('react'),
     ReactDOM = require('react-dom');
-  var Modal = require("react-modal");
+  var Modal = require('react-modal');
   var Router = require('react-router').Router;
   var Route = require('react-router').Route;
   var hashHistory = require('react-router').hashHistory;

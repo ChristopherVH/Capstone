@@ -2,7 +2,7 @@
 
 Link to live site: [NimbusPlaylist][heroku]
 
-[heroku]: nimbusplaylist.herokuapp.com
+[heroku]: nimbusplaylist.com
 
 ---
 
