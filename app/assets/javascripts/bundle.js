@@ -35725,7 +35725,7 @@
 	      React.createElement(
 	        'button',
 	        { onClick: this.openModal },
-	        'Add Or Remove From Playlist'
+	        'Add to Playlist'
 	      ),
 	      React.createElement(
 	        Modal,
@@ -36122,8 +36122,8 @@
 	      null,
 	      React.createElement(
 	        'button',
-	        { onClick: this.openModal },
-	        'Add To New Playlist'
+	        { className: 'add-to-playlist-button', onClick: this.openModal },
+	        'Create New Playlist'
 	      ),
 	      this.display()
 	    );

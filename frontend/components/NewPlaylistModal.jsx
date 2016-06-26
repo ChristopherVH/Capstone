@@ -101,7 +101,7 @@ var NewPlaylistModal = React.createClass({
       // }
         return (
             <div>
-                <button onClick={this.openModal}>Add To New Playlist</button>
+                <button className="add-to-playlist-button" onClick={this.openModal}>Create New Playlist</button>
                 {this.display()}
             </div>
         );

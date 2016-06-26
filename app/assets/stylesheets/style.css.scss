@@ -329,7 +329,37 @@ img{
 }
 
 .not-like-button, .like-button {
-  content: "\U+1F44D;"
+  height: 30px;
+  width: 30px;
+}
+
+.not-like-button{
+  background-image: url("http://res.cloudinary.com/dzmavimlg/image/upload/v1466917652/like_kmsd94.png");
+  background-size: auto 75%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.like-button{
+  background-image: url("http://res.cloudinary.com/dzmavimlg/image/upload/v1466917644/like-1_ncqfre.png");
+  background-size: auto 75%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.add-to-playlist-button{
+  padding-left: 30px;
+  background-image: url("http://res.cloudinary.com/dzmavimlg/image/upload/v1466917637/music_mqaqzl.png");
+  background-size: auto 75%;
+  background-repeat: no-repeat;
+  background-position: 7px 3px;
+}
+
+.add-to-playlist-button{
+  padding-left: 30px;
+  background-image: url("http://res.cloudinary.com/dzmavimlg/image/upload/v1466917637/music_mqaqzl.png");
+  background-size: auto 75%;
+  background-repeat: no-repeat;
+  background-position: 7px 3px;
 }
 
 .audio-tag{
@@ -444,7 +474,12 @@ img{
 
 .collection-container{
   margin-top: 0;
-  padding-top: 0
+  padding-top: 0;
+  background-color: rgba(0,0,0,0.8);
+}
+
+.collection{
+  background-color: rgba(0,0,0,0.2);
 }
 
 video{
