@@ -41,15 +41,11 @@ var Song = React.createClass({
             Artist: {this.state.song.artist}
           </div>
         </div>
-        <br/>
         <div className="song-thumbnail"><img src={this.state.song.image_url} onDoubleClick={this.singleSongRedirect} ></img></div>
-        <br/>
         <div className="audio-actions">
-          <Like songId={this.state.song.id} userId={this.props.userId} />
-
-          <NewPlaylistModal songId={this.state.song.id} userId={this.props.userId}/>
-          <PlaylistModal songId={this.state.song.id}/>
-          <br/>
+          <Like className="song-button" songId={this.state.song.id} userId={this.props.userId} />
+          <NewPlaylistModal className="song-button" songId={this.state.song.id} userId={this.props.userId}/>
+          <PlaylistModal className="song-button" songId={this.state.song.id}/>
           <div className="audio-tag" onClick={this.showAudioTag}>
             {this.renderAudioTag()}
           </div>

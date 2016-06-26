@@ -8,7 +8,7 @@ blockquote, figure, pre {
   padding: 0;
   border: 0;
   font: inherit;
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
 }
 
 ul {
@@ -28,6 +28,10 @@ button, .like-button, .button, input, textarea{
 
 button:focus, .like-button:focus, input:focus, textarea{
   outline: none;
+}
+
+.song-button {
+  display: inline-block;
 }
 
 #username, #password{
@@ -319,8 +323,13 @@ img{
 
 .audio-actions{
   position:absolute;
+  display: flex;
   top: 95px;
   left:170px;
+}
+
+.not-like-button, .like-button {
+  content: "\U+1F44D;"
 }
 
 .audio-tag{

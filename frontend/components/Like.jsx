@@ -12,24 +12,28 @@ var appElement = document.getElementById('root');
 
 const customStyles = {
   overlay : {
-    position          : 'fixed',
+    position          : 'absolute',
     top               : 0,
     left              : 0,
     right             : 0,
     bottom            : 0,
+    height            : "100%",
+    width             : "100%",
     backgroundColor   : 'rgba(0, 0, 0, 0.7)',
     zIndex            : 10
   },
   content : {
+    position              : 'relative',
     top                   : '50%',
-    left                  : '50%',
+    left                  : 0,
     right                 : 'auto',
     bottom                : 'auto',
-    marginRight           : '-50%',
-    background            : "rgba(0,0,0)",
+    marginRight           : 0,
+    background            : "rgba(50,41,41,0.8)",
     transform             : 'translate(-50%, -50%)',
     padding               : 0,
-    border                : 0
+    border                : 0,
+    zIndex               : 11
   }
 };
 
@@ -90,7 +94,7 @@ var Like = React.createClass({
   },
   display: function(){
     if (SingleUserStore.currentUser().username === undefined){
-      return [<button key={1} onClick={this.openModal}>Like</button>,
+      return [<button className="not-like-button" key={1} onClick={this.openModal}></button>,
         <Modal
           isOpen={this.state.modalIsOpen}
           onRequestClose={this.closeModal}
@@ -106,10 +110,10 @@ var Like = React.createClass({
         </Modal>];
     }
     else if (this.state.liked){
-      return  <input className="like-button" type="button" onClick={this.toggleLike} value={"Liked"}/>;
+      return  <input className="like-button" type="button" onClick={this.toggleLike}/>;
       //this.props.numbLikes + 1
     }else {
-      return  <input className="like-button" type="button" onClick={this.toggleLike} value="Unliked"/>;
+      return  <input className="not-like-button" type="button" onClick={this.toggleLike}/>;
       //this.props.numbLikes
     }
   },

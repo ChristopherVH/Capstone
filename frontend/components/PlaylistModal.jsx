@@ -13,24 +13,28 @@ var appElement = document.getElementById('root');
 
 const customStyles = {
   overlay : {
-    position          : 'fixed',
+    position          : 'absolute',
     top               : 0,
     left              : 0,
     right             : 0,
     bottom            : 0,
+    height            : "100%",
+    width             : "100%",
     backgroundColor   : 'rgba(0, 0, 0, 0.7)',
     zIndex            : 10
   },
   content : {
+    position              : 'relative',
     top                   : '50%',
-    left                  : '50%',
+    left                  : 0,
     right                 : 'auto',
     bottom                : 'auto',
-    marginRight           : '-50%',
+    marginRight           : 0,
     background            : "rgba(50,41,41,0.8)",
     transform             : 'translate(-50%, -50%)',
     padding               : 0,
-    border                : 0
+    border                : 0,
+    zIndex               : 11
   }
 };
 
