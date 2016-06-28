@@ -299,13 +299,16 @@ img{
 // songs
 
 .song-thumbnail{
-  width:150px;
-  height: 150px;
+  position: relative;
+  display:inline-flex;
+  width:170px;
+  height: 170px;
 }
 
 .song-container{
   position:relative;
-  padding-top: 20px;
+  height: 246px;
+  padding: 20px 0;
   margin: 0, auto;
 }
 
@@ -322,15 +325,55 @@ img{
 }
 
 .audio-actions{
-  position:absolute;
+  position:absolute;;
+  left: 180px;
+  bottom: 23px;
   display: flex;
-  top: 95px;
-  left:170px;
+}
+
+.play-button{
+  background-image: url("http://res.cloudinary.com/dzmavimlg/image/upload/v1466992136/restart_t7xpbp.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  -webkit-transition: opacity 1s ease-in-out;
+       -moz-transition: opacity 1s ease-in-out;
+            transition: opacity 1s ease-in-out;
+  opacity: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  transition: all 200ms ease-out;
+  transform: scale(1);
+}
+
+.song-thumbnail:hover .play-button{
+  transition: all 200ms ease-in;
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.audio-actions *{
+  margin-left: 1%;
+  z-index: 12;
+}
+
+em{
+  font-size: 12px;
+}
+.uploader{
+  margin-top: 10px;
+  width: 170px;
+  font-size: 14px;
+  text-align: center;
+  color: white;
+}
+.uploader em{
+    margin-right: 2px;
 }
 
 .not-like-button, .like-button {
   height: 30px;
-  width: 30px;
+  width: 35px;
 }
 
 .not-like-button{
@@ -346,25 +389,30 @@ img{
   background-position: center;
 }
 
-.add-to-playlist-button{
+.add-to-new-playlist-button, .add-to-playlist-button{
   padding-left: 30px;
   background-image: url("http://res.cloudinary.com/dzmavimlg/image/upload/v1466917637/music_mqaqzl.png");
   background-size: auto 75%;
   background-repeat: no-repeat;
   background-position: 7px 3px;
+
+}
+
+.add-to-new-playlist-button{
+  background-image: url("http://res.cloudinary.com/dzmavimlg/image/upload/v1466917637/music_mqaqzl.png");
+  width: 180px;
 }
 
 .add-to-playlist-button{
-  padding-left: 30px;
-  background-image: url("http://res.cloudinary.com/dzmavimlg/image/upload/v1466917637/music_mqaqzl.png");
-  background-size: auto 75%;
-  background-repeat: no-repeat;
-  background-position: 7px 3px;
+  background-image: url("http://res.cloudinary.com/dzmavimlg/image/upload/v1466917631/compact-disc_z1m65r.png");
+  width: 145px;
 }
 
 .audio-tag{
   position:absolute;
-  top: -40px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .single-song-container .audio-actions{
@@ -378,29 +426,53 @@ img{
 }
 
 .feed-song-info{
+  display: inline-block;
   position: absolute;
-  width: 100%
+  background-color: black;
+  left: 185px;
+  padding: 0 10px;
+  border-bottom: 2px solid #AFB8AE;
 }
 
 .feed-song-artist{
-  position: absolute;
-  display:inline-block;
+  padding-left: 5px;
+  display: inline;
   color: white;
-  background-color: black;
-  border-bottom: 2px solid #AFB8AE;
-  padding: 0px 10px;
   left: 170px;
   top:0;
 }
 
+
 .feed-song-title{
+  position: relative;
+  vertical-align: bottom;
+  display: inline;
+  font-size: 24px;
+  color: white;
   width: 150px;
   text-align: center;
-  color: white;
-  background-color: black;
-  border-bottom: 2px solid #AFB8AE;
 }
 
+.wave-surfer{
+  position: absolute;
+  width: 600px;
+  left: 185px;
+  top: 30%;
+}
+
+.wave-surfer *{
+  max-width: 600px;
+}
+
+.inner-artist-text{
+  display: inline;
+  position: relative;
+  bottom: 3px;
+}
+
+.inner-artist-text *{
+  margin-right: 5px;
+}
 .playlist-title{
   display: inline-block;
   color: white;
@@ -433,7 +505,11 @@ img{
   padding-top: 20px;
   padding-right: 40px;
   margin:0 auto;
-  background-color: #d3d3d3;
+  background-color: rgba(0,0,0,0.2);
+}
+
+.page-background{
+  background-color: rgba(0,0,0,0.8);
 }
 
 .single-playlist{
@@ -475,13 +551,7 @@ img{
 .collection-container{
   margin-top: 0;
   padding-top: 0;
-  background-color: rgba(0,0,0,0.8);
 }
-
-.collection{
-  background-color: rgba(0,0,0,0.2);
-}
-
 video{
   height: 100%;
 }
@@ -562,9 +632,6 @@ video{
 #wavesurfer-test{
   position: absolute;
   top: 200px;
-}
-.play-button{
-  border-radius: 20px;
 }
 .playlist-container, .song-container{
   border-bottom: 2px solid white;

@@ -24,7 +24,7 @@ var App = React.createClass({
       return <div></div>;
     }
     return (
-    <div>
+    <div className="page-background">
       <Navbar currentUser ={this.state.currentUser}/>
       {this.props.children}
     </div>

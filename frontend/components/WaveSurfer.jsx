@@ -1,15 +1,26 @@
 var React = require('react');
-var WaveSurfer = require('react-wavesurfer').Wavesurfer;
+var ReactDom = require('react-dom');
 
-WaveSurfer = React.createClass({
+var reactWaveSurfer = React.createClass({
   getInitialState: function(){
-    return({
-
-    })
+    return ({
+      song: this.props.song
+    });
   },
   componentDidMount: function () {
+    this.initWavesurfer();
   },
-  _initWavesurfer: function () {
+  initWavesurfer: function () {
+    var visualContainer = ReactDom.findDOMNode(this.refs.waveContainer);
+    var visual = WaveSurfer.create({
+      container: visualContainer,
+      waveColor: 'Violet',
+      progressColor: 'purple',
+      barWidth: '3',
+      height: "90",
+      maxCanvasWidth: 200
+    });
+    visual.load(this.state.song.audio_url);
     // var track = this.props.track;
     // var height = 128;
     // var visible = true;
@@ -26,8 +37,8 @@ WaveSurfer = React.createClass({
     // this.wavesurfer.load(track.audio_url);
   },
   render: function () {
-    return <div className="waveform" + {this.props.song.id}></div>
+    return <div className="wave-surfer" ref="waveContainer" ></div>;
   }
 });
 
-module.exports = WaveSurfer;
+module.exports = reactWaveSurfer;

@@ -87,7 +87,7 @@ var PlaylistModal = React.createClass({
       }
         return (
             <div>
-                <button onClick={this.openModal}>Add to Playlist</button>
+                <button className="add-to-playlist-button" Click={this.openModal}>Add to Playlist</button>
                 <Modal
                   isOpen={this.state.modalIsOpen}
                   onRequestClose={this.closeModal}

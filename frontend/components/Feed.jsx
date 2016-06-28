@@ -6,6 +6,7 @@ var SingleUserStore = require("../stores/SingleUserStore.js");
 
 var Feed = React.createClass({
   getInitialState: function(){
+    debugger;
     return({
       feed: this.props.feed
     })
@@ -15,13 +16,17 @@ var Feed = React.createClass({
   },
   populateFeed: function(feed){
     var that = this;
-    var postFeed = feed.map(function(feedobj, index){
-      if (feedobj.genre === undefined){
-        return <li className="feed-element"><FeedPlaylist key={index} playlist={feedobj} /></li>;
-      }else{
+    var postFeed;
+    var postFeedSongs = feed.songs.map(function(feedobj, index){
         return <li className="feed-element"><Song key={index} song={feedobj} userId={that.props.userId}/></li>;
-      }
     });
+    var postFeedPlaylist = feed.playlists.map(function(feedobj, index){
+        return <li className="feed-element"><FeedPlaylist key={index} playlist={feedobj} /></li>;
+    });
+    var postFeedLikes = feed.liked_songs.map(function(feedobj, index){
+        return <li className="feed-element"><Song key={index} song={feedobj} userId={that.props.userId}/></li>;
+    });
+    postFeed = postFeedSongs.concat(postFeedPlaylist).concat(postFeedLikes);
     return postFeed;
   },
   render: function(){

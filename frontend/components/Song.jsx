@@ -4,6 +4,7 @@ var ApiUtil = require("../util/apiUtil.js");
 var Like = require("./Like.jsx");
 var PlaylistModal = require("./PlaylistModal.jsx");
 var NewPlaylistModal = require("./NewPlaylistModal.jsx");
+var WaveSurfer = require("./WaveSurfer.jsx");
 
 var Song = React.createClass({
   getInitialState: function(){
@@ -20,7 +21,7 @@ var Song = React.createClass({
   },
   renderAudioTag: function(){
     if (this.state.showAudio === false){
-      return <button className="play-button">▶</button>;
+      return <button className="play-button"></button>;
     }else {
       return  <audio controls autoPlay>
                 <source src={this.state.song.audio_url} type="audio/mpeg"></source>
@@ -38,18 +39,25 @@ var Song = React.createClass({
             {this.state.song.title}
           </div>
           <div className="feed-song-artist">
-            Artist: {this.state.song.artist}
+            <div className="inner-artist-text">
+              <em>by</em>
+              {this.state.song.artist}
+            </div>
           </div>
         </div>
-        <div className="song-thumbnail"><img src={this.state.song.image_url} onDoubleClick={this.singleSongRedirect} ></img></div>
+        <div className="song-thumbnail">
+          <img src={this.state.song.image_url} onDoubleClick={this.singleSongRedirect} ></img>
+          <div className="audio-tag" onClick={this.showAudioTag}>
+              {this.renderAudioTag()}
+          </div>
+        </div>
         <div className="audio-actions">
           <Like className="song-button" songId={this.state.song.id} userId={this.props.userId} />
           <NewPlaylistModal className="song-button" songId={this.state.song.id} userId={this.props.userId}/>
           <PlaylistModal className="song-button" songId={this.state.song.id}/>
-          <div className="audio-tag" onClick={this.showAudioTag}>
-            {this.renderAudioTag()}
-          </div>
         </div>
+        <WaveSurfer song={this.state.song}/>
+        <div className="uploader">Uploaded <em>by</em> {this.state.song.user.username}</div>
       </div>
     );
   }
