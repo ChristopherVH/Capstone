@@ -10,26 +10,22 @@ var Song = React.createClass({
   getInitialState: function(){
     return({
       song: this.props.song,
-      showAudio: false
-    })
+      playing: false
+    });
   },
   singleSongRedirect: function(){
-    window.location = '/#/songs/' + this.props.song.id
+    window.location = '/#/songs/' + this.props.song.id;
   },
   componentWillReceiveProps: function(newProps){
     this.setState({song: newProps.song});
   },
   renderAudioTag: function(){
-    if (this.state.showAudio === false){
+    if (this.state.playing === false){
       return <button className="play-button"></button>;
-    }else {
-      return  <audio controls autoPlay>
-                <source src={this.state.song.audio_url} type="audio/mpeg"></source>
-              </audio>;
     }
   },
   showAudioTag: function(){
-    this.setState({showAudio: true})
+    this.setState({playing: true});
   },
   render: function(){
     return(
@@ -56,7 +52,7 @@ var Song = React.createClass({
           <NewPlaylistModal className="song-button" songId={this.state.song.id} userId={this.props.userId}/>
           <PlaylistModal className="song-button" songId={this.state.song.id}/>
         </div>
-        <WaveSurfer song={this.state.song}/>
+        <WaveSurfer song={this.state.song} playing={this.state.playing}/>
         <div className="uploader">Uploaded <em>by</em> {this.state.song.user.username}</div>
       </div>
     );

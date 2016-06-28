@@ -78,7 +78,7 @@
 	  Modal.setAppElement(container);
 	  ReactDOM.render(React.createElement(
 	    Router,
-	    null,
+	    { history: hashHistory },
 	    routes
 	  ), container);
 	});
@@ -35340,7 +35340,7 @@
 	  getInitialState: function () {
 	    return {
 	      song: this.props.song,
-	      showAudio: false
+	      playing: false
 	    };
 	  },
 	  singleSongRedirect: function () {
@@ -35350,18 +35350,12 @@
 	    this.setState({ song: newProps.song });
 	  },
 	  renderAudioTag: function () {
-	    if (this.state.showAudio === false) {
+	    if (this.state.playing === false) {
 	      return React.createElement("button", { className: "play-button" });
-	    } else {
-	      return React.createElement(
-	        "audio",
-	        { controls: true, autoPlay: true },
-	        React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
-	      );
 	    }
 	  },
 	  showAudioTag: function () {
-	    this.setState({ showAudio: true });
+	    this.setState({ playing: true });
 	  },
 	  render: function () {
 	    return React.createElement(
@@ -35407,7 +35401,7 @@
 	        React.createElement(NewPlaylistModal, { className: "song-button", songId: this.state.song.id, userId: this.props.userId }),
 	        React.createElement(PlaylistModal, { className: "song-button", songId: this.state.song.id })
 	      ),
-	      React.createElement(WaveSurfer, { song: this.state.song }),
+	      React.createElement(WaveSurfer, { song: this.state.song, playing: this.state.playing }),
 	      React.createElement(
 	        "div",
 	        { className: "uploader" },
@@ -36462,37 +36456,31 @@
 	
 	  getInitialState: function () {
 	    return {
-	      song: this.props.song
+	      song: this.props.song,
+	      playing: this.props.playing
 	    };
 	  },
 	  componentDidMount: function () {
-	    this.initWavesurfer();
+	    this.setState({ visual: this.initWavesurfer() });
+	  },
+	  componentWillReceiveProps: function (nextProps) {
+	    this.state.visual.playPause();
+	    this.setState({
+	      playing: nextProps.playing
+	    });
 	  },
 	  initWavesurfer: function () {
 	    var visualContainer = ReactDom.findDOMNode(this.refs.waveContainer);
 	    var visual = WaveSurfer.create({
 	      container: visualContainer,
-	      waveColor: 'Violet',
+	      waveColor: 'blue',
 	      progressColor: 'purple',
 	      barWidth: '3',
 	      height: "90",
 	      maxCanvasWidth: 200
 	    });
 	    visual.load(this.state.song.audio_url);
-	    // var track = this.props.track;
-	    // var height = 128;
-	    // var visible = true;
-	    //
-	    // var containerClass = "wave-" + track.id;
-	    // var container = $(containerClass)[0];
-	    //
-	    // var this.wavesurfer = WaveSurfer.create({
-	    //   container: container,
-	    //   height: height,
-	    //   visible: visible
-	    // });
-	    //
-	    // this.wavesurfer.load(track.audio_url);
+	    return visual;
 	  },
 	  render: function () {
 	    return React.createElement('div', { className: 'wave-surfer', ref: 'waveContainer' });

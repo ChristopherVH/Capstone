@@ -16,7 +16,7 @@ ul {
 }
 
 body {
-  background-color: #BBC3CC;
+  background-color: rgba(0,0,0,0.9);
   height: 100%;
   width: 100%;
 }
@@ -409,6 +409,7 @@ em{
 }
 
 .audio-tag{
+  z-index: 20;
   position:absolute;
   top: 50%;
   left: 50%;
@@ -505,11 +506,7 @@ em{
   padding-top: 20px;
   padding-right: 40px;
   margin:0 auto;
-  background-color: rgba(0,0,0,0.2);
-}
-
-.page-background{
-  background-color: rgba(0,0,0,0.8);
+  background-color: rgba(255,255,255,0.1);
 }
 
 .single-playlist{
@@ -569,6 +566,7 @@ video{
 
 .playlist-song-info{
   position: absolute;
+  color: white;
   left: 90px;
   top: 20px;
 }

@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var container = document.getElementById("root");
   Modal.setAppElement(container);
   ReactDOM.render(
-    <Router>{routes}</Router>,
+    <Router history={hashHistory}>{routes}</Router>,
     container
-  )
+  );
 });
