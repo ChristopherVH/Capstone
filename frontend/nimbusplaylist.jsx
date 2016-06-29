@@ -4,6 +4,7 @@ var React = require('react'),
   var Router = require('react-router').Router;
   var Route = require('react-router').Route;
   var hashHistory = require('react-router').hashHistory;
+  var browserHistory = require('react-router').browserHistory;
   var IndexRoute = require('react-router').IndexRoute;
   var App = require("./components/App.jsx");
   var Navbar = require("./components/Navbar.jsx");

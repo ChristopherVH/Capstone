@@ -22,10 +22,16 @@ var Song = React.createClass({
   renderAudioTag: function(){
     if (this.state.playing === false){
       return <button className="play-button"></button>;
+    }else {
+      return <button className="pause-button"></button>;
     }
   },
   showAudioTag: function(){
-    this.setState({playing: true});
+    if (this.state.playing === true){
+      this.setState({playing: false});
+    }else{
+      this.setState({playing: true});
+    }
   },
   render: function(){
     return(

@@ -14,7 +14,7 @@ var Navbar = React.createClass({
     if (this.props.currentUser === undefined || this.props.currentUser.id === undefined){
       return [<li key={2} ><a href="users/new">Sign Up</a></li>,<li id="login" key={1} ><a href="session/new">Login</a></li>];
     }
-    return [<li key={1} ><Link to={"user/" + this.state.currentUser.id} >Profile
+    return [<li key={1} ><Link to={"/user/" + this.state.currentUser.id} >Profile
   </Link></li>, <li id="logout" key={2}><a onClick={this.signOut}>Logout</a></li>];
   },
   signOut: function(){
@@ -30,8 +30,8 @@ var Navbar = React.createClass({
           <div className="navbar-collapse">
             <ul className="nav navbar-nav">
 
-              <li><Link to="songs" >Songs</Link></li>
-              <li><Link to="playlists" >Playlists</Link></li>
+              <li><Link to="/songs" >Songs</Link></li>
+              <li><Link to="/playlists" >Playlists</Link></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
               {this.createProfile()}

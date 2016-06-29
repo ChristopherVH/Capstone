@@ -6,7 +6,6 @@ var SingleUserStore = require("../stores/SingleUserStore.js");
 
 var Feed = React.createClass({
   getInitialState: function(){
-    debugger;
     return({
       feed: this.props.feed
     })
