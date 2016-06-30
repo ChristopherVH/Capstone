@@ -40,6 +40,10 @@ SingleUserStore.__onDispatch = function(payload){
       SingleUserStore.setCurrentUser(payload.user);
       SingleUserStore.__emitChange();
       break;
+    case UserConstants.PROFILE_IMAGE_UPDATED:
+      SingleUserStore.setUser(payload.user);
+      SingleUserStore.__emitChange();
+      break;
 }
 };
 

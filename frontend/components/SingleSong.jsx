@@ -20,7 +20,7 @@ var Song = React.createClass({
   },
   renderAudioTag: function(){
     if (this.state.showAudio === false){
-      return <button className="play-button">▶</button>;
+      return <button className="play-button"></button>;
     }else {
       return  <audio controls autoPlay>
                 <source src={this.state.song.audio_url} type="audio/mpeg"></source>

@@ -248,8 +248,30 @@ img{
   left:50px;
 }
 
+.upload-profile{
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  -webkit-transition: opacity 500ms ease-out;
+       -moz-transition: opacity 500ms ease-out;
+            transition: opacity 500ms ease-out;
+  opacity: 0;
+  transform: translateX(-50%);
+  background-repeat: no-repeat;
+  background-color: rgba(255,255,255,0.4);
+  background-image: url("http://res.cloudinary.com/dzmavimlg/image/upload/v1467243730/camera_bvkvua.png");
+  background-size: 70%, 70%;
+  background-position: center;
+}
+
 .profile-photo-container > img{
   border-radius: 50%;
+}
+.profile-photo-container:hover .upload-profile{
+  opacity: 1;
 }
 
 .cover-photo-container{
@@ -357,7 +379,8 @@ img{
   border-width: 3px;
 }
 
-.song-thumbnail:hover .play-button, .song-thumbnail:hover .pause-button{
+.song-thumbnail:hover .play-button, .song-thumbnail:hover .pause-button,
+.playlist-song-thumbnail:hover .play-button, .playlist-song-thumbnail:hover .pause-button{
   transform: scale(1.1);
   opacity: 1;
 }

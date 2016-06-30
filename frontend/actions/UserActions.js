@@ -29,6 +29,15 @@ var UserActions = {
       actionType: UserConstants.SIGN_OUT_RECEIVED,
       user: {}
     });
+  },
+  updateProfileImage: function(url, user_id){
+    userUtil.updateProfileImage(url, user_id, this.receiveNewProfileImage);
+  },
+  receiveNewProfileImage: function(user){
+    Dispatcher.dispatch({
+      actionType: UserConstants.PROFILE_IMAGE_UPDATED,
+      user: user
+    });
   }
 };
 

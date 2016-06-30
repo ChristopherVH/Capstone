@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 
       resources :playlist_songs, only: [:create, :update, :destroy]
 
-      resources :users, only: [:show] do
+      resources :users, only: [:show, :update] do
         resources :songs, only: [:index]
         resources :playlists, only: [:index]
       end

@@ -19,8 +19,14 @@ class Api::UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
+  def update
+    @user = User.find(params[:id])
+    @user.update(profile_url: params[:profile_url])
+    render :show
+  end
+
   private
   def user_params
-    params.require(:user).permit(:password, :username)
+    params.require(:user).permit(:password, :username, :profile_url, :cover_url)
   end
 end

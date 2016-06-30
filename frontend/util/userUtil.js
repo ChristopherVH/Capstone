@@ -48,5 +48,15 @@ module.exports = {
         callback();
       }
     })
+  },
+  updateProfileImage: function(url, user_id, callback){
+    $.ajax({
+      type:"PATCH",
+      url:"api/users/" + user_id,
+      data: {profile_url: url},
+      success: function(user){
+        callback(user);
+      }
+    })
   }
 }

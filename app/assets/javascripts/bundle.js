@@ -28082,6 +28082,15 @@
 	      actionType: UserConstants.SIGN_OUT_RECEIVED,
 	      user: {}
 	    });
+	  },
+	  updateProfileImage: function (url, user_id) {
+	    userUtil.updateProfileImage(url, user_id, this.receiveNewProfileImage);
+	  },
+	  receiveNewProfileImage: function (user) {
+	    Dispatcher.dispatch({
+	      actionType: UserConstants.PROFILE_IMAGE_UPDATED,
+	      user: user
+	    });
 	  }
 	};
 	
@@ -28411,7 +28420,8 @@
 	  CURRENT_USER_RECEIVED: "CURRENT_USER_RECEIVED",
 	  USER_SONGS_RECEIVED: "USER_SONGS_RECEIVED",
 	  USER_PLAYLISTS_RECEIVED: "USER_PLAYLISTS_RECEIVED",
-	  SIGN_OUT_RECEIVED: "SIGN_OUT_RECEIVED"
+	  SIGN_OUT_RECEIVED: "SIGN_OUT_RECEIVED",
+	  PROFILE_IMAGE_UPDATED: "PROFILE_IMAGE_UPDATED"
 	};
 
 /***/ },
@@ -28466,6 +28476,16 @@
 	      success: function () {
 	        window.location.href = '/#/';
 	        callback();
+	      }
+	    });
+	  },
+	  updateProfileImage: function (url, user_id, callback) {
+	    $.ajax({
+	      type: "PATCH",
+	      url: "api/users/" + user_id,
+	      data: { profile_url: url },
+	      success: function (user) {
+	        callback(user);
 	      }
 	    });
 	  }
@@ -35690,6 +35710,10 @@
 	      SingleUserStore.setCurrentUser(payload.user);
 	      SingleUserStore.__emitChange();
 	      break;
+	    case UserConstants.PROFILE_IMAGE_UPDATED:
+	      SingleUserStore.setUser(payload.user);
+	      SingleUserStore.__emitChange();
+	      break;
 	  }
 	};
 	
@@ -36640,7 +36664,42 @@
 	    this.userListener = SingleUserStore.addListener(this._onChange);
 	    UserActions.fetchUserInfo(this.props.params.user_id);
 	  },
-	  cloudinaryOpen: function () {},
+	  updateProfileImage: function (url) {
+	    UserActions.updateProfileImage(url, this.state.user.id);
+	  },
+	  cloudinaryOpen: function (e) {
+	    e.preventDefault();
+	    cloudinary.openUploadWidget(window.cloudinary_options, function (error, images) {
+	      if (error === null) {
+	        this.updateProfileImage(images[0].url);
+	      }
+	    }.bind(this));
+	  },
+	  profileImage: function () {
+	    if (this.state.user.profile_url && SingleUserStore.currentUser().id === this.state.user.id) {
+	      return React.createElement(
+	        "div",
+	        { className: "profile-photo-container" },
+	        React.createElement("img", { src: this.state.user.profile_url, onClick: this.cloudinaryOpen }),
+	        React.createElement("div", { className: "upload-profile" })
+	      );
+	    } else {
+	      return React.createElement(
+	        "div",
+	        { className: "profile-photo-container" },
+	        React.createElement("img", { src: this.state.user.profile_url, onClick: this.cloudinaryOpen })
+	      );
+	    }
+	  },
+	  profileCover: function () {
+	    if (this.state.user.cover_url) {
+	      return React.createElement(
+	        "div",
+	        { className: "cover-photo-container" },
+	        React.createElement("img", { src: this.state.user.cover_url, onClick: this.cloudinaryOpen })
+	      );
+	    }
+	  },
 	  componentWillUnmount: function () {
 	    this.userListener.remove();
 	  },
@@ -36648,25 +36707,6 @@
 	    if (this.state.user === undefined || this.state.user.id === undefined) {
 	      return React.createElement("div", null);
 	    }
-	    var user = this.state.user;
-	    var profileimage = function () {
-	      if (user.cover_url) {
-	        return React.createElement(
-	          "div",
-	          { className: "cover-photo-container" },
-	          React.createElement("img", { src: user.cover_url, onClick: this.cloudinaryOpen })
-	        );
-	      }
-	    };
-	    var profilecover = function () {
-	      if (user.profile_url) {
-	        return React.createElement(
-	          "div",
-	          { className: "profile-photo-container" },
-	          React.createElement("img", { src: user.profile_url, onClick: this.cloudinaryOpen })
-	        );
-	      }
-	    };
 	    return React.createElement(
 	      "div",
 	      { className: "profile-container" },
@@ -36679,31 +36719,31 @@
 	          React.createElement(
 	            "h1",
 	            { className: "username" },
-	            user.username
+	            this.state.user.username
 	          ),
 	          React.createElement(
 	            "h2",
 	            { className: "song-count" },
 	            "Songs: ",
-	            user.songs.length
+	            this.state.user.songs.length
 	          ),
 	          React.createElement(
 	            "h2",
 	            { className: "playlist-count" },
 	            "Playlists: ",
-	            user.playlists.length
+	            this.state.user.playlists.length
 	          ),
 	          React.createElement(
 	            "h2",
 	            { className: "like-count" },
 	            "Likes: ",
-	            user.liked_songs.length
+	            this.state.user.liked_songs.length
 	          )
 	        ),
-	        profileimage(),
-	        profilecover()
+	        this.profileImage(),
+	        this.profileCover()
 	      ),
-	      React.createElement(Feed, { feed: user.feed, userId: user.id })
+	      React.createElement(Feed, { feed: this.state.user.feed, userId: this.state.user.id })
 	    );
 	  }
 	});
@@ -36864,26 +36904,22 @@
 	    return {
 	      ord: this.props.song.ord,
 	      song: this.props.song.song,
-	      showAudio: false
+	      playing: false
 	    };
 	  },
 	  renderAudioTag: function () {
-	    if (this.state.showAudio === false) {
-	      return React.createElement(
-	        "button",
-	        { className: "play-button" },
-	        "▶"
-	      );
+	    if (this.state.playing === false) {
+	      return React.createElement("button", { className: "play-button" });
 	    } else {
-	      return React.createElement(
-	        "audio",
-	        { controls: true, autoPlay: true },
-	        React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
-	      );
+	      return React.createElement("button", { className: "pause-button" });
 	    }
 	  },
 	  showAudioTag: function () {
-	    this.setState({ showAudio: true });
+	    if (this.state.playing === true) {
+	      this.setState({ playing: false });
+	    } else {
+	      this.setState({ playing: true });
+	    }
 	  },
 	  render: function () {
 	    return React.createElement(
@@ -36903,17 +36939,15 @@
 	          this.state.song.genre
 	        )
 	      ),
-	      React.createElement("br", null),
 	      React.createElement(
 	        "div",
 	        { className: "playlist-song-thumbnail" },
-	        React.createElement("img", { src: this.state.song.image_url })
-	      ),
-	      React.createElement("br", null),
-	      React.createElement(
-	        "div",
-	        { className: "playlist-song-audio", onClick: this.showAudioTag },
-	        this.renderAudioTag()
+	        React.createElement("img", { src: this.state.song.image_url }),
+	        React.createElement(
+	          "div",
+	          { className: "playlist-song-audio", onClick: this.showAudioTag },
+	          this.renderAudioTag()
+	        )
 	      )
 	    );
 	  }
@@ -37170,11 +37204,7 @@
 	  },
 	  renderAudioTag: function () {
 	    if (this.state.showAudio === false) {
-	      return React.createElement(
-	        "button",
-	        { className: "play-button" },
-	        "▶"
-	      );
+	      return React.createElement("button", { className: "play-button" });
 	    } else {
 	      return React.createElement(
 	        "audio",

@@ -20,7 +20,35 @@ var Profile = React.createClass({
     this.userListener = SingleUserStore.addListener(this._onChange);
     UserActions.fetchUserInfo(this.props.params.user_id);
   },
-  cloudinaryOpen: function(){
+  updateProfileImage: function(url){
+    UserActions.updateProfileImage(url, this.state.user.id);
+  },
+  cloudinaryOpen: function(e){
+    e.preventDefault();
+    cloudinary.openUploadWidget(
+      window.cloudinary_options,
+      function(error, images){
+        if (error === null){
+          this.updateProfileImage(images[0].url);
+        }
+    }.bind(this));
+  },
+  profileImage: function(){
+    if (this.state.user.profile_url && SingleUserStore.currentUser().id === this.state.user.id){
+      return <div className="profile-photo-container">
+        <img src={this.state.user.profile_url} onClick={this.cloudinaryOpen}></img>
+        <div className= 'upload-profile'></div>
+      </div>;
+    }else {
+      return <div className="profile-photo-container">
+        <img src={this.state.user.profile_url} onClick={this.cloudinaryOpen}></img>
+      </div>;
+    }
+  },
+  profileCover: function(){
+    if (this.state.user.cover_url){
+      return <div className="cover-photo-container"><img src={this.state.user.cover_url} onClick={this.cloudinaryOpen}></img></div>;
+    }
   },
   componentWillUnmount: function(){
     this.userListener.remove();
@@ -29,30 +57,19 @@ var Profile = React.createClass({
     if (this.state.user === undefined || this.state.user.id === undefined){
       return <div></div>;
     }
-    var user = this.state.user;
-    var profileimage = function(){
-      if (user.cover_url){
-        return <div className="cover-photo-container"><img src={user.cover_url} onClick={this.cloudinaryOpen}></img></div>;
-      }
-    }
-    var profilecover = function(){
-      if (user.profile_url){
-        return <div className="profile-photo-container"><img src={user.profile_url} onClick={this.cloudinaryOpen}></img></div>;
-      }
-    }
     return(
       <div className="profile-container">
         <div className="profile-info">
           <div className="user-info">
-            <h1 className="username">{user.username}</h1>
-            <h2 className="song-count">Songs: {user.songs.length}</h2>
-            <h2 className="playlist-count">Playlists: {user.playlists.length}</h2>
-            <h2 className="like-count">Likes: {user.liked_songs.length}</h2>
+            <h1 className="username">{this.state.user.username}</h1>
+            <h2 className="song-count">Songs: {this.state.user.songs.length}</h2>
+            <h2 className="playlist-count">Playlists: {this.state.user.playlists.length}</h2>
+            <h2 className="like-count">Likes: {this.state.user.liked_songs.length}</h2>
           </div>
-          {profileimage()}
-          {profilecover()}
+          {this.profileImage()}
+          {this.profileCover()}
         </div>
-        <Feed feed={user.feed} userId={user.id}/>
+        <Feed feed={this.state.user.feed} userId={this.state.user.id}/>
       </div>
     );
   }
