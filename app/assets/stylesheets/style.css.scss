@@ -34,6 +34,11 @@ button:focus, .like-button:focus, input:focus, textarea{
   display: inline-block;
 }
 
+.greeting-text{
+  font-family: "Montserrat";
+  font-weight: normal;
+}
+
 #username, #password{
   padding: 2px;
   display: flex;
@@ -378,6 +383,23 @@ img{
   background-position: center;
   border-width: 3px;
 }
+.playlist-song-thumbnail .play-button, .playlist-song-thumbnail .pause-button{
+  width: 35px;
+  height: 35px;
+}
+
+.playlist-wave{
+  position: relative;
+  display: block;
+  height: 180px;
+}
+
+.playlist-song-audio{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
 .song-thumbnail:hover .play-button, .song-thumbnail:hover .pause-button,
 .playlist-song-thumbnail:hover .play-button, .playlist-song-thumbnail:hover .pause-button{
@@ -563,12 +585,19 @@ em{
   position:absolute;
   width: 100%;
   text-align: center;
-  font-size: 55px;
-  font-style: italic;
+  font-size: 70px;
   color: white;
-  -webkit-text-stroke-width: 1.5px;
-  -webkit-text-stroke-color: black;
-  top: 200px;
+  top: 150px;
+  z-index: 1;
+}
+
+.greeting-text-under{
+  position:absolute;
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  color: white;
+  top: 260px;
   z-index: 1;
 }
 .greeting-vid{
@@ -594,7 +623,19 @@ video{
 
 .playlist-song{
   position: relative;
+  margin-top: 20px;
   left: 20px;
+}
+
+.playlist-song:last-child{
+  margin-bottom: 20px;
+}
+
+.playlsit-song-thumbnail > button{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%), translateY(-50%);
 }
 
 .playlist-song-info{
@@ -609,14 +650,9 @@ video{
 }
 
 .playlist-song-thumbnail{
+  position: relative;
   width: 80px;
   height: 80px;
-}
-
-.playlist-song-audio{
-  position:absolute;
-  left: 90px;
-  bottom: 18px;
 }
 
 .playlist-index-header, .song-index-header{

@@ -35276,7 +35276,12 @@
 	      React.createElement(
 	        "h2",
 	        { className: "fade-in greeting-text" },
-	        " Welcome to Nimbus Playlist "
+	        " Nimbus Playlist "
+	      ),
+	      React.createElement(
+	        "h5",
+	        { className: "fade-in greeting-text-under" },
+	        "A SOUND DISCOVERY PLATFORM"
 	      ),
 	      React.createElement(
 	        "div",
@@ -36566,15 +36571,25 @@
 	    };
 	  },
 	  componentDidMount: function () {
-	    this.setState({ visual: this.initWavesurfer() });
+	    this.setState({ visual: this.initWavesurfer(this.props.song.audio_url) });
 	  },
 	  componentWillReceiveProps: function (nextProps) {
-	    this.state.visual.playPause();
+	    if (nextProps.song !== this.state.song) {
+	      this.setState({ song: nextProps.song });
+	      this.state.visual.destroy();
+	      var newWave = this.initWavesurfer(nextProps.song.audio_url);
+	      this.setState({ visual: newWave });
+	      newWave.on('ready', function () {
+	        newWave.playPause();
+	      });
+	    } else {
+	      this.state.visual.playPause();
+	    }
 	    this.setState({
 	      playing: nextProps.playing
 	    });
 	  },
-	  initWavesurfer: function () {
+	  initWavesurfer: function (audio_url) {
 	    var visualContainer = ReactDom.findDOMNode(this.refs.waveContainer);
 	    var visual = WaveSurfer.create({
 	      container: visualContainer,
@@ -36584,8 +36599,11 @@
 	      height: "90",
 	      maxCanvasWidth: 200
 	    });
-	    visual.load(this.state.song.audio_url);
+	    visual.load(audio_url);
 	    return visual;
+	  },
+	  componentWillUnmount: function () {
+	    this.state.visual.destroy();
 	  },
 	  render: function () {
 	    return React.createElement('div', { className: 'wave-surfer', ref: 'waveContainer' });
@@ -36759,6 +36777,7 @@
 	var FeedPlaylist = __webpack_require__(306);
 	var PlaylistStore = __webpack_require__(292);
 	var SingleUserStore = __webpack_require__(289);
+	var PlaylistIndexItem = __webpack_require__(309);
 	
 	var Feed = React.createClass({
 	  displayName: "Feed",
@@ -36785,7 +36804,7 @@
 	      return React.createElement(
 	        "li",
 	        { className: "feed-element" },
-	        React.createElement(FeedPlaylist, { key: index, playlist: feedobj })
+	        React.createElement(PlaylistIndexItem, { key: index, playlist: feedobj })
 	      );
 	    });
 	    var postFeedLikes = feed.liked_songs.map(function (feedobj, index) {
@@ -36903,7 +36922,6 @@
 	  getInitialState: function () {
 	    return {
 	      ord: this.props.song.ord,
-	      song: this.props.song.song,
 	      playing: false
 	    };
 	  },
@@ -36916,9 +36934,16 @@
 	  },
 	  showAudioTag: function () {
 	    if (this.state.playing === true) {
+	      this.props.setPlaying(false);
 	      this.setState({ playing: false });
 	    } else {
+	      this.props.setPlaying(true);
 	      this.setState({ playing: true });
+	    }
+	    if (this.props.song.song !== undefined) {
+	      this.props.setCurrentSongWave(this.props.song.song);
+	    } else {
+	      this.props.setCurrentSongWave(this.props.song);
 	    }
 	  },
 	  render: function () {
@@ -36931,18 +36956,18 @@
 	        React.createElement(
 	          "div",
 	          { className: "playlist-song-title" },
-	          this.state.song.title
+	          this.props.song.title
 	        ),
 	        React.createElement(
 	          "div",
 	          { className: "playlist-song-genre" },
-	          this.state.song.genre
+	          this.props.song.genre
 	        )
 	      ),
 	      React.createElement(
 	        "div",
 	        { className: "playlist-song-thumbnail" },
-	        React.createElement("img", { src: this.state.song.image_url }),
+	        React.createElement("img", { src: this.props.song.image_url }),
 	        React.createElement(
 	          "div",
 	          { className: "playlist-song-audio", onClick: this.showAudioTag },
@@ -37019,22 +37044,47 @@
 	var PlaylistStore = __webpack_require__(292);
 	var ApiUtil = __webpack_require__(262);
 	var PlaylistSong = __webpack_require__(307);
+	var WaveSurfer = __webpack_require__(302);
 	
 	var Playlist = React.createClass({
 	  displayName: "Playlist",
 	
 	  getInitialState: function () {
 	    return {
-	      playlist: this.props.playlist
+	      playlist: this.props.playlist,
+	      currentSong: undefined,
+	      playing: false
 	    };
+	  },
+	  componentWillMount: function () {
+	    if (this.state.playlist.songs[0].song !== undefined) {
+	      this.setState({ currentSong: this.state.playlist.songs[0].song });
+	    } else {
+	      this.setState({ currentSong: this.state.playlist.songs[0] });
+	    }
 	  },
 	  singlePlaylistRedirect: function () {
 	    window.location = '/#/playlists/' + this.props.playlist.id;
 	  },
-	  render: function () {
-	    var songsList = this.state.playlist.songs.map(function (song) {
-	      return React.createElement(PlaylistSong, { key: song.ord, song: song });
+	  fillState: function () {
+	    var that = this;
+	    return this.state.playlist.songs.map(function (song, index) {
+	      if (song.song !== undefined) {
+	        return React.createElement(PlaylistSong, { key: index, song: song.song,
+	          setCurrentSongWave: that.setCurrentSongWave, setPlaying: that.setPlaying });
+	      } else {
+	        return React.createElement(PlaylistSong, { key: index, song: song,
+	          setCurrentSongWave: that.setCurrentSongWave, setPlaying: that.setPlaying });
+	      }
 	    });
+	  },
+	  setCurrentSongWave: function (song) {
+	    this.setState({ currentSong: song });
+	  },
+	  setPlaying: function (playingBoolean) {
+	    this.setState({ playing: playingBoolean });
+	  },
+	  render: function () {
 	    return React.createElement(
 	      "div",
 	      { className: "playlist-container" },
@@ -37052,8 +37102,12 @@
 	        { className: "playlist-description" },
 	        this.state.playlist.description
 	      ),
-	      React.createElement("br", null),
-	      songsList
+	      React.createElement(
+	        "div",
+	        { className: "playlist-wave" },
+	        React.createElement(WaveSurfer, { song: this.state.currentSong, playing: this.state.playing })
+	      ),
+	      this.fillState()
 	    );
 	  }
 	});
