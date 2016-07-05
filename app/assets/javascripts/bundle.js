@@ -36926,18 +36926,16 @@
 	    };
 	  },
 	  renderAudioTag: function () {
-	    if (this.state.playing === false) {
-	      return React.createElement("button", { className: "play-button" });
-	    } else {
+	    if (this.state.playing === true && this.props.currentSong === this.props.song) {
 	      return React.createElement("button", { className: "pause-button" });
+	    } else {
+	      return React.createElement("button", { className: "play-button" });
 	    }
 	  },
 	  showAudioTag: function () {
 	    if (this.state.playing === true) {
-	      this.props.setPlaying(false);
 	      this.setState({ playing: false });
 	    } else {
-	      this.props.setPlaying(true);
 	      this.setState({ playing: true });
 	    }
 	    if (this.props.song.song !== undefined) {
@@ -36961,7 +36959,12 @@
 	        React.createElement(
 	          "div",
 	          { className: "playlist-song-genre" },
-	          this.props.song.genre
+	          React.createElement(
+	            "em",
+	            null,
+	            "by"
+	          ),
+	          this.props.song.artist
 	        )
 	      ),
 	      React.createElement(
@@ -37070,13 +37073,18 @@
 	    var that = this;
 	    return this.state.playlist.songs.map(function (song, index) {
 	      if (song.song !== undefined) {
-	        return React.createElement(PlaylistSong, { key: index, song: song.song,
-	          setCurrentSongWave: that.setCurrentSongWave, setPlaying: that.setPlaying });
+	        return React.createElement(PlaylistSong, { key: index, song: song.song, playing: that.state.Playing, currentSong: that.state.currentSong,
+	          setCurrentSongWave: that.setCurrentSongWave });
 	      } else {
-	        return React.createElement(PlaylistSong, { key: index, song: song,
-	          setCurrentSongWave: that.setCurrentSongWave, setPlaying: that.setPlaying });
+	        return React.createElement(PlaylistSong, { key: index, song: song, playing: that.state.Playing, currentSong: that.state.currentSong,
+	          setCurrentSongWave: that.setCurrentSongWave });
 	      }
 	    });
+	  },
+	  shouldComponenetUpdate: function (nextProps, nextState) {
+	    if (nextState.currentSong !== this.state.currentSong) {
+	      this.setState({ playing: false });
+	    }
 	  },
 	  setCurrentSongWave: function (song) {
 	    this.setState({ currentSong: song });
@@ -37095,12 +37103,17 @@
 	          "h3",
 	          { className: "playlist-title", onDoubleClick: this.singlePlaylistRedirect },
 	          this.state.playlist.title
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "playlist-description" },
+	          this.state.playlist.description
 	        )
 	      ),
 	      React.createElement(
 	        "div",
-	        { className: "playlist-description" },
-	        this.state.playlist.description
+	        { className: "current-list-image" },
+	        React.createElement("img", { src: this.state.currentSong.image_url })
 	      ),
 	      React.createElement(
 	        "div",

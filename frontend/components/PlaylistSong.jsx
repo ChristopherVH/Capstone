@@ -8,18 +8,16 @@ var PlaylistSong = React.createClass({
     });
   },
   renderAudioTag: function(){
-    if (this.state.playing === false){
-      return <button className="play-button"></button>;
-    }else {
+    if (this.state.playing === true && this.props.currentSong === this.props.song){
       return <button className="pause-button"></button>;
+    }else {
+      return <button className="play-button"></button>;
     }
   },
   showAudioTag: function(){
     if (this.state.playing === true){
-      this.props.setPlaying(false);
       this.setState({playing: false});
     }else{
-      this.props.setPlaying(true);
       this.setState({playing: true});
     }
     if (this.props.song.song !== undefined){
@@ -35,8 +33,8 @@ var PlaylistSong = React.createClass({
           <div className="playlist-song-title">
             {this.props.song.title}
           </div>
-          <div className="playlist-song-genre">
-            {this.props.song.genre}
+          <div className="playlist-song-genre"><em>by</em>
+            {this.props.song.artist}
           </div>
         </div>
         <div className="playlist-song-thumbnail"><img src={this.props.song.image_url}></img>
