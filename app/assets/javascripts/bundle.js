@@ -37177,32 +37177,41 @@
 
 	var React = __webpack_require__(1);
 	var SongStore = __webpack_require__(284);
+	var SingleUserStore = __webpack_require__(289);
 	var Song = __webpack_require__(287);
 	var SongActions = __webpack_require__(303);
+	var UserActions = __webpack_require__(252);
 	
 	var SongIndex = React.createClass({
 	  displayName: "SongIndex",
 	
 	  getInitialState: function () {
 	    return {
-	      songs: SongStore.all()
+	      songs: SongStore.all(),
+	      userId: SingleUserStore.currentUser().id
 	    };
 	  },
 	  _onChange: function () {
 	    this.setState({ songs: SongStore.all() });
 	  },
+	  componentWillMount: function () {
+	    UserActions.fetchCurrentUser();
+	  },
 	  componentDidMount: function () {
 	    this.songListener = SongStore.addListener(this._onChange);
-	    //didn't match flux pattern when calling util inside
 	    SongActions.fetchAllSongs();
 	  },
 	  componentWillUnmount: function () {
 	    this.songListener.remove();
 	  },
-	  render: function () {
+	  songsList: function () {
+	    var that = this;
 	    var songsList = this.state.songs.map(function (song, index) {
-	      return React.createElement(Song, { key: song.id, song: song });
+	      return React.createElement(Song, { key: song.id, song: song, userId: that.state.userId });
 	    });
+	    return songsList;
+	  },
+	  render: function () {
 	    return React.createElement(
 	      "div",
 	      null,
@@ -37214,7 +37223,7 @@
 	      React.createElement(
 	        "ul",
 	        { className: "song-list" },
-	        songsList
+	        this.songsList()
 	      )
 	    );
 	  }
