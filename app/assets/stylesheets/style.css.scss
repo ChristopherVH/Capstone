@@ -384,14 +384,18 @@ img{
   border-width: 3px;
 }
 .playlist-song-thumbnail .play-button, .playlist-song-thumbnail .pause-button{
-  width: 35px;
-  height: 35px;
+  width: 25px;
+  height: 25px;
 }
 
 .playlist-wave{
   position: relative;
   display: block;
   height: 180px;
+}
+
+.playlist-wave .wave-surfer{
+  top: 25%;
 }
 
 .playlist-song-audio{
@@ -409,7 +413,7 @@ img{
 
 .audio-actions *{
   margin-left: 1%;
-  z-index: 12;
+  z-index: 2;
 }
 
 em{
@@ -464,7 +468,7 @@ em{
 }
 
 .audio-tag{
-  z-index: 20;
+  z-index: 3;
   position:absolute;
   top: 50%;
   left: 50%;
@@ -529,26 +533,28 @@ em{
 .inner-artist-text *{
   margin-right: 5px;
 }
+
 .playlist-title{
   display: inline-block;
-  color: white;
-  background-color: black;
-  border-bottom: 2px solid #AFB8AE;
-  padding: 5px 10px;
+  padding: 10px 0px 10px 10px;
   margin-bottom: 0;
+  margin-top: 0;
 }
 
 .playlist-description{
   display: inline-block;
-  color: white;
-  background-color: black;
-  border-bottom: 2px solid #AFB8AE;
   padding: 5px 10px;
   margin-bottom: 0;
 }
 
 .playlist-info{
+  display: inline-block;
   text-align: left;
+  color: white;
+  background-color: black;
+  border-bottom: 2px solid #AFB8AE;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .song-title{
@@ -623,8 +629,13 @@ video{
 
 .playlist-song{
   position: relative;
-  margin-top: 20px;
-  left: 20px;
+  margin: 10px 70px 0px 70px;
+  padding: 5px 0px 5px 20px;
+  border-radius: 20px;
+}
+
+.playlist-song:hover{
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .playlist-song:last-child{
@@ -641,11 +652,16 @@ video{
 .playlist-song-info{
   position: absolute;
   color: white;
-  left: 90px;
-  top: 20px;
+  left: 85px;
+  top: 30%;
+}
+
+.playlist-song-info *{
+  display: inline-block;
 }
 
 .current-list-image{
+  position: absolute;
   height: 170px;
   width: 170px;
 }
@@ -660,8 +676,8 @@ video{
 
 .playlist-song-thumbnail{
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 50px;
+  height: 50px;
 }
 
 .playlist-index-header, .song-index-header{
@@ -679,12 +695,25 @@ video{
 }
 
 .modal-playlist-title{
-  margin-bottom: 5px;
-  margin-top: 5px;
+  margin-bottom: 10px;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.modal-title{
+  font-weight: bolder;
+}
+
+.modal-playlist-title:first-child{
+  margin-top: 0;
 }
 
 #playlist-form-title, #playlist-form-description{
   display: block;
+  padding: 10px;
+  background-color: rgba(0,0,0,0.75);
+  color: rgba(231,236,237, 1);
+  border: none;
   margin: 0 auto;
   width: 70%;
 }
@@ -692,6 +721,7 @@ video{
 #playlist-form-description{
   margin-top: 20px;
 }
+
 
 .playlist-form-submit{
   width: 170px;

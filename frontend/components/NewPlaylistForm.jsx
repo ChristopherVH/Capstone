@@ -6,7 +6,6 @@ var UserActions = require("../actions/UserActions.js");
 
 var PlaylistForm = React.createClass({
   mixins: [LinkedStateMixin],
-
   getInitialState: function() {
     return {songId: this.props.songId, title: '', description: ''}
   },
@@ -46,7 +45,7 @@ var PlaylistForm = React.createClass({
               valueLink={this.linkState("description")}
               placeholder="New Playlist Description"
             />
-          <input className='playlist-form-submit' type="submit" value="submit" ></input>
+          <input className='playlist-form-submit' type="submit" value="Submit" ></input>
         </div>
       </form>
     </div>

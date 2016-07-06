@@ -35545,7 +35545,7 @@
 	
 	const customStyles = {
 	  overlay: {
-	    position: 'absolute',
+	    position: 'fixed',
 	    top: 0,
 	    left: 0,
 	    right: 0,
@@ -35556,9 +35556,9 @@
 	    zIndex: 10
 	  },
 	  content: {
-	    position: 'relative',
+	    position: 'fixed',
 	    top: '50%',
-	    left: 0,
+	    left: '50%',
 	    right: 'auto',
 	    bottom: 'auto',
 	    marginRight: 0,
@@ -35576,7 +35576,7 @@
 	  //TODO maybe get it so likes is a number that goes up/down one based on song's likes
 	  getInitialState: function () {
 	    return {
-	      liked: undefined,
+	      liked: false,
 	      modalIsOpen: false
 	    };
 	  },
@@ -35749,7 +35749,6 @@
 	var React = __webpack_require__(1);
 	
 	var SingleUserStore = __webpack_require__(289);
-	// var Modal = require('boron/FadeModal');
 	var Modal = __webpack_require__(168);
 	var PlaylistStore = __webpack_require__(292);
 	var PlaylistActions = __webpack_require__(294);
@@ -35759,7 +35758,7 @@
 	
 	const customStyles = {
 	  overlay: {
-	    position: 'absolute',
+	    position: 'fixed',
 	    top: 0,
 	    left: 0,
 	    right: 0,
@@ -35770,9 +35769,9 @@
 	    zIndex: 10
 	  },
 	  content: {
-	    position: 'relative',
+	    position: 'fixed',
 	    top: '50%',
-	    left: 0,
+	    left: '50%',
 	    right: 'auto',
 	    bottom: 'auto',
 	    marginRight: 0,
@@ -35784,15 +35783,6 @@
 	  }
 	};
 	
-	// var modalStyle = {
-	//     width: '300px'
-	// };
-	
-	// var contentStyle = {
-	//     backgroundColor: 'grey',
-	//     height: '100%'
-	// };
-	// backdropStyle={backdropStyle} contentStyle={contentStyle}
 	var PlaylistModal = React.createClass({
 	  displayName: 'PlaylistModal',
 	
@@ -35809,6 +35799,7 @@
 	  },
 	  componentDidMount: function () {
 	    this.playlistListener = PlaylistStore.addListener(this._onChange);
+	    PlaylistActions.fetchUserPlaylists(SingleUserStore.currentUser().id);
 	  },
 	  componentWillUnmount: function () {
 	    this.playlistListener.remove();
@@ -35846,7 +35837,7 @@
 	      null,
 	      React.createElement(
 	        'button',
-	        { className: 'add-to-playlist-button', Click: this.openModal },
+	        { className: 'add-to-playlist-button', onClick: this.openModal },
 	        'Add to Playlist'
 	      ),
 	      React.createElement(
@@ -36122,7 +36113,7 @@
 	
 	const customStyles = {
 	  overlay: {
-	    position: 'absolute',
+	    position: 'fixed',
 	    top: 0,
 	    left: 0,
 	    right: 0,
@@ -36133,9 +36124,9 @@
 	    zIndex: 10
 	  },
 	  content: {
-	    position: 'relative',
+	    position: 'fixed',
 	    top: '50%',
-	    left: 0,
+	    left: '50%',
 	    right: 'auto',
 	    bottom: 'auto',
 	    marginRight: 0,
@@ -36155,18 +36146,6 @@
 	      modalIsOpen: false
 	    };
 	  },
-	  // _onChange: function(){
-	  //   this.setState({
-	  //     playlists: PlaylistStore.all()
-	  //   })
-	  // },
-	  // componentDidMount: function(){
-	  //   this.playlistListener = PlaylistStore.addListener(this._onChange)
-	  //   // PlaylistActions.fetchUserPlaylists(SingleUserStore.currentUser().id)
-	  // },
-	  // componentWillUnmount: function(){
-	  //   this.playlistListener.remove()
-	  // },
 	  openModal: function () {
 	    this.setState({ modalIsOpen: true });
 	  },
@@ -36174,7 +36153,7 @@
 	    this.setState({ modalIsOpen: false });
 	  },
 	  display: function () {
-	    if (SingleUserStore.currentUser() === undefined) {
+	    if (SingleUserStore.currentUser().username !== undefined) {
 	      return React.createElement(
 	        Modal,
 	        {
@@ -36268,7 +36247,6 @@
 	  displayName: 'PlaylistForm',
 	
 	  mixins: [LinkedStateMixin],
-	
 	  getInitialState: function () {
 	    return { songId: this.props.songId, title: '', description: '' };
 	  },
@@ -36312,7 +36290,7 @@
 	            valueLink: this.linkState("description"),
 	            placeholder: 'New Playlist Description'
 	          }),
-	          React.createElement('input', { className: 'playlist-form-submit', type: 'submit', value: 'submit' })
+	          React.createElement('input', { className: 'playlist-form-submit', type: 'submit', value: 'Submit' })
 	        )
 	      )
 	    );
@@ -37102,7 +37080,8 @@
 	        React.createElement(
 	          "h3",
 	          { className: "playlist-title", onDoubleClick: this.singlePlaylistRedirect },
-	          this.state.playlist.title
+	          this.state.playlist.title + " ",
+	          ":"
 	        ),
 	        React.createElement(
 	          "div",

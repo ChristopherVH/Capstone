@@ -1,7 +1,6 @@
 var React = require('react');
 
 var SingleUserStore = require("../stores/SingleUserStore.js");
-// var Modal = require('boron/FadeModal');
 var Modal = require('react-modal');
 var PlaylistStore = require("../stores/PlaylistStore.js");
 var PlaylistActions = require("../actions/PlaylistActions.js");
@@ -13,7 +12,7 @@ var appElement = document.getElementById('root');
 
 const customStyles = {
   overlay : {
-    position          : 'absolute',
+    position          : 'fixed',
     top               : 0,
     left              : 0,
     right             : 0,
@@ -24,9 +23,9 @@ const customStyles = {
     zIndex            : 10
   },
   content : {
-    position              : 'relative',
+    position              : 'fixed',
     top                   : '50%',
-    left                  : 0,
+    left                  : '50%',
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : 0,
@@ -38,15 +37,6 @@ const customStyles = {
   }
 };
 
-// var modalStyle = {
-//     width: '300px'
-// };
-
-// var contentStyle = {
-//     backgroundColor: 'grey',
-//     height: '100%'
-// };
-// backdropStyle={backdropStyle} contentStyle={contentStyle}
 var PlaylistModal = React.createClass({
     getInitialState: function (){
       return({
@@ -60,7 +50,8 @@ var PlaylistModal = React.createClass({
       })
     },
     componentDidMount: function(){
-      this.playlistListener = PlaylistStore.addListener(this._onChange)
+      this.playlistListener = PlaylistStore.addListener(this._onChange);
+      PlaylistActions.fetchUserPlaylists(SingleUserStore.currentUser().id)
     },
     componentWillUnmount: function(){
       this.playlistListener.remove()
@@ -87,7 +78,7 @@ var PlaylistModal = React.createClass({
       }
         return (
             <div>
-                <button className="add-to-playlist-button" Click={this.openModal}>Add to Playlist</button>
+                <button className="add-to-playlist-button" onClick={this.openModal}>Add to Playlist</button>
                 <Modal
                   isOpen={this.state.modalIsOpen}
                   onRequestClose={this.closeModal}

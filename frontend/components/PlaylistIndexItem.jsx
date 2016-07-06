@@ -49,7 +49,7 @@ var Playlist = React.createClass({
     return(
       <div className="playlist-container">
         <div className="playlist-info">
-          <h3 className="playlist-title" onDoubleClick = {this.singlePlaylistRedirect} >{this.state.playlist.title}</h3>
+          <h3 className="playlist-title" onDoubleClick = {this.singlePlaylistRedirect} >{this.state.playlist.title + " "}:</h3>
           <div className="playlist-description">{this.state.playlist.description}</div>
         </div>
         <div className="current-list-image"><img src={this.state.currentSong.image_url}></img></div>

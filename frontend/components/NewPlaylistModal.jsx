@@ -8,7 +8,7 @@ var SingleUserStore = require("../stores/SingleUserStore.js");
 
 const customStyles = {
   overlay : {
-    position          : 'absolute',
+    position          : 'fixed',
     top               : 0,
     left              : 0,
     right             : 0,
@@ -19,9 +19,9 @@ const customStyles = {
     zIndex            : 10
   },
   content : {
-    position              : 'relative',
+    position              : 'fixed',
     top                   : '50%',
-    left                  : 0,
+    left                  : '50%',
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : 0,
@@ -39,18 +39,6 @@ var NewPlaylistModal = React.createClass({
         modalIsOpen: false
       })
     },
-    // _onChange: function(){
-    //   this.setState({
-    //     playlists: PlaylistStore.all()
-    //   })
-    // },
-    // componentDidMount: function(){
-    //   this.playlistListener = PlaylistStore.addListener(this._onChange)
-    //   // PlaylistActions.fetchUserPlaylists(SingleUserStore.currentUser().id)
-    // },
-    // componentWillUnmount: function(){
-    //   this.playlistListener.remove()
-    // },
     openModal: function() {
       this.setState({modalIsOpen: true});
     },
@@ -58,7 +46,7 @@ var NewPlaylistModal = React.createClass({
       this.setState({modalIsOpen: false});
     },
     display: function(){
-      if (SingleUserStore.currentUser() === undefined)
+      if (SingleUserStore.currentUser().username !== undefined)
       {
       return <Modal
               isOpen={this.state.modalIsOpen}

@@ -12,7 +12,7 @@ var appElement = document.getElementById('root');
 
 const customStyles = {
   overlay : {
-    position          : 'absolute',
+    position          : 'fixed',
     top               : 0,
     left              : 0,
     right             : 0,
@@ -23,9 +23,9 @@ const customStyles = {
     zIndex            : 10
   },
   content : {
-    position              : 'relative',
+    position              : 'fixed',
     top                   : '50%',
-    left                  : 0,
+    left                  : '50%',
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : 0,
@@ -41,7 +41,7 @@ var Like = React.createClass({
   //TODO maybe get it so likes is a number that goes up/down one based on song's likes
   getInitialState: function(){
     return({
-      liked: undefined,
+      liked: false,
       modalIsOpen: false
     })
   },
