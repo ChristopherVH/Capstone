@@ -33,16 +33,21 @@ PlaylistActions = {
   },
   addSongToPlaylist: function(songId, playlistId, ord){
     apiUtil.addSong(songId, playlistId, ord);
-    this.fetchPlaylist(playlistId);
   },
+  // addSongToNewPlaylist: function(){
+  //   playlist.songs.push(newsong)
+  //   recieveNewPlaylist
+  //   calltoBackendinBackground
+  //   // gets access to newly created playlist
+  // },
   deleteSongFromPlaylist: function(playlistId, playlistSongId){
     apiUtil.deleteSong(playlistSongId, playlistId);
     this.fetchPlaylist(playlistId);
   },
-  createPlaylist: function(title, description, songId){
-    apiUtil.createPlaylist(title, description, this.receiveNewPlaylist);
+  createPlaylist: function(title, description, song){
+    apiUtil.createPlaylist(title, description, this.addSongToPlaylist, this.receiveNewPlaylist, song.id, song);
   },
-  receiveNewPlaylist: function (playlist, songId) {
+  receiveNewPlaylist: function (playlist) {
     Dispatcher.dispatch({
       actionType: PlaylistConstants.NEW_PLAYLIST_RECEIVED,
       playlist: playlist

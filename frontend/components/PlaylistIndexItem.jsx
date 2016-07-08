@@ -3,6 +3,7 @@ var PlaylistStore = require("../stores/PlaylistStore.js");
 var ApiUtil = require("../util/apiUtil.js");
 var PlaylistSong = require("./PlaylistSong.jsx");
 var WaveSurfer = require('./WaveSurfer.jsx');
+var PlaylistActions = require("../actions/PlaylistActions.js");
 
 var Playlist = React.createClass({
   getInitialState: function(){
@@ -12,8 +13,18 @@ var Playlist = React.createClass({
       playing: false
     });
   },
+  componentDidMount: function(){
+    this.playlistListener = PlaylistStore.addListener(this._onChange);
+  },
+  componentWillUnmount: function(){
+    this.playlistListener.remove();
+  },
+  _onChange: function(){
+    this.setState({playlist: PlaylistStore.find(this.props.playlist.id)});
+  },
   componentWillMount: function(){
-    if (this.state.playlist.songs[0].song !== undefined){
+    console.log(this.props.playlist);
+    if (this.props.playlist.songs[0].song !== undefined){
       this.setState({currentSong: this.state.playlist.songs[0].song});
     }else {
       this.setState({currentSong: this.state.playlist.songs[0]});
@@ -27,10 +38,10 @@ var Playlist = React.createClass({
     return (this.state.playlist.songs.map(function (song,index) {
       if (song.song !== undefined){
         return <PlaylistSong key={index} song={song.song} playing={that.state.Playing} currentSong={that.state.currentSong}
-          setCurrentSongWave={that.setCurrentSongWave}/>;
+          setCurrentSongWave={that.setCurrentSongWave} setPlaying={that.setPlaying}/>;
       }else {
         return <PlaylistSong key={index} song={song} playing={that.state.Playing} currentSong={that.state.currentSong}
-          setCurrentSongWave={that.setCurrentSongWave}/>;
+          setCurrentSongWave={that.setCurrentSongWave} setPlaying={that.setPlaying}/>;
       }
     }));
   },
@@ -54,7 +65,7 @@ var Playlist = React.createClass({
         </div>
         <div className="current-list-image"><img src={this.state.currentSong.image_url}></img></div>
         <div className="playlist-wave">
-          <WaveSurfer song={this.state.currentSong} playing = {this.state.playing}>
+          <WaveSurfer playlistId={this.props.playlist.id} song={this.state.currentSong} playing = {this.state.playing}>
           </WaveSurfer>
         </div>
         {this.fillState()}

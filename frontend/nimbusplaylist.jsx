@@ -8,7 +8,6 @@ var React = require('react'),
   var IndexRoute = require('react-router').IndexRoute;
   var App = require("./components/App.jsx");
   var Navbar = require("./components/Navbar.jsx");
-  var PlayBar = require("./components/Playbar.jsx");
   var Greeting = require("./components/Greeting.jsx");
   var Collection = require("./components/Collection.jsx");
   var Profile = require("./components/Profile.jsx");

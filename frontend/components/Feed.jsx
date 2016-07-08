@@ -1,6 +1,5 @@
 var React = require('react');
 var Song = require("./Song.jsx");
-var FeedPlaylist = require("./FeedPlaylist.jsx");
 var PlaylistStore = require("../stores/PlaylistStore.js");
 var SingleUserStore = require("../stores/SingleUserStore.js");
 var PlaylistIndexItem = require('./PlaylistIndexItem.jsx');
@@ -8,34 +7,48 @@ var PlaylistIndexItem = require('./PlaylistIndexItem.jsx');
 var Feed = React.createClass({
   getInitialState: function(){
     return({
-      feed: this.props.feed
-    })
+      playlists: this.props.feed.playlists,
+      songs: this.props.feed.songs,
+      likedSongs: this.props.feed.liked_songs
+    });
   },
   componentWillReceiveProps: function(newProps){
     this.setState({feed: newProps.feed});
   },
-  populateFeed: function(feed){
+  componentDidMount: function(){
+    this.playlistListener = PlaylistStore.addListener(this._onChange);
+  },
+  componentWillUnmount: function(){
+    this.playlistListener.remove();
+  },
+  _onChange: function(){
+    this.updateFeed();
+  },
+  populateFeed: function(songs, playlists, likedSongs){
     var that = this;
     var postFeed;
-    var postFeedSongs = feed.songs.map(function(feedobj, index){
+    var postFeedSongs = songs.map(function(feedobj, index){
         return <li className="feed-element"><Song key={index} song={feedobj} userId={that.props.userId}/></li>;
     });
-    var postFeedPlaylist = feed.playlists.map(function(feedobj, index){
+    var postFeedPlaylist = playlists.map(function(feedobj, index){
         return <li className="feed-element"><PlaylistIndexItem key={index} playlist={feedobj} /></li>;
     });
-    var postFeedLikes = feed.liked_songs.map(function(feedobj, index){
+    var postFeedLikes = likedSongs.map(function(feedobj, index){
         return <li className="feed-element"><Song key={index} song={feedobj} userId={that.props.userId}/></li>;
     });
     postFeed = postFeedSongs.concat(postFeedPlaylist).concat(postFeedLikes);
     return postFeed;
   },
+  updateFeed: function(){
+    this.setState({playlists: PlaylistStore.all()});
+  },
   render: function(){
     return(
       <ul className="feed">
-        {this.populateFeed(this.state.feed)}
+        {this.populateFeed(this.state.songs, this.state.playlists, this.state.likedSongs)}
       </ul>
-    )
+    );
   }
-})
+});
 
 module.exports = Feed;

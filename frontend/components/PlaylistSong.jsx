@@ -17,8 +17,10 @@ var PlaylistSong = React.createClass({
   showAudioTag: function(){
     if (this.state.playing === true){
       this.setState({playing: false});
+      this.props.setPlaying(false);
     }else{
       this.setState({playing: true});
+      this.props.setPlaying(true);
     }
     if (this.props.song.song !== undefined){
       this.props.setCurrentSongWave(this.props.song.song);

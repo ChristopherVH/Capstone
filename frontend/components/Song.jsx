@@ -55,7 +55,7 @@ var Song = React.createClass({
         </div>
         <div className="audio-actions">
           <Like className="song-button" songId={this.state.song.id} userId={this.props.userId} />
-          <NewPlaylistModal className="song-button" songId={this.state.song.id} userId={this.props.userId}/>
+          <NewPlaylistModal className="song-button" song={this.state.song} songId={this.state.song.id} userId={this.props.userId}/>
           <PlaylistModal className="song-button" songId={this.state.song.id}/>
         </div>
         <WaveSurfer song={this.state.song} playing={this.state.playing}/>

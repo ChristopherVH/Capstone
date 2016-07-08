@@ -59,7 +59,7 @@ var NewPlaylistModal = React.createClass({
                   <h4 className="modal-title">Please specify the name and description</h4>
                 </div>
                 <div className="modal-body">
-                  <NewPlaylistForm songId={this.props.songId} userId={this.props.userId}/>
+                  <NewPlaylistForm song={this.props.song} songId={this.props.songId} userId={this.props.userId}/>
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-default button" onClick={this.closeModal}>Close</button>

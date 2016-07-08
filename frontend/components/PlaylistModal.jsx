@@ -89,7 +89,7 @@ var PlaylistModal = React.createClass({
                     <div className="modal-header">
                       <h4 className="modal-title">Playlists</h4>
                     </div>
-                    <div className="modal-body">
+                    <div className="add-song-modal-body modal-body">
                       {this.allPlaylists()}
                     </div>
                     <div className="modal-footer">

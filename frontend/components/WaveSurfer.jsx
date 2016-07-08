@@ -12,7 +12,7 @@ var reactWaveSurfer = React.createClass({
     this.setState({visual: this.initWavesurfer(this.props.song.audio_url)});
   },
   componentWillReceiveProps: function(nextProps) {
-    if(nextProps.song !== this.state.song){
+    if(nextProps.song.title !== this.state.song.title){
       this.setState({song: nextProps.song});
       this.state.visual.destroy();
       var newWave = this.initWavesurfer(nextProps.song.audio_url);
@@ -20,8 +20,10 @@ var reactWaveSurfer = React.createClass({
       newWave.on('ready', function(){
         newWave.playPause();
       });
-    }else {
-      this.state.visual.playPause();
+    }else if(nextProps.playing === true){
+      this.state.visual.play();
+    }else if(nextProps.playing === false && this.state.playing === true){
+      this.state.visual.pause();
     }
     this.setState({
       playing: nextProps.playing

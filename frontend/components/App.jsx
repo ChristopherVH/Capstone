@@ -1,6 +1,5 @@
 var React = require('react'),
     Navbar = require("./Navbar.jsx"),
-    Playbar = require("./Playbar.jsx"),
     Greeting = require("./Greeting.jsx");
 var SingleUserStore = require("../stores/SingleUserStore.js");
 var UserActions = require("../actions/UserActions.js");

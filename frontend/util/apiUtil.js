@@ -37,13 +37,15 @@ var songUtil = {
       }
     });
   },
-  createPlaylist: function(title, description, callback){
+  createPlaylist: function(title, description, callback1, callback2, songId, song){
     $.ajax({
       type:"POST",
       url: "api/playlists",
       data: {title: title, description: description},
       success: function (playlist) {
-        callback(playlist);
+        playlist.songs.push(song);
+        callback1(songId, playlist.id, 1);
+        callback2(playlist);
       }
     });
   },
@@ -73,7 +75,10 @@ var songUtil = {
     $.ajax({
       type:"POST",
       data:{playlist_id: playlistId, song_id: songId, ord:ord},
-      url: "api/playlist_songs"
+      url: "api/playlist_songs",
+      success: function (song){
+        console.log("song added");
+      }
     });
   },
   deleteSong: function(id, playlistId){

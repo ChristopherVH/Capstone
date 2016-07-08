@@ -7,11 +7,10 @@ var Profile = React.createClass({
   getInitialState: function(){
     return({
       user: undefined
-      //make a request
-    })
+    });
   },
   _onChange: function(){
-    this.setState({user: SingleUserStore.access()})
+    this.setState({user: SingleUserStore.access()});
   },
   componentWillReceiveProps: function(newProps){
     UserActions.fetchUserInfo(newProps.params.user_id);
@@ -73,6 +72,6 @@ var Profile = React.createClass({
       </div>
     );
   }
-})
+});
 
 module.exports = Profile;
