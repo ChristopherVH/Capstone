@@ -9,15 +9,6 @@ var PlaylistForm = React.createClass({
   getInitialState: function() {
     return {songId: this.props.songId, title: '', description: ''};
   },
-  // _onChange: function(){
-  //   PlaylistActions.addSongToPlaylist(this.props.songId, PlaylistStore.newPlaylist().id, 1);
-  // },
-  // componentDidMount: function(){
-  //   this.playlistListener = PlaylistStore.addListener(this._onChange);
-  // },
-  // componentWillUnmount: function(){
-  //   this.playlistListener.remove();
-  // },
   createPlaylist: function (event) {
     event.preventDefault();
     PlaylistActions.createPlaylist(this.state.title, this.state.description, this.props.song);

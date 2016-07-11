@@ -3,7 +3,7 @@ var PlaylistConstants = require('../constants/PlaylistConstants.js');
 var apiUtil = require("../util/apiUtil.js");
 var userUtil = require("../util/userUtil.js");
 
-PlaylistActions = {
+var PlaylistActions = {
   fetchAllPlaylists: function () {
     apiUtil.fetchAllPlaylists(this.receivePlaylists);
   },
@@ -34,12 +34,6 @@ PlaylistActions = {
   addSongToPlaylist: function(songId, playlistId, ord){
     apiUtil.addSong(songId, playlistId, ord);
   },
-  // addSongToNewPlaylist: function(){
-  //   playlist.songs.push(newsong)
-  //   recieveNewPlaylist
-  //   calltoBackendinBackground
-  //   // gets access to newly created playlist
-  // },
   deleteSongFromPlaylist: function(playlistId, playlistSongId){
     apiUtil.deleteSong(playlistSongId, playlistId);
     this.fetchPlaylist(playlistId);

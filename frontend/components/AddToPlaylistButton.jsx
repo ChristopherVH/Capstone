@@ -7,13 +7,13 @@ var playlistSongAdd = React.createClass({
   getInitialState: function(){
     return({
       added: undefined
-    })
+    });
   },
   componentDidMount: function(){
     if (this.props.playlist.songIndex[this.props.songId]){
-      this.setState({added: true})
+      this.setState({added: true});
     }else{
-      this.setState({added: false})
+      this.setState({added: false});
     }
   },
   deleteSongFromPlaylist: function(){
@@ -21,19 +21,21 @@ var playlistSongAdd = React.createClass({
     var songId = this.props.songId;
     this.props.playlist.songs.forEach(function(playlistsong){
       if (songId === playlistsong.song.id){
-        PlaylistActions.deleteSongFromPlaylist(playId, playlistsong.id)
-        return;
+        PlaylistActions.deleteSongFromPlaylist(playId, playlistsong.id);
       }
-    })
+    });
+  },
+  addSongToPlaylist: function(){
+    PlaylistActions.addSongToPlaylist(this.props.songId, this.props.playlist.id, this.props.playlist.songs.length + 1);
   },
   toggleAdd: function(event){
     event.preventDefault();
     if (!(this.state.added)){
-      PlaylistActions.addSongToPlaylist(this.props.songId, this.props.playlist.id, this.props.playlist.songs.length + 1)
-      this.setState({added: true})
+      this.addSongToPlaylist();
+      this.setState({added: true});
     }else{
-      this.deleteSongFromPlaylist()
-      this.setState({added: false})
+      this.deleteSongFromPlaylist();
+      this.setState({added: false});
     }
   },
   display: function(){

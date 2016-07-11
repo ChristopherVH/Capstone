@@ -23,7 +23,6 @@ var Playlist = React.createClass({
     this.setState({playlist: PlaylistStore.find(this.props.playlist.id)});
   },
   componentWillMount: function(){
-    console.log(this.props.playlist);
     if (this.props.playlist.songs[0].song !== undefined){
       this.setState({currentSong: this.state.playlist.songs[0].song});
     }else {

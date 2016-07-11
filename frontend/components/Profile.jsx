@@ -68,7 +68,7 @@ var Profile = React.createClass({
           {this.profileImage()}
           {this.profileCover()}
         </div>
-        <Feed feed={this.state.user.feed} userId={this.state.user.id}/>
+        <Feed feed={this.state.user.feed} username={this.state.user.username} allSongs={this.state.user.allsongs} userId={this.state.user.id}/>
       </div>
     );
   }

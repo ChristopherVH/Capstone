@@ -13,7 +13,9 @@ blockquote, figure, pre {
 
 ul {
   list-style: none;
+  margin-bottom: 0;
 }
+
 
 body {
   background-color: rgba(0,0,0,0.9);
@@ -214,8 +216,9 @@ img{
 // }
 
 .navbar-form{
-  margin-top: 10px;
+  margin-top: 13px;
   margin-left: 30px;
+  vertical-align: middle;
 }
 
 .search-result{
@@ -349,11 +352,6 @@ img{
   top:10px;
   padding-top: 20px;
   margin: 0, auto;
-}
-
-.song-list{
-  position:relative;
-  top:35px;
 }
 
 .audio-actions{
@@ -581,11 +579,13 @@ em{
 }
 
 .playlist-list{
-  margin-top: 50px;
+  margin-top: 30px;
 }
 
 .song-list{
-  margin-top: 15px;
+  margin-top: 10px;
+  position:relative;
+  top:35px;
 }
 
 .greeting-page{
@@ -687,7 +687,7 @@ video{
 
 .playlist-index-header, .song-index-header{
   position: relative;
-  top: 60px;
+  top: 52px;
   text-align: center;
   color: white;
   background-color: black;

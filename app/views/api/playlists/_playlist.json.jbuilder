@@ -1,4 +1,4 @@
-json.extract! playlist, :id, :user_id, :title, :description, :updated_at
+json.extract! playlist, :id, :user_id, :title, :description, :updated_at, :created_at
 
 json.songs playlist.playlist_songs do |song|
   json.id song.id

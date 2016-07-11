@@ -54,13 +54,13 @@
 	var IndexRoute = __webpack_require__(188).IndexRoute;
 	var App = __webpack_require__(250);
 	var Navbar = __webpack_require__(251);
-	var Greeting = __webpack_require__(283);
-	var Collection = __webpack_require__(286);
-	var Profile = __webpack_require__(304);
-	var PlaylistIndex = __webpack_require__(308);
-	var SinglePlaylist = __webpack_require__(310);
-	var SongIndex = __webpack_require__(311);
-	var SingleSong = __webpack_require__(312);
+	var Greeting = __webpack_require__(282);
+	var Collection = __webpack_require__(285);
+	var Profile = __webpack_require__(303);
+	var PlaylistIndex = __webpack_require__(307);
+	var SinglePlaylist = __webpack_require__(308);
+	var SongIndex = __webpack_require__(309);
+	var SingleSong = __webpack_require__(310);
 	
 	var routes = React.createElement(
 	  Route,
@@ -27886,8 +27886,8 @@
 
 	var React = __webpack_require__(1),
 	    Navbar = __webpack_require__(251),
-	    Greeting = __webpack_require__(283);
-	var SingleUserStore = __webpack_require__(289);
+	    Greeting = __webpack_require__(282);
+	var SingleUserStore = __webpack_require__(288);
 	var UserActions = __webpack_require__(252);
 	
 	var App = React.createClass({
@@ -27953,7 +27953,7 @@
 	        React.createElement(
 	          'a',
 	          { href: 'session/new' },
-	          'Login'
+	          'Sign In'
 	        )
 	      )];
 	    }
@@ -35241,14 +35241,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 282 */,
-/* 283 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SongStore = __webpack_require__(284);
+	var SongStore = __webpack_require__(283);
 	var ApiUtil = __webpack_require__(262);
-	var Collection = __webpack_require__(286);
+	var Collection = __webpack_require__(285);
 	
 	var Greeting = React.createClass({
 	  displayName: "Greeting",
@@ -35296,12 +35295,12 @@
 	module.exports = Greeting;
 
 /***/ },
-/* 284 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(253);
 	var Store = __webpack_require__(265).Store;
-	var SongConstant = __webpack_require__(285);
+	var SongConstant = __webpack_require__(284);
 	
 	var SongStore = new Store(AppDispatcher);
 	
@@ -35355,7 +35354,7 @@
 	module.exports = SongStore;
 
 /***/ },
-/* 285 */
+/* 284 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -35365,14 +35364,14 @@
 	};
 
 /***/ },
-/* 286 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SongStore = __webpack_require__(284);
-	var Song = __webpack_require__(287);
-	var SongActions = __webpack_require__(303);
-	var SingleUserStore = __webpack_require__(289);
+	var SongStore = __webpack_require__(283);
+	var Song = __webpack_require__(286);
+	var SongActions = __webpack_require__(302);
+	var SingleUserStore = __webpack_require__(288);
 	
 	var Collection = React.createClass({
 	  displayName: "Collection",
@@ -35407,16 +35406,16 @@
 	module.exports = Collection;
 
 /***/ },
-/* 287 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SongStore = __webpack_require__(284);
+	var SongStore = __webpack_require__(283);
 	var ApiUtil = __webpack_require__(262);
-	var Like = __webpack_require__(288);
-	var PlaylistModal = __webpack_require__(291);
-	var NewPlaylistModal = __webpack_require__(296);
-	var WaveSurfer = __webpack_require__(302);
+	var Like = __webpack_require__(287);
+	var PlaylistModal = __webpack_require__(290);
+	var NewPlaylistModal = __webpack_require__(295);
+	var WaveSurfer = __webpack_require__(301);
 	
 	var Song = React.createClass({
 	  displayName: "Song",
@@ -35489,7 +35488,7 @@
 	        { className: "audio-actions" },
 	        React.createElement(Like, { className: "song-button", songId: this.state.song.id, userId: this.props.userId }),
 	        React.createElement(NewPlaylistModal, { className: "song-button", song: this.state.song, songId: this.state.song.id, userId: this.props.userId }),
-	        React.createElement(PlaylistModal, { className: "song-button", songId: this.state.song.id })
+	        React.createElement(PlaylistModal, { className: "song-button", song: this.state.song, songId: this.state.song.id })
 	      ),
 	      React.createElement(WaveSurfer, { song: this.state.song, playing: this.state.playing }),
 	      React.createElement(
@@ -35512,12 +35511,12 @@
 	module.exports = Song;
 
 /***/ },
-/* 288 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SingleUserStore = __webpack_require__(289);
-	var LikeActions = __webpack_require__(290);
+	var SingleUserStore = __webpack_require__(288);
+	var LikeActions = __webpack_require__(289);
 	var UserActions = __webpack_require__(252);
 	var Modal = __webpack_require__(168);
 	
@@ -35654,7 +35653,7 @@
 	module.exports = Like;
 
 /***/ },
-/* 289 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(253);
@@ -35709,7 +35708,7 @@
 	module.exports = SingleUserStore;
 
 /***/ },
-/* 290 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(253);
@@ -35727,16 +35726,16 @@
 	module.exports = LikeActions;
 
 /***/ },
-/* 291 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	
-	var SingleUserStore = __webpack_require__(289);
+	var SingleUserStore = __webpack_require__(288);
 	var Modal = __webpack_require__(168);
-	var PlaylistStore = __webpack_require__(292);
-	var PlaylistActions = __webpack_require__(294);
-	var AddToPlaylistButton = __webpack_require__(295);
+	var PlaylistStore = __webpack_require__(291);
+	var PlaylistActions = __webpack_require__(293);
+	var AddToPlaylistButton = __webpack_require__(294);
 	
 	var appElement = document.getElementById('root');
 	
@@ -35803,12 +35802,13 @@
 	      );
 	    }
 	    var songId = this.props.songId;
+	    var song = this.props.song;
 	    var playlistList = this.state.playlists.map(function (playlist, index) {
 	      return [React.createElement(
 	        'div',
 	        { className: 'modal-playlist-title' },
 	        playlist.title
-	      ), React.createElement(AddToPlaylistButton, { className: 'modal-playlist-button', key: index, playlist: playlist, songId: songId })];
+	      ), React.createElement(AddToPlaylistButton, { className: 'modal-playlist-button', key: index, song: song, playlist: playlist, songId: songId })];
 	    });
 	    return playlistList;
 	  },
@@ -35866,12 +35866,12 @@
 	module.exports = PlaylistModal;
 
 /***/ },
-/* 292 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(253);
 	var Store = __webpack_require__(265).Store;
-	var PlaylistConstant = __webpack_require__(293);
+	var PlaylistConstant = __webpack_require__(292);
 	
 	var PlaylistStore = new Store(AppDispatcher);
 	
@@ -35953,7 +35953,7 @@
 	module.exports = PlaylistStore;
 
 /***/ },
-/* 293 */
+/* 292 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -35964,15 +35964,15 @@
 	};
 
 /***/ },
-/* 294 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(253);
-	var PlaylistConstants = __webpack_require__(293);
+	var PlaylistConstants = __webpack_require__(292);
 	var apiUtil = __webpack_require__(262);
 	var userUtil = __webpack_require__(258);
 	
-	PlaylistActions = {
+	var PlaylistActions = {
 	  fetchAllPlaylists: function () {
 	    apiUtil.fetchAllPlaylists(this.receivePlaylists);
 	  },
@@ -36003,12 +36003,6 @@
 	  addSongToPlaylist: function (songId, playlistId, ord) {
 	    apiUtil.addSong(songId, playlistId, ord);
 	  },
-	  // addSongToNewPlaylist: function(){
-	  //   playlist.songs.push(newsong)
-	  //   recieveNewPlaylist
-	  //   calltoBackendinBackground
-	  //   // gets access to newly created playlist
-	  // },
 	  deleteSongFromPlaylist: function (playlistId, playlistSongId) {
 	    apiUtil.deleteSong(playlistSongId, playlistId);
 	    this.fetchPlaylist(playlistId);
@@ -36027,11 +36021,11 @@
 	module.exports = PlaylistActions;
 
 /***/ },
-/* 295 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PlaylistActions = __webpack_require__(294);
+	var PlaylistActions = __webpack_require__(293);
 	var UserActions = __webpack_require__(252);
 	
 	var playlistSongAdd = React.createClass({
@@ -36056,14 +36050,16 @@
 	    this.props.playlist.songs.forEach(function (playlistsong) {
 	      if (songId === playlistsong.song.id) {
 	        PlaylistActions.deleteSongFromPlaylist(playId, playlistsong.id);
-	        return;
 	      }
 	    });
+	  },
+	  addSongToPlaylist: function () {
+	    PlaylistActions.addSongToPlaylist(this.props.songId, this.props.playlist.id, this.props.playlist.songs.length + 1);
 	  },
 	  toggleAdd: function (event) {
 	    event.preventDefault();
 	    if (!this.state.added) {
-	      PlaylistActions.addSongToPlaylist(this.props.songId, this.props.playlist.id, this.props.playlist.songs.length + 1);
+	      this.addSongToPlaylist();
 	      this.setState({ added: true });
 	    } else {
 	      this.deleteSongFromPlaylist();
@@ -36089,16 +36085,16 @@
 	module.exports = playlistSongAdd;
 
 /***/ },
-/* 296 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	// var Modal = require('boron/FadeModal');
 	var Modal = __webpack_require__(168);
-	var PlaylistStore = __webpack_require__(292);
-	var PlaylistActions = __webpack_require__(294);
-	var NewPlaylistForm = __webpack_require__(297);
-	var SingleUserStore = __webpack_require__(289);
+	var PlaylistStore = __webpack_require__(291);
+	var PlaylistActions = __webpack_require__(293);
+	var NewPlaylistForm = __webpack_require__(296);
+	var SingleUserStore = __webpack_require__(288);
 	
 	const customStyles = {
 	  overlay: {
@@ -36223,13 +36219,13 @@
 	module.exports = NewPlaylistModal;
 
 /***/ },
-/* 297 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var LinkedStateMixin = __webpack_require__(298);
-	var PlaylistActions = __webpack_require__(294);
-	var PlaylistStore = __webpack_require__(292);
+	var LinkedStateMixin = __webpack_require__(297);
+	var PlaylistActions = __webpack_require__(293);
+	var PlaylistStore = __webpack_require__(291);
 	var UserActions = __webpack_require__(252);
 	
 	var PlaylistForm = React.createClass({
@@ -36239,15 +36235,6 @@
 	  getInitialState: function () {
 	    return { songId: this.props.songId, title: '', description: '' };
 	  },
-	  // _onChange: function(){
-	  //   PlaylistActions.addSongToPlaylist(this.props.songId, PlaylistStore.newPlaylist().id, 1);
-	  // },
-	  // componentDidMount: function(){
-	  //   this.playlistListener = PlaylistStore.addListener(this._onChange);
-	  // },
-	  // componentWillUnmount: function(){
-	  //   this.playlistListener.remove();
-	  // },
 	  createPlaylist: function (event) {
 	    event.preventDefault();
 	    PlaylistActions.createPlaylist(this.state.title, this.state.description, this.props.song);
@@ -36287,13 +36274,13 @@
 	module.exports = PlaylistForm;
 
 /***/ },
-/* 298 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(299);
+	module.exports = __webpack_require__(298);
 
 /***/ },
-/* 299 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -36309,8 +36296,8 @@
 	
 	'use strict';
 	
-	var ReactLink = __webpack_require__(300);
-	var ReactStateSetters = __webpack_require__(301);
+	var ReactLink = __webpack_require__(299);
+	var ReactStateSetters = __webpack_require__(300);
 	
 	/**
 	 * A simple mixin around ReactLink.forState().
@@ -36334,7 +36321,7 @@
 	module.exports = LinkedStateMixin;
 
 /***/ },
-/* 300 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -36410,7 +36397,7 @@
 	module.exports = ReactLink;
 
 /***/ },
-/* 301 */
+/* 300 */
 /***/ function(module, exports) {
 
 	/**
@@ -36519,7 +36506,7 @@
 	module.exports = ReactStateSetters;
 
 /***/ },
-/* 302 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36579,11 +36566,11 @@
 	module.exports = reactWaveSurfer;
 
 /***/ },
-/* 303 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(253);
-	var SongConstants = __webpack_require__(285);
+	var SongConstants = __webpack_require__(284);
 	var apiUtil = __webpack_require__(262);
 	
 	SongActions = {
@@ -36621,12 +36608,12 @@
 	module.exports = SongActions;
 
 /***/ },
-/* 304 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SingleUserStore = __webpack_require__(289);
-	var Feed = __webpack_require__(305);
+	var SingleUserStore = __webpack_require__(288);
+	var Feed = __webpack_require__(304);
 	var UserActions = __webpack_require__(252);
 	
 	var Profile = React.createClass({
@@ -36726,7 +36713,7 @@
 	        this.profileImage(),
 	        this.profileCover()
 	      ),
-	      React.createElement(Feed, { feed: this.state.user.feed, userId: this.state.user.id })
+	      React.createElement(Feed, { feed: this.state.user.feed, username: this.state.user.username, allSongs: this.state.user.allsongs, userId: this.state.user.id })
 	    );
 	  }
 	});
@@ -36734,23 +36721,25 @@
 	module.exports = Profile;
 
 /***/ },
-/* 305 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var Song = __webpack_require__(287);
-	var PlaylistStore = __webpack_require__(292);
-	var SingleUserStore = __webpack_require__(289);
-	var PlaylistIndexItem = __webpack_require__(309);
+	var Song = __webpack_require__(286);
+	var PlaylistStore = __webpack_require__(291);
+	var SingleUserStore = __webpack_require__(288);
+	var PlaylistIndexItem = __webpack_require__(305);
 	
 	var Feed = React.createClass({
 	  displayName: "Feed",
 	
 	  getInitialState: function () {
+	    console.log(this.props.allSongs);
 	    return {
 	      playlists: this.props.feed.playlists,
 	      songs: this.props.feed.songs,
-	      likedSongs: this.props.feed.liked_songs
+	      likedSongs: this.props.feed.liked_songs,
+	      allSongs: this.props.allSongs
 	    };
 	  },
 	  componentWillReceiveProps: function (newProps) {
@@ -36765,32 +36754,36 @@
 	  _onChange: function () {
 	    this.updateFeed();
 	  },
-	  populateFeed: function (songs, playlists, likedSongs) {
+	  populateFeed: function (allSongs, playlists) {
 	    var that = this;
 	    var postFeed;
-	    var postFeedSongs = songs.map(function (feedobj, index) {
-	      return React.createElement(
-	        "li",
-	        { className: "feed-element" },
-	        React.createElement(Song, { key: index, song: feedobj, userId: that.props.userId })
-	      );
+	    postFeed = allSongs.concat(playlists);
+	    postFeed = postFeed.sort(function (a, b) {
+	      if (a.created_at > b.created_at) {
+	        return -1;
+	      }
+	      if (a.created_at < b.created_at) {
+	        return 1;
+	      }
+	      return 0;
 	    });
-	    var postFeedPlaylist = playlists.map(function (feedobj, index) {
-	      return React.createElement(
-	        "li",
-	        { className: "feed-element" },
-	        React.createElement(PlaylistIndexItem, { key: index, playlist: feedobj })
-	      );
+	    var jsxPostFeed = postFeed.map(function (feedobj, index) {
+	      if (feedobj.description !== undefined) {
+	        return React.createElement(
+	          "li",
+	          { className: "feed-element" },
+	          React.createElement(PlaylistIndexItem, { key: index, playlist: feedobj })
+	        );
+	      } else {
+	        feedobj["user"] = { "username": that.props.username };
+	        return React.createElement(
+	          "li",
+	          { className: "feed-element" },
+	          React.createElement(Song, { key: index, song: feedobj, userId: that.props.userId })
+	        );
+	      }
 	    });
-	    var postFeedLikes = likedSongs.map(function (feedobj, index) {
-	      return React.createElement(
-	        "li",
-	        { className: "feed-element" },
-	        React.createElement(Song, { key: index, song: feedobj, userId: that.props.userId })
-	      );
-	    });
-	    postFeed = postFeedSongs.concat(postFeedPlaylist).concat(postFeedLikes);
-	    return postFeed;
+	    return jsxPostFeed;
 	  },
 	  updateFeed: function () {
 	    this.setState({ playlists: PlaylistStore.all() });
@@ -36799,7 +36792,7 @@
 	    return React.createElement(
 	      "ul",
 	      { className: "feed" },
-	      this.populateFeed(this.state.songs, this.state.playlists, this.state.likedSongs)
+	      this.populateFeed(this.state.allSongs, this.state.playlists)
 	    );
 	  }
 	});
@@ -36807,8 +36800,106 @@
 	module.exports = Feed;
 
 /***/ },
-/* 306 */,
-/* 307 */
+/* 305 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PlaylistStore = __webpack_require__(291);
+	var ApiUtil = __webpack_require__(262);
+	var PlaylistSong = __webpack_require__(306);
+	var WaveSurfer = __webpack_require__(301);
+	var PlaylistActions = __webpack_require__(293);
+	
+	var Playlist = React.createClass({
+	  displayName: "Playlist",
+	
+	  getInitialState: function () {
+	    return {
+	      playlist: this.props.playlist,
+	      currentSong: undefined,
+	      playing: false
+	    };
+	  },
+	  componentDidMount: function () {
+	    this.playlistListener = PlaylistStore.addListener(this._onChange);
+	  },
+	  componentWillUnmount: function () {
+	    this.playlistListener.remove();
+	  },
+	  _onChange: function () {
+	    this.setState({ playlist: PlaylistStore.find(this.props.playlist.id) });
+	  },
+	  componentWillMount: function () {
+	    if (this.props.playlist.songs[0].song !== undefined) {
+	      this.setState({ currentSong: this.state.playlist.songs[0].song });
+	    } else {
+	      this.setState({ currentSong: this.state.playlist.songs[0] });
+	    }
+	  },
+	  singlePlaylistRedirect: function () {
+	    window.location = '/#/playlists/' + this.props.playlist.id;
+	  },
+	  fillState: function () {
+	    var that = this;
+	    return this.state.playlist.songs.map(function (song, index) {
+	      if (song.song !== undefined) {
+	        return React.createElement(PlaylistSong, { key: index, song: song.song, playing: that.state.Playing, currentSong: that.state.currentSong,
+	          setCurrentSongWave: that.setCurrentSongWave, setPlaying: that.setPlaying });
+	      } else {
+	        return React.createElement(PlaylistSong, { key: index, song: song, playing: that.state.Playing, currentSong: that.state.currentSong,
+	          setCurrentSongWave: that.setCurrentSongWave, setPlaying: that.setPlaying });
+	      }
+	    });
+	  },
+	  shouldComponenetUpdate: function (nextProps, nextState) {
+	    if (nextState.currentSong !== this.state.currentSong) {
+	      this.setState({ playing: false });
+	    }
+	  },
+	  setCurrentSongWave: function (song) {
+	    this.setState({ currentSong: song });
+	  },
+	  setPlaying: function (playingBoolean) {
+	    this.setState({ playing: playingBoolean });
+	  },
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "playlist-container" },
+	      React.createElement(
+	        "div",
+	        { className: "playlist-info" },
+	        React.createElement(
+	          "h3",
+	          { className: "playlist-title", onDoubleClick: this.singlePlaylistRedirect },
+	          this.state.playlist.title + " ",
+	          ":"
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "playlist-description" },
+	          this.state.playlist.description
+	        )
+	      ),
+	      React.createElement(
+	        "div",
+	        { className: "current-list-image" },
+	        React.createElement("img", { src: this.state.currentSong.image_url })
+	      ),
+	      React.createElement(
+	        "div",
+	        { className: "playlist-wave" },
+	        React.createElement(WaveSurfer, { playlistId: this.props.playlist.id, song: this.state.currentSong, playing: this.state.playing })
+	      ),
+	      this.fillState()
+	    );
+	  }
+	});
+	
+	module.exports = Playlist;
+
+/***/ },
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36883,13 +36974,13 @@
 	module.exports = PlaylistSong;
 
 /***/ },
-/* 308 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PlaylistStore = __webpack_require__(292);
-	var PlaylistIndexItem = __webpack_require__(309);
-	var PlaylistActions = __webpack_require__(294);
+	var PlaylistStore = __webpack_require__(291);
+	var PlaylistIndexItem = __webpack_require__(305);
+	var PlaylistActions = __webpack_require__(293);
 	
 	var PlaylistIndex = React.createClass({
 	  displayName: "PlaylistIndex",
@@ -36939,114 +37030,14 @@
 	module.exports = PlaylistIndex;
 
 /***/ },
-/* 309 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PlaylistStore = __webpack_require__(292);
+	var PlaylistStore = __webpack_require__(291);
 	var ApiUtil = __webpack_require__(262);
-	var PlaylistSong = __webpack_require__(307);
-	var WaveSurfer = __webpack_require__(302);
-	var PlaylistActions = __webpack_require__(294);
-	
-	var Playlist = React.createClass({
-	  displayName: "Playlist",
-	
-	  getInitialState: function () {
-	    return {
-	      playlist: this.props.playlist,
-	      currentSong: undefined,
-	      playing: false
-	    };
-	  },
-	  componentDidMount: function () {
-	    this.playlistListener = PlaylistStore.addListener(this._onChange);
-	  },
-	  componentWillUnmount: function () {
-	    this.playlistListener.remove();
-	  },
-	  _onChange: function () {
-	    this.setState({ playlist: PlaylistStore.find(this.props.playlist.id) });
-	  },
-	  componentWillMount: function () {
-	    console.log(this.props.playlist);
-	    if (this.props.playlist.songs[0].song !== undefined) {
-	      this.setState({ currentSong: this.state.playlist.songs[0].song });
-	    } else {
-	      this.setState({ currentSong: this.state.playlist.songs[0] });
-	    }
-	  },
-	  singlePlaylistRedirect: function () {
-	    window.location = '/#/playlists/' + this.props.playlist.id;
-	  },
-	  fillState: function () {
-	    var that = this;
-	    return this.state.playlist.songs.map(function (song, index) {
-	      if (song.song !== undefined) {
-	        return React.createElement(PlaylistSong, { key: index, song: song.song, playing: that.state.Playing, currentSong: that.state.currentSong,
-	          setCurrentSongWave: that.setCurrentSongWave, setPlaying: that.setPlaying });
-	      } else {
-	        return React.createElement(PlaylistSong, { key: index, song: song, playing: that.state.Playing, currentSong: that.state.currentSong,
-	          setCurrentSongWave: that.setCurrentSongWave, setPlaying: that.setPlaying });
-	      }
-	    });
-	  },
-	  shouldComponenetUpdate: function (nextProps, nextState) {
-	    if (nextState.currentSong !== this.state.currentSong) {
-	      this.setState({ playing: false });
-	    }
-	  },
-	  setCurrentSongWave: function (song) {
-	    this.setState({ currentSong: song });
-	  },
-	  setPlaying: function (playingBoolean) {
-	    this.setState({ playing: playingBoolean });
-	  },
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      { className: "playlist-container" },
-	      React.createElement(
-	        "div",
-	        { className: "playlist-info" },
-	        React.createElement(
-	          "h3",
-	          { className: "playlist-title", onDoubleClick: this.singlePlaylistRedirect },
-	          this.state.playlist.title + " ",
-	          ":"
-	        ),
-	        React.createElement(
-	          "div",
-	          { className: "playlist-description" },
-	          this.state.playlist.description
-	        )
-	      ),
-	      React.createElement(
-	        "div",
-	        { className: "current-list-image" },
-	        React.createElement("img", { src: this.state.currentSong.image_url })
-	      ),
-	      React.createElement(
-	        "div",
-	        { className: "playlist-wave" },
-	        React.createElement(WaveSurfer, { playlistId: this.props.playlist.id, song: this.state.currentSong, playing: this.state.playing })
-	      ),
-	      this.fillState()
-	    );
-	  }
-	});
-	
-	module.exports = Playlist;
-
-/***/ },
-/* 310 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PlaylistStore = __webpack_require__(292);
-	var ApiUtil = __webpack_require__(262);
-	var PlaylistSong = __webpack_require__(307);
-	var PlaylistActions = __webpack_require__(294);
+	var PlaylistSong = __webpack_require__(306);
+	var PlaylistActions = __webpack_require__(293);
 	
 	var SinglePlaylist = React.createClass({
 	  displayName: "SinglePlaylist",
@@ -37104,14 +37095,14 @@
 	module.exports = SinglePlaylist;
 
 /***/ },
-/* 311 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SongStore = __webpack_require__(284);
-	var SingleUserStore = __webpack_require__(289);
-	var Song = __webpack_require__(287);
-	var SongActions = __webpack_require__(303);
+	var SongStore = __webpack_require__(283);
+	var SingleUserStore = __webpack_require__(288);
+	var Song = __webpack_require__(286);
+	var SongActions = __webpack_require__(302);
 	var UserActions = __webpack_require__(252);
 	
 	var SongIndex = React.createClass({
@@ -37164,15 +37155,15 @@
 	module.exports = SongIndex;
 
 /***/ },
-/* 312 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SongStore = __webpack_require__(284);
-	var SongActions = __webpack_require__(303);
-	var Like = __webpack_require__(288);
-	var PlaylistModal = __webpack_require__(291);
-	var NewPlaylistModal = __webpack_require__(296);
+	var SongStore = __webpack_require__(283);
+	var SongActions = __webpack_require__(302);
+	var Like = __webpack_require__(287);
+	var PlaylistModal = __webpack_require__(290);
+	var NewPlaylistModal = __webpack_require__(295);
 	
 	var Song = React.createClass({
 	  displayName: "Song",

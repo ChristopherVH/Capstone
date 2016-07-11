@@ -6,10 +6,12 @@ var PlaylistIndexItem = require('./PlaylistIndexItem.jsx');
 
 var Feed = React.createClass({
   getInitialState: function(){
+    console.log(this.props.allSongs);
     return({
       playlists: this.props.feed.playlists,
       songs: this.props.feed.songs,
-      likedSongs: this.props.feed.liked_songs
+      likedSongs: this.props.feed.liked_songs,
+      allSongs: this.props.allSongs
     });
   },
   componentWillReceiveProps: function(newProps){
@@ -24,20 +26,28 @@ var Feed = React.createClass({
   _onChange: function(){
     this.updateFeed();
   },
-  populateFeed: function(songs, playlists, likedSongs){
+  populateFeed: function(allSongs, playlists){
     var that = this;
     var postFeed;
-    var postFeedSongs = songs.map(function(feedobj, index){
-        return <li className="feed-element"><Song key={index} song={feedobj} userId={that.props.userId}/></li>;
+    postFeed = allSongs.concat(playlists);
+    postFeed = postFeed.sort(function (a, b) {
+      if (a.created_at > b.created_at) {
+        return -1;
+      }
+      if (a.created_at < b.created_at) {
+        return 1;
+      }
+      return 0;
     });
-    var postFeedPlaylist = playlists.map(function(feedobj, index){
+    var jsxPostFeed = postFeed.map(function(feedobj, index){
+      if (feedobj.description !== undefined){
         return <li className="feed-element"><PlaylistIndexItem key={index} playlist={feedobj} /></li>;
-    });
-    var postFeedLikes = likedSongs.map(function(feedobj, index){
+      }else{
+        feedobj["user"] = {"username" : that.props.username};
         return <li className="feed-element"><Song key={index} song={feedobj} userId={that.props.userId}/></li>;
+      }
     });
-    postFeed = postFeedSongs.concat(postFeedPlaylist).concat(postFeedLikes);
-    return postFeed;
+    return jsxPostFeed;
   },
   updateFeed: function(){
     this.setState({playlists: PlaylistStore.all()});
@@ -45,7 +55,7 @@ var Feed = React.createClass({
   render: function(){
     return(
       <ul className="feed">
-        {this.populateFeed(this.state.songs, this.state.playlists, this.state.likedSongs)}
+        {this.populateFeed(this.state.allSongs, this.state.playlists)}
       </ul>
     );
   }
