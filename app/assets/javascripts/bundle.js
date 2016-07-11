@@ -28631,6 +28631,16 @@
 	      }
 	    });
 	  },
+	  deletePlaylist: function (id, callback) {
+	    $.ajax({
+	      type: "DELETE",
+	      url: "api/playlists/" + id,
+	      data: { id: id },
+	      success: function () {
+	        callback(id);
+	      }
+	    });
+	  },
 	  fetchTrendingSongs: function (callback) {
 	    $.ajax({
 	      type: "GET",
@@ -35913,6 +35923,15 @@
 	  }
 	};
 	
+	PlaylistStore.deletePlaylist = function (playlistId) {
+	  delete _playlisthash[playlistId];
+	  for (var i = 0; i < _playlists.length; i++) {
+	    if (_playlists[i].id === playlistId) {
+	      _playlists.splice(i, 1);
+	    }
+	  }
+	};
+	
 	PlaylistStore.resetPlaylists = function (playlists) {
 	  _playlists = [];
 	  _playlisthash = {};
@@ -35947,6 +35966,10 @@
 	      PlaylistStore.storeNewPlaylist(payload.playlist);
 	      PlaylistStore.__emitChange();
 	      break;
+	    case PlaylistConstant.PLAYLIST_DELETED:
+	      PlaylistStore.deletePlaylist(payload.playlistId);
+	      PlaylistStore.__emitChange();
+	      break;
 	  }
 	};
 	
@@ -35960,7 +35983,8 @@
 	  PLAYLISTS_RECEIVED: "PLAYLISTS_RECEIVED",
 	  PLAYLIST_RECEIVED: "PLAYLIST_RECEIVED",
 	  SINGLE_PLAYLIST_RECEIVED: "SINGLE_PLAYLIST_RECEIVED",
-	  NEW_PLAYLIST_RECEIVED: "NEW_PLAYLIST_RECEIVED"
+	  NEW_PLAYLIST_RECEIVED: "NEW_PLAYLIST_RECEIVED",
+	  PLAYLIST_DELETED: "PLAYLIST_DELETED"
 	};
 
 /***/ },
@@ -36007,6 +36031,15 @@
 	    apiUtil.deleteSong(playlistSongId, playlistId);
 	    this.fetchPlaylist(playlistId);
 	  },
+	  deletePlaylist: function (id) {
+	    apiUtil.deletePlaylist(id, this.recieveDeletedPlaylist);
+	  },
+	  recieveDeletedPlaylist: function (playlistId) {
+	    Dispatcher.dispatch({
+	      actionType: PlaylistConstants.PLAYLIST_DELETED,
+	      playlistId: playlistId
+	    });
+	  },
 	  createPlaylist: function (title, description, song) {
 	    apiUtil.createPlaylist(title, description, this.addSongToPlaylist, this.receiveNewPlaylist, song.id, song);
 	  },
@@ -36047,6 +36080,10 @@
 	  deleteSongFromPlaylist: function () {
 	    var playId = this.props.playlist.id;
 	    var songId = this.props.songId;
+	    if (this.props.playlist.songs.length === 1) {
+	      console.log("looking to be deleted");
+	      PlaylistActions.deletePlaylist(playId);
+	    }
 	    this.props.playlist.songs.forEach(function (playlistsong) {
 	      if (songId === playlistsong.song.id) {
 	        PlaylistActions.deleteSongFromPlaylist(playId, playlistsong.id);

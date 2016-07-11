@@ -42,6 +42,15 @@ PlaylistStore.addPlaylist = function(playlist) {
   }
 };
 
+PlaylistStore.deletePlaylist = function(playlistId){
+  delete _playlisthash[playlistId];
+  for (var i = 0; i < _playlists.length; i++) {
+    if (_playlists[i].id === playlistId){
+      _playlists.splice(i, 1);
+    }
+  }
+};
+
 PlaylistStore.resetPlaylists = function(playlists){
   _playlists = [];
   _playlisthash = {};
@@ -74,6 +83,10 @@ PlaylistStore.__onDispatch = function(payload){
     case PlaylistConstant.NEW_PLAYLIST_RECEIVED:
       PlaylistStore.addPlaylist(payload.playlist);
       PlaylistStore.storeNewPlaylist(payload.playlist);
+      PlaylistStore.__emitChange();
+      break;
+    case PlaylistConstant.PLAYLIST_DELETED:
+      PlaylistStore.deletePlaylist(payload.playlistId);
       PlaylistStore.__emitChange();
       break;
   }

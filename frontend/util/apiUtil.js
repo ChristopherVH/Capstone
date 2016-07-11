@@ -49,12 +49,22 @@ var songUtil = {
       }
     });
   },
+  deletePlaylist: function(id, callback){
+    $.ajax({
+      type:"DELETE",
+      url: "api/playlists/" + id,
+      data: {id: id},
+      success: function () {
+        callback(id);
+      }
+    });
+  },
   fetchTrendingSongs: function(callback){
     $.ajax({
       type:"GET",
       url: "api/songs/trending",
       success: function (songs) {
-        callback(songs)
+        callback(songs);
         //goes back to song actions, dispatches
       }
     });

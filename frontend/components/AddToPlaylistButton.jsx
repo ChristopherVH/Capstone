@@ -19,6 +19,10 @@ var playlistSongAdd = React.createClass({
   deleteSongFromPlaylist: function(){
     var playId = this.props.playlist.id;
     var songId = this.props.songId;
+    if (this.props.playlist.songs.length === 1){
+      console.log("looking to be deleted");
+      PlaylistActions.deletePlaylist(playId);
+    }
     this.props.playlist.songs.forEach(function(playlistsong){
       if (songId === playlistsong.song.id){
         PlaylistActions.deleteSongFromPlaylist(playId, playlistsong.id);
