@@ -8,6 +8,7 @@ var WaveSurfer = require("./WaveSurfer.jsx");
 
 var Song = React.createClass({
   getInitialState: function(){
+    
     return({
       song: this.props.song,
       playing: false

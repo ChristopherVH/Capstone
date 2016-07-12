@@ -35432,6 +35432,7 @@
 	  displayName: "Song",
 	
 	  getInitialState: function () {
+	
 	    return {
 	      song: this.props.song,
 	      playing: false
