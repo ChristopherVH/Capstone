@@ -130,6 +130,7 @@ GEM
       pry (>= 0.9.10)
     puma (2.16.0)
     rack (1.6.4)
+    rack-cors (0.3.1)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.5.1)
@@ -230,6 +231,7 @@ DEPENDENCIES
   pg (~> 0.15)
   pry-rails
   puma
+  rack-cors (~> 0.3.1)
   rails (= 4.2.5.1)
   rails-assets-tether (>= 1.1.0)
   sass-rails (~> 5.0)
