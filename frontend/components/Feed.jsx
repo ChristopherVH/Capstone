@@ -6,7 +6,6 @@ var PlaylistIndexItem = require('./PlaylistIndexItem.jsx');
 
 var Feed = React.createClass({
   getInitialState: function(){
-    console.log(this.props.allSongs);
     return({
       playlists: this.props.feed.playlists,
       songs: this.props.feed.songs,

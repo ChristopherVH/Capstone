@@ -36070,7 +36070,8 @@
 	      added: undefined
 	    };
 	  },
-	  componentDidMount: function () {
+	  componentWillMount: function () {
+	    console.log(this.props.playlist.songIndex);
 	    if (this.props.playlist.songIndex[this.props.songId]) {
 	      this.setState({ added: true });
 	    } else {
@@ -36081,7 +36082,6 @@
 	    var playId = this.props.playlist.id;
 	    var songId = this.props.songId;
 	    if (this.props.playlist.songs.length === 1) {
-	      console.log("looking to be deleted");
 	      PlaylistActions.deletePlaylist(playId);
 	    }
 	    this.props.playlist.songs.forEach(function (playlistsong) {
@@ -36090,18 +36090,16 @@
 	      }
 	    });
 	  },
-	  addSongToPlaylist: function () {
-	    PlaylistActions.addSongToPlaylist(this.props.songId, this.props.playlist.id, this.props.playlist.songs.length + 1);
-	  },
 	  toggleAdd: function (event) {
 	    event.preventDefault();
 	    if (!this.state.added) {
-	      this.addSongToPlaylist();
+	      PlaylistActions.addSongToPlaylist(this.props.songId, this.props.playlist.id, this.props.playlist.songs[this.props.playlist.songs.length - 1].ord + 1);
 	      this.setState({ added: true });
 	    } else {
 	      this.deleteSongFromPlaylist();
 	      this.setState({ added: false });
 	    }
+	    PlaylistActions.fetchPlaylist(this.props.playlist.id);
 	  },
 	  display: function () {
 	    if (this.state.added) {
@@ -36687,8 +36685,8 @@
 	      return React.createElement(
 	        "div",
 	        { className: "profile-photo-container" },
-	        React.createElement("img", { src: this.state.user.profile_url, onClick: this.cloudinaryOpen }),
-	        React.createElement("div", { className: "upload-profile" })
+	        React.createElement("img", { src: this.state.user.profile_url }),
+	        React.createElement("div", { onClick: this.cloudinaryOpen, className: "upload-profile" })
 	      );
 	    } else {
 	      return React.createElement(
@@ -36703,23 +36701,7 @@
 	      return React.createElement(
 	        "div",
 	        { className: "cover-photo-container" },
-	        React.createElement("img", { src: this.state.user.cover_url, onClick: this.cloudinaryOpen })
-	      );
-	    }
-	  },
-	  componentWillUnmount: function () {
-	    this.userListener.remove();
-	  },
-	  render: function () {
-	    if (this.state.user === undefined || this.state.user.id === undefined) {
-	      return React.createElement("div", null);
-	    }
-	    return React.createElement(
-	      "div",
-	      { className: "profile-container" },
-	      React.createElement(
-	        "div",
-	        { className: "profile-info" },
+	        React.createElement("img", { src: this.state.user.cover_url, onClick: this.cloudinaryOpen }),
 	        React.createElement(
 	          "div",
 	          { className: "user-info" },
@@ -36746,7 +36728,23 @@
 	            "Likes: ",
 	            this.state.user.liked_songs.length
 	          )
-	        ),
+	        )
+	      );
+	    }
+	  },
+	  componentWillUnmount: function () {
+	    this.userListener.remove();
+	  },
+	  render: function () {
+	    if (this.state.user === undefined || this.state.user.id === undefined) {
+	      return React.createElement("div", null);
+	    }
+	    return React.createElement(
+	      "div",
+	      { className: "profile-container" },
+	      React.createElement(
+	        "div",
+	        { className: "profile-info" },
 	        this.profileImage(),
 	        this.profileCover()
 	      ),
@@ -36771,7 +36769,6 @@
 	  displayName: "Feed",
 	
 	  getInitialState: function () {
-	    console.log(this.props.allSongs);
 	    return {
 	      playlists: this.props.feed.playlists,
 	      songs: this.props.feed.songs,

@@ -35,8 +35,8 @@ var Profile = React.createClass({
   profileImage: function(){
     if (this.state.user.profile_url && SingleUserStore.currentUser().id === this.state.user.id){
       return <div className="profile-photo-container">
-        <img src={this.state.user.profile_url} onClick={this.cloudinaryOpen}></img>
-        <div className= 'upload-profile'></div>
+        <img src={this.state.user.profile_url}></img>
+        <div onClick={this.cloudinaryOpen} className= 'upload-profile'></div>
       </div>;
     }else {
       return <div className="profile-photo-container">
@@ -46,7 +46,17 @@ var Profile = React.createClass({
   },
   profileCover: function(){
     if (this.state.user.cover_url){
-      return <div className="cover-photo-container"><img src={this.state.user.cover_url} onClick={this.cloudinaryOpen}></img></div>;
+      return (
+      <div className="cover-photo-container">
+        <img src={this.state.user.cover_url} onClick={this.cloudinaryOpen}></img>
+          <div className="user-info">
+            <h1 className="username">{this.state.user.username}</h1>
+            <h2 className="song-count">Songs: {this.state.user.songs.length}</h2>
+            <h2 className="playlist-count">Playlists: {this.state.user.playlists.length}</h2>
+            <h2 className="like-count">Likes: {this.state.user.liked_songs.length}</h2>
+          </div>
+        </div>
+        );
     }
   },
   componentWillUnmount: function(){
@@ -59,12 +69,6 @@ var Profile = React.createClass({
     return(
       <div className="profile-container">
         <div className="profile-info">
-          <div className="user-info">
-            <h1 className="username">{this.state.user.username}</h1>
-            <h2 className="song-count">Songs: {this.state.user.songs.length}</h2>
-            <h2 className="playlist-count">Playlists: {this.state.user.playlists.length}</h2>
-            <h2 className="like-count">Likes: {this.state.user.liked_songs.length}</h2>
-          </div>
           {this.profileImage()}
           {this.profileCover()}
         </div>

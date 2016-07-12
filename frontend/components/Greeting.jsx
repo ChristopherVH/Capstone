@@ -22,8 +22,8 @@ var Greeting = React.createClass({
           </div>
         </div>
       </div>
-    )
+    );
   }
-})
+});
 
 module.exports = Greeting;

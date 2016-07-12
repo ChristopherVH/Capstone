@@ -258,10 +258,11 @@ img{
   width: 300px;
   position:absolute;
   top:50px;
-  left:50px;
+  left:15%;
 }
 
 .upload-profile{
+  cursor: pointer;
   width: 45px;
   height: 45px;
   border-radius: 50%;
@@ -288,8 +289,12 @@ img{
 }
 
 .cover-photo-container{
-  width:100%;
+  position:relative;
+  width:75%;
+  margin:0 auto;
   height: 400px;
+  z-index:-1;
+  border-bottom: 2px solid white;
 }
 
 .profile-info{
@@ -297,34 +302,40 @@ img{
 }
 
 .user-info{
-  background-color: yellow;
-  width:100%;
+  position: absolute;
+  background-color: none;
+  top: 0;
+  left: calc(10% + 80px);
+  width: 80%;
+  height: 100%;
 }
 
 .username, .song-count, .playlist-count, .like-count{
   position: absolute;
   display: block;
-  background-color: white;
+  width: calc(90% + 50px);
+  text-align: right;
   padding: 5px 15px;
-  left:400px;
   opacity: .7;
+  background-color: white;
 }
 
 .username{
-  top:40px;
-  width: 76.2%;
+  top: 32px;
+  font-size: 50px;
+  text-transform: capitalize;
 }
 
 .like-count{
-  top:173px;
+  top:186px;
 }
 
 .song-count{
-  top:223px;
+  top:236px;
 }
 
 .playlist-count{
-  top:273px;
+  top:286px;
 }
 
 .search-result:hover {
