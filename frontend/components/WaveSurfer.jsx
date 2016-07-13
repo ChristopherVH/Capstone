@@ -33,7 +33,7 @@ var reactWaveSurfer = React.createClass({
     var visualContainer = ReactDom.findDOMNode(this.refs.waveContainer);
     var visual = WaveSurfer.create({
       container: visualContainer,
-      waveColor: 'blue',
+      waveColor: '#5f9ce1',
       progressColor: 'purple',
       barWidth: '3',
       height: "90",
