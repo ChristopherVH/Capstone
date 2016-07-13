@@ -4,9 +4,16 @@ class ApplicationController < ActionController::Base
   # protect_from_forgery with: :exception
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }
   helper_method :current_user, :signed_in?
-
+  before_filter :cors_set_access_control_headers
 
   private
+
+  def cors_set_access_control_headers
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
+    headers['Access-Control-Request-Method'] = '*'
+    headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  end
 
   def current_user
     @current_user ||= User.find_by_session_token(session[:session_token])
