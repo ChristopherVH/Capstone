@@ -53,6 +53,14 @@ button:focus, .like-button:focus, input:focus, textarea{
   margin: 5px 0px;
 }
 
+.nav-container{
+  width:75%;
+}
+
+.navbar-brand, .navbar-header{
+  padding-left: 0;
+}
+
 
 .login-backer {
   background-image: url("http://res.cloudinary.com/dzmavimlg/image/upload/v1468442762/login-backer_adnmte.jpg");
@@ -217,7 +225,6 @@ img{
 
 .navbar-form{
   margin-top: 13px;
-  margin-left: 30px;
   vertical-align: middle;
 }
 
@@ -623,10 +630,10 @@ em{
   z-index: 1;
 }
 .greeting-vid{
-  width:100%;
+  width:75%;
+  margin: 0 auto;
   height: 400px;
   overflow:hidden;
-  margin:0;
 }
 
 .collection-container{
