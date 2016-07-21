@@ -3,31 +3,33 @@ var Song = require("./Song.jsx");
 var PlaylistStore = require("../stores/PlaylistStore.js");
 var SingleUserStore = require("../stores/SingleUserStore.js");
 var PlaylistIndexItem = require('./PlaylistIndexItem.jsx');
+var PlaylistActions = require("../actions/PlaylistActions.js");
 
 var Feed = React.createClass({
   getInitialState: function(){
     return({
       playlists: this.props.feed.playlists,
-      songs: this.props.feed.songs,
-      likedSongs: this.props.feed.liked_songs,
-      allSongs: this.props.allSongs
+      allSongs: this.props.allSongs,
     });
   },
-  componentWillReceiveProps: function(newProps){
-    this.setState({feed: newProps.feed});
+  componentWillMount: function(){
+    this.populateFeed(this.props.allSongs, this.props.feed.playlists);
   },
   componentDidMount: function(){
     this.playlistListener = PlaylistStore.addListener(this._onChange);
+    PlaylistActions.fetchUserPlaylists(SingleUserStore.currentUser().id);
   },
   componentWillUnmount: function(){
     this.playlistListener.remove();
   },
   _onChange: function(){
-    this.updateFeed();
+    this.setState({playlists: PlaylistStore.all()});
+    //Store updating as expected
+    //running populateFeed before state is being set
   },
   populateFeed: function(allSongs, playlists){
     var that = this;
-    var postFeed;
+    var postFeed = [];
     postFeed = allSongs.concat(playlists);
     postFeed = postFeed.sort(function (a, b) {
       if (a.created_at > b.created_at) {
@@ -38,20 +40,22 @@ var Feed = React.createClass({
       }
       return 0;
     });
-    var jsxPostFeed = postFeed.map(function(feedobj, index){
+    // postFeed always coming back as expected
+    var jsxPostFeed = [];
+    var mock = [];
+    postFeed.forEach(function(feedobj, index){
       if (feedobj.description !== undefined){
-        return <li className="feed-element"><PlaylistIndexItem key={index} playlist={feedobj} /></li>;
+        jsxPostFeed.push(<li className="feed-element"><PlaylistIndexItem playlist={feedobj} /></li>);
       }else{
         feedobj["user"] = {"username" : that.props.username};
-        return <li className="feed-element"><Song key={index} song={feedobj} userId={that.props.userId}/></li>;
+        jsxPostFeed.push(<li className="feed-element"><Song key={index} song={feedobj} userId={that.props.userId}/></li>);
       }
     });
     return jsxPostFeed;
   },
-  updateFeed: function(){
-    this.setState({playlists: PlaylistStore.all()});
-  },
   render: function(){
+    //playlists updating as expected
+    console.log(this.state.playlists);
     return(
       <ul className="feed">
         {this.populateFeed(this.state.allSongs, this.state.playlists)}

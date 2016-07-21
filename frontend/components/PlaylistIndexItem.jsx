@@ -7,26 +7,20 @@ var PlaylistActions = require("../actions/PlaylistActions.js");
 
 var Playlist = React.createClass({
   getInitialState: function(){
+    console.log(this.props.playlist);
     return({
       playlist: this.props.playlist,
-      currentSong: undefined,
       playing: false
     });
   },
-  componentDidMount: function(){
-    this.playlistListener = PlaylistStore.addListener(this._onChange);
-  },
-  componentWillUnmount: function(){
-    this.playlistListener.remove();
-  },
-  _onChange: function(){
-    this.setState({playlist: PlaylistStore.find(this.props.playlist.id)});
-  },
   componentWillMount: function(){
-    if (this.props.playlist.songs[0].song !== undefined){
-      this.setState({currentSong: this.state.playlist.songs[0].song});
+    this.firstSong(this.props.playlist);
+  },
+  firstSong: function(playlist){
+    if (playlist.songs[0].song !== undefined){
+      this.setState({currentSong: playlist.songs[0].song});
     }else {
-      this.setState({currentSong: this.state.playlist.songs[0]});
+      this.setState({currentSong: playlist.songs[0]});
     }
   },
   singlePlaylistRedirect: function(){
@@ -44,10 +38,9 @@ var Playlist = React.createClass({
       }
     }));
   },
-  shouldComponenetUpdate: function(nextProps, nextState){
-    if (nextState.currentSong !== this.state.currentSong){
-      this.setState({playing: false});
-    }
+  componentWillReceiveProps: function(nextProps){
+    this.setState({playlist: nextProps.playlist});
+    this.firstSong(nextProps.playlist);
   },
   setCurrentSongWave: function(song){
     this.setState({currentSong: song});

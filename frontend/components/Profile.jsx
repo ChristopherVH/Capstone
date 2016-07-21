@@ -19,6 +19,9 @@ var Profile = React.createClass({
     this.userListener = SingleUserStore.addListener(this._onChange);
     UserActions.fetchUserInfo(this.props.params.user_id);
   },
+  componentWillUnmount: function(){
+    this.userListener.remove();
+  },
   updateProfileImage: function(url){
     UserActions.updateProfileImage(url, this.state.user.id);
   },
@@ -58,9 +61,6 @@ var Profile = React.createClass({
         </div>
         );
     }
-  },
-  componentWillUnmount: function(){
-    this.userListener.remove();
   },
   render: function(){
     if (this.state.user === undefined || this.state.user.id === undefined){

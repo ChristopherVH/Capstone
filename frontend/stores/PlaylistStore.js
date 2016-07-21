@@ -71,23 +71,28 @@ PlaylistStore.__onDispatch = function(payload){
     case PlaylistConstant.PLAYLISTS_RECEIVED:
       PlaylistStore.resetPlaylists(payload.playlists);
       PlaylistStore.__emitChange();
+      console.log("reset playlists all");
       break;
     case PlaylistConstant.PLAYLIST_RECEIVED:
       PlaylistStore.addPlaylist(payload.playlist);
       PlaylistStore.__emitChange();
+      console.log("add playlist");
       break;
     case PlaylistConstant.USER_PLAYLISTS_RECEIVED:
       PlaylistStore.resetPlaylists(payload.playlists);
       PlaylistStore.__emitChange();
+      console.log("reset playlists user");
       break;
     case PlaylistConstant.NEW_PLAYLIST_RECEIVED:
       PlaylistStore.addPlaylist(payload.playlist);
       PlaylistStore.storeNewPlaylist(payload.playlist);
       PlaylistStore.__emitChange();
+      console.log("new playlist");
       break;
     case PlaylistConstant.PLAYLIST_DELETED:
       PlaylistStore.deletePlaylist(payload.playlistId);
       PlaylistStore.__emitChange();
+      console.log("deleted playlists");
       break;
   }
 };

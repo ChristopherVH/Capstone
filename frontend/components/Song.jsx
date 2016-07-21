@@ -8,7 +8,6 @@ var WaveSurfer = require("./WaveSurfer.jsx");
 
 var Song = React.createClass({
   getInitialState: function(){
-    
     return({
       song: this.props.song,
       playing: false
@@ -19,6 +18,7 @@ var Song = React.createClass({
   },
   componentWillReceiveProps: function(newProps){
     this.setState({song: newProps.song});
+    //this.state.playing always coming back false
   },
   renderAudioTag: function(){
     if (this.state.playing === false){
@@ -64,7 +64,7 @@ var Song = React.createClass({
       </div>
     );
   }
-})
+});
 // numbLikes={this.state.song.likers.length}
 
 module.exports = Song;

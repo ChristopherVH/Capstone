@@ -17,9 +17,11 @@ var reactWaveSurfer = React.createClass({
       this.state.visual.destroy();
       var newWave = this.initWavesurfer(nextProps.song.audio_url);
       this.setState({visual : newWave});
-      newWave.on('ready', function(){
-        newWave.playPause();
-      });
+      if (nextProps.song.playlist_id !== undefined){
+        newWave.on('ready', function(){
+          newWave.playPause();
+        });
+      }
     }else if(nextProps.playing === true){
       this.state.visual.play();
     }else if(nextProps.playing === false && this.state.playing === true){

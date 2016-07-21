@@ -18,7 +18,6 @@ var PlaylistForm = React.createClass({
   render: function() {
     return (
       <div className="commentformwrapper">
-
         <form className='newPlaylistForm' onSubmit={this.createPlaylist}>
           <div className="playlistArea">
             <input

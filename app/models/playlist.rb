@@ -20,4 +20,12 @@ class Playlist < ActiveRecord::Base
     where("lower(title) like ?", "%#{query}%").limit(5)
   end
 
+  def songhash
+    songs = Hash.new()
+    self.playlist_songs do |song|
+      songhash[song.id] = song.title
+    end
+    return songs
+  end
+
 end
