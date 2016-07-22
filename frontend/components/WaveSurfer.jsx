@@ -5,7 +5,8 @@ var reactWaveSurfer = React.createClass({
   getInitialState: function(){
     return ({
       song: this.props.song,
-      playing: this.props.playing
+      playing: this.props.playing,
+      loading: true
     });
   },
   componentDidMount: function () {
@@ -32,6 +33,7 @@ var reactWaveSurfer = React.createClass({
     });
   },
   initWavesurfer: function (audio_url) {
+    var that = this;
     var visualContainer = ReactDom.findDOMNode(this.refs.waveContainer);
     var visual = WaveSurfer.create({
       container: visualContainer,
@@ -42,13 +44,35 @@ var reactWaveSurfer = React.createClass({
       maxCanvasWidth: 200
     });
     visual.load(audio_url);
+    visual.on('ready', function(){
+      that.setState({loading: false});
+    });
     return visual;
+  },
+  loadingAnimation: function(){
+    if (this.state.loading){
+      return(
+        <div className="cs-loader">
+          <div className="cs-loader-inner">
+            <label>	●</label>
+            <label>	●</label>
+            <label>	●</label>
+            <label>	●</label>
+            <label>	●</label>
+            <label>	●</label>
+          </div>
+        </div>);
+      }
   },
   componentWillUnmount: function(){
     this.state.visual.destroy();
   },
   render: function () {
-    return <div className="wave-surfer" ref="waveContainer" ></div>;
+    return (<div classname="surfer-and-animation-container">
+      {this.loadingAnimation()}
+      <div className="wave-surfer" ref="waveContainer" ></div>
+    </div>
+      );
   }
 });
 

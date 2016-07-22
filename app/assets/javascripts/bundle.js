@@ -35600,6 +35600,7 @@
 	      LikeActions.deleteLike(SingleUserStore.currentUser().id, this.props.songId);
 	      this.setState({ liked: false });
 	    }
+	    console.log("fetching user for likes update");
 	    UserActions.fetchUserInfo(this.props.userId);
 	  },
 	  openModal: function () {
@@ -36579,7 +36580,8 @@
 	  getInitialState: function () {
 	    return {
 	      song: this.props.song,
-	      playing: this.props.playing
+	      playing: this.props.playing,
+	      loading: true
 	    };
 	  },
 	  componentDidMount: function () {
@@ -36606,6 +36608,7 @@
 	    });
 	  },
 	  initWavesurfer: function (audio_url) {
+	    var that = this;
 	    var visualContainer = ReactDom.findDOMNode(this.refs.waveContainer);
 	    var visual = WaveSurfer.create({
 	      container: visualContainer,
@@ -36616,13 +36619,63 @@
 	      maxCanvasWidth: 200
 	    });
 	    visual.load(audio_url);
+	    visual.on('ready', function () {
+	      that.setState({ loading: false });
+	    });
 	    return visual;
+	  },
+	  loadingAnimation: function () {
+	    if (this.state.loading) {
+	      return React.createElement(
+	        'div',
+	        { className: 'cs-loader' },
+	        React.createElement(
+	          'div',
+	          { className: 'cs-loader-inner' },
+	          React.createElement(
+	            'label',
+	            null,
+	            ' ●'
+	          ),
+	          React.createElement(
+	            'label',
+	            null,
+	            ' ●'
+	          ),
+	          React.createElement(
+	            'label',
+	            null,
+	            ' ●'
+	          ),
+	          React.createElement(
+	            'label',
+	            null,
+	            ' ●'
+	          ),
+	          React.createElement(
+	            'label',
+	            null,
+	            ' ●'
+	          ),
+	          React.createElement(
+	            'label',
+	            null,
+	            ' ●'
+	          )
+	        )
+	      );
+	    }
 	  },
 	  componentWillUnmount: function () {
 	    this.state.visual.destroy();
 	  },
 	  render: function () {
-	    return React.createElement('div', { className: 'wave-surfer', ref: 'waveContainer' });
+	    return React.createElement(
+	      'div',
+	      { classname: 'surfer-and-animation-container' },
+	      this.loadingAnimation(),
+	      React.createElement('div', { className: 'wave-surfer', ref: 'waveContainer' })
+	    );
 	  }
 	});
 	

@@ -60,6 +60,7 @@ var Like = React.createClass({
       LikeActions.deleteLike(SingleUserStore.currentUser().id, this.props.songId)
       this.setState({liked: false})
     }
+    console.log("fetching user for likes update");
     UserActions.fetchUserInfo(this.props.userId)
   },
   openModal: function() {
