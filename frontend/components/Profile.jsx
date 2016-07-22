@@ -56,7 +56,7 @@ var Profile = React.createClass({
             <h1 className="username">{this.state.user.username}</h1>
             <h2 className="song-count">Songs: {this.state.user.songs.length}</h2>
             <h2 className="playlist-count">Playlists: {this.state.user.playlists.length}</h2>
-            <h2 className="like-count">Likes: {this.state.user.liked_songs.length}</h2>
+            <h2 className="like-count">Likes: {this.state.user.likesnum}</h2>
           </div>
         </div>
         );

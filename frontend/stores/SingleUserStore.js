@@ -26,6 +26,15 @@ SingleUserStore.setCurrentUser = function(user) {
   _current = user;
 };
 
+SingleUserStore.addLike = function(songId) {
+  _current["liked_songs_hash"][songId] = "X";
+  console.log(_current["liked_songs_hash"]);
+};
+
+SingleUserStore.deleteLike = function(songId) {
+  delete _current["liked_songs_hash"][songId];
+};
+
 SingleUserStore.__onDispatch = function(payload){
   switch (payload.actionType) {
     case UserConstants.USER_RECEIVED:
@@ -42,6 +51,16 @@ SingleUserStore.__onDispatch = function(payload){
       break;
     case UserConstants.PROFILE_IMAGE_UPDATED:
       SingleUserStore.setUser(payload.user);
+      SingleUserStore.__emitChange();
+      break;
+    case UserConstants.LIKE:
+      SingleUserStore.addLike(payload.songId);
+      console.log("like in store changing user");
+      SingleUserStore.__emitChange();
+      break;
+    case UserConstants.DISLIKE:
+      SingleUserStore.deleteLike(payload.songId);
+      console.log("dislike in store changing user");
       SingleUserStore.__emitChange();
       break;
 }

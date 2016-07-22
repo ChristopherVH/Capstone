@@ -7,7 +7,6 @@ var PlaylistActions = require("../actions/PlaylistActions.js");
 
 var Playlist = React.createClass({
   getInitialState: function(){
-    console.log(this.props.playlist);
     return({
       playlist: this.props.playlist,
       playing: false

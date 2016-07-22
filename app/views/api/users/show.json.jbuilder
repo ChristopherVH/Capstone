@@ -3,10 +3,19 @@
 # json.array! @playlists, :id, :user_id, :title, :description, :songs
 # json.array! @liked_songs, :id, :user_id, :title, :artist, :genre, :audio_url, :image_url
 json.extract! @user, :id, :username, :profile_url, :cover_url
-json.songs @user.songs, :id, :user_id, :title, :artist, :genre, :audio_url, :image_url, :user, :created_at
+json.songs @user.songs, :id, :user_id, :title, :artist, :genre, :audio_url, :image_url, :user, :created_at, :updated_at
 json.playlists @user.playlists, :id, :user_id, :title, :description, :songs, :created_at
-json.liked_songs @user.liked_songs, :id, :user_id, :title, :artist, :genre, :audio_url, :image_url, :likers, :user, :created_at
+json.liked_songs @user.liked_songs, :id, :user_id, :title, :artist, :genre, :audio_url, :image_url, :likers, :user, :created_at, :updated_at
 
+likes = Hash.new()
+likesnum = 0
+@user.liked_songs.each do |song|
+  likesnum += 1
+  likes[song.id] = song.title
+end
+
+json.liked_songs_hash likes
+json.likesnum likesnum
 #Song: title artist imageurl id user
 json.feed do
   json.songs @user.songs, :id, :user_id, :title, :artist, :genre, :audio_url, :image_url, :user, :created_at

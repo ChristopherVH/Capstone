@@ -28419,7 +28419,9 @@
 	  USER_SONGS_RECEIVED: "USER_SONGS_RECEIVED",
 	  USER_PLAYLISTS_RECEIVED: "USER_PLAYLISTS_RECEIVED",
 	  SIGN_OUT_RECEIVED: "SIGN_OUT_RECEIVED",
-	  PROFILE_IMAGE_UPDATED: "PROFILE_IMAGE_UPDATED"
+	  PROFILE_IMAGE_UPDATED: "PROFILE_IMAGE_UPDATED",
+	  LIKE: "LIKE",
+	  DISLIKE: "DISLIKE"
 	};
 
 /***/ },
@@ -28651,26 +28653,35 @@
 	      }
 	    });
 	  },
-	  createLike: function (songId, callback) {
+	  createLike: function (songId, userId, callback) {
 	    $.ajax({
 	      type: "POST",
-	      url: "api/songs/" + songId + "/like"
+	      url: "api/songs/" + songId + "/like",
+	      data: { user_id: userId },
+	      success: function () {
+	        console.log("create like success");
+	        callback(songId);
+	      },
+	      error: function () {
+	        console.log("create like fail");
+	      }
 	    });
 	  },
-	  destroyLike: function (songId, callback) {
+	  destroyLike: function (songId, userId, callback) {
 	    $.ajax({
 	      type: "DELETE",
-	      url: "api/songs/" + songId + "/like"
+	      url: "api/songs/" + songId + "/like",
+	      data: { user_id: userId },
+	      success: function () {
+	        callback(songId);
+	      }
 	    });
 	  },
 	  addSong: function (songId, playlistId, ord) {
 	    $.ajax({
 	      type: "POST",
 	      data: { playlist_id: playlistId, song_id: songId, ord: ord },
-	      url: "api/playlist_songs",
-	      success: function (song) {
-	        console.log("song added");
-	      }
+	      url: "api/playlist_songs"
 	    });
 	  },
 	  deleteSong: function (id, playlistId) {
@@ -35574,22 +35585,10 @@
 	      modalIsOpen: false
 	    };
 	  },
-	  componentDidMount: function () {
-	    if (SingleUserStore.currentUser().liked_songs === undefined) {
-	      this.setState({ liked: false });
-	    } else if (SingleUserStore.currentUser().liked_songs[this.props.songId]) {
+	  componentWillMount: function () {
+	    console.log("mounting");
+	    if (SingleUserStore.currentUser().liked_songs_hash[this.props.songId]) {
 	      this.setState({ liked: true });
-	    } else {
-	      this.setState({ liked: false });
-	    }
-	  },
-	  componentWillReceiveProps: function (newProps) {
-	    if (SingleUserStore.currentUser().liked_songs === undefined) {
-	      this.setState({ liked: false });
-	    } else if (SingleUserStore.currentUser().liked_songs[newProps.songId]) {
-	      this.setState({ liked: true });
-	    } else {
-	      this.setState({ liked: false });
 	    }
 	  },
 	  toggleLike: function (event) {
@@ -35597,22 +35596,11 @@
 	    if (!this.state.liked) {
 	      LikeActions.createLike(SingleUserStore.currentUser().id, this.props.songId);
 	      this.setState({ liked: true });
-	      if (this.props.userId === undefined || this.props.userId === SingleUserStore.currentUser().id) {
-	        UserActions.fetchCurrentUser();
-	        UserActions.fetchUserInfo(this.props.userId);
-	      } else {
-	        UserActions.fetchUserInfo(this.props.userId);
-	      }
 	    } else {
 	      LikeActions.deleteLike(SingleUserStore.currentUser().id, this.props.songId);
 	      this.setState({ liked: false });
-	      if (this.props.userId === undefined || this.props.userId === SingleUserStore.currentUser().id) {
-	        UserActions.fetchCurrentUser();
-	        UserActions.fetchUserInfo(this.props.userId);
-	      } else {
-	        UserActions.fetchUserInfo(this.props.userId);
-	      }
 	    }
+	    UserActions.fetchUserInfo(this.props.userId);
 	  },
 	  openModal: function () {
 	    this.setState({ modalIsOpen: true });
@@ -35695,6 +35683,15 @@
 	  _current = user;
 	};
 	
+	SingleUserStore.addLike = function (songId) {
+	  _current["liked_songs_hash"][songId] = "X";
+	  console.log(_current["liked_songs_hash"]);
+	};
+	
+	SingleUserStore.deleteLike = function (songId) {
+	  delete _current["liked_songs_hash"][songId];
+	};
+	
 	SingleUserStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case UserConstants.USER_RECEIVED:
@@ -35713,6 +35710,16 @@
 	      SingleUserStore.setUser(payload.user);
 	      SingleUserStore.__emitChange();
 	      break;
+	    case UserConstants.LIKE:
+	      SingleUserStore.addLike(payload.songId);
+	      console.log("like in store changing user");
+	      SingleUserStore.__emitChange();
+	      break;
+	    case UserConstants.DISLIKE:
+	      SingleUserStore.deleteLike(payload.songId);
+	      console.log("dislike in store changing user");
+	      SingleUserStore.__emitChange();
+	      break;
 	  }
 	};
 	
@@ -35723,14 +35730,28 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(253);
+	var UserConstants = __webpack_require__(257);
 	var apiUtil = __webpack_require__(262);
 	
-	LikeActions = {
+	var LikeActions = {
 	  createLike: function (userId, songId) {
-	    apiUtil.createLike(songId);
+	    console.log("create like action running");
+	    apiUtil.createLike(songId, userId, this.receiveLike);
+	  },
+	  receiveLike: function (songId) {
+	    Dispatcher.dispatch({
+	      actionType: UserConstants.LIKE,
+	      songId: songId
+	    });
 	  },
 	  deleteLike: function (userId, songId) {
-	    apiUtil.destroyLike(songId);
+	    apiUtil.destroyLike(songId, userId, this.receiveDislike);
+	  },
+	  receiveDislike: function (songId) {
+	    Dispatcher.dispatch({
+	      actionType: UserConstants.DISLIKE,
+	      songId: songId
+	    });
 	  }
 	};
 	
@@ -36099,21 +36120,17 @@
 	    event.preventDefault();
 	    if (!this.state.added) {
 	      this.setState({ added: true });
-	      console.log("state change to true");
 	      PlaylistActions.addSongToPlaylist(this.props.songId, this.props.playlist.id, this.props.playlist.songs[this.props.playlist.songs.length - 1].ord + 1);
 	    } else {
 	      this.deleteSongFromPlaylist();
 	      this.setState({ added: false });
-	      console.log("state change to false");
 	    }
 	    PlaylistActions.fetchPlaylist(this.props.playlist.id);
 	  },
 	  display: function () {
 	    if (this.state.added) {
-	      console.log("should return added button");
 	      return React.createElement("input", { type: "button", onClick: this.toggleAdd, value: "Added" });
 	    } else {
-	      console.log("should return add song button");
 	      return React.createElement("input", { type: "button", onClick: this.toggleAdd, value: "Add Song" });
 	    }
 	  },
@@ -36740,7 +36757,7 @@
 	            "h2",
 	            { className: "like-count" },
 	            "Likes: ",
-	            this.state.user.liked_songs.length
+	            this.state.user.likesnum
 	          )
 	        )
 	      );
@@ -36837,7 +36854,6 @@
 	  },
 	  render: function () {
 	    //playlists updating as expected
-	    console.log(this.state.playlists);
 	    return React.createElement(
 	      "ul",
 	      { className: "feed" },
@@ -36863,7 +36879,6 @@
 	  displayName: "Playlist",
 	
 	  getInitialState: function () {
-	    console.log(this.props.playlist);
 	    return {
 	      playlist: this.props.playlist,
 	      playing: false

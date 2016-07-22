@@ -55,7 +55,6 @@ var Feed = React.createClass({
   },
   render: function(){
     //playlists updating as expected
-    console.log(this.state.playlists);
     return(
       <ul className="feed">
         {this.populateFeed(this.state.allSongs, this.state.playlists)}

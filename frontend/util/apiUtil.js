@@ -69,16 +69,28 @@ var songUtil = {
       }
     });
   },
-  createLike: function(songId, callback){
+  createLike: function(songId, userId, callback){
     $.ajax({
       type:"POST",
-      url: "api/songs/"+ songId + "/like"
+      url: "api/songs/"+ songId + "/like",
+      data: {user_id: userId},
+      success: function(){
+        console.log("create like success");
+        callback(songId);
+      },
+      error: function(){
+        console.log("create like fail");
+      }
     });
   },
-  destroyLike: function(songId, callback){
+  destroyLike: function(songId, userId, callback){
     $.ajax({
       type:"DELETE",
-      url: "api/songs/" + songId + "/like"
+      url: "api/songs/" + songId + "/like",
+      data: {user_id: userId},
+      success: function(){
+        callback(songId);
+      }
     });
   },
   addSong:function (songId, playlistId, ord){
@@ -86,9 +98,6 @@ var songUtil = {
       type:"POST",
       data:{playlist_id: playlistId, song_id: songId, ord:ord},
       url: "api/playlist_songs",
-      success: function (song){
-        console.log("song added");
-      }
     });
   },
   deleteSong: function(id, playlistId){

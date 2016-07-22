@@ -32,23 +32,19 @@ var playlistSongAdd = React.createClass({
     event.preventDefault();
     if (!(this.state.added)){
       this.setState({added: true});
-      console.log("state change to true");
       PlaylistActions.addSongToPlaylist(this.props.songId,
         this.props.playlist.id,
         this.props.playlist.songs[this.props.playlist.songs.length - 1].ord + 1);
     }else{
       this.deleteSongFromPlaylist();
       this.setState({added: false});
-      console.log("state change to false");
     }
     PlaylistActions.fetchPlaylist(this.props.playlist.id);
   },
   display: function(){
     if (this.state.added){
-      console.log("should return added button");
       return  <input type="button" onClick={this.toggleAdd} value="Added"/>;
     }else {
-      console.log("should return add song button");
       return  <input type="button" onClick={this.toggleAdd} value="Add Song"/>;
     }
   },

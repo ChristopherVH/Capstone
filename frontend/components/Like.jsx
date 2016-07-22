@@ -45,23 +45,10 @@ var Like = React.createClass({
       modalIsOpen: false
     })
   },
-  componentDidMount: function(){
-    if (SingleUserStore.currentUser().liked_songs === undefined){
-      this.setState({liked: false})
-    }
-    else if (SingleUserStore.currentUser().liked_songs[this.props.songId]){
+  componentWillMount: function(){
+    console.log("mounting");
+    if (SingleUserStore.currentUser().liked_songs_hash[this.props.songId]){
       this.setState({liked: true})
-    }else{
-      this.setState({liked: false})
-    }
-  },
-  componentWillReceiveProps: function(newProps){
-    if (SingleUserStore.currentUser().liked_songs === undefined){
-      this.setState({liked: false})
-    }else if (SingleUserStore.currentUser().liked_songs[newProps.songId]){
-      this.setState({liked: true})
-    }else{
-      this.setState({liked: false})
     }
   },
   toggleLike: function(event){
@@ -69,22 +56,11 @@ var Like = React.createClass({
     if (!(this.state.liked)){
       LikeActions.createLike(SingleUserStore.currentUser().id, this.props.songId)
       this.setState({liked: true})
-      if (this.props.userId === undefined || this.props.userId === SingleUserStore.currentUser().id){
-        UserActions.fetchCurrentUser();
-        UserActions.fetchUserInfo(this.props.userId);
-      }else{
-        UserActions.fetchUserInfo(this.props.userId);
-      }
     }else{
       LikeActions.deleteLike(SingleUserStore.currentUser().id, this.props.songId)
       this.setState({liked: false})
-      if (this.props.userId === undefined || this.props.userId === SingleUserStore.currentUser().id){
-        UserActions.fetchCurrentUser();
-        UserActions.fetchUserInfo(this.props.userId);
-      }else{
-        UserActions.fetchUserInfo(this.props.userId);
-      }
     }
+    UserActions.fetchUserInfo(this.props.userId)
   },
   openModal: function() {
     this.setState({modalIsOpen: true});

@@ -33,7 +33,7 @@ button:focus, .like-button:focus, input:focus, textarea{
 }
 
 .add-song-modal-body{
-  height: 300px;
+  max-height: 300px;
   overflow: scroll;
 }
 
