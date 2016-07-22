@@ -35587,7 +35587,7 @@
 	  },
 	  componentWillMount: function () {
 	    console.log("mounting");
-	    if (SingleUserStore.currentUser().liked_songs_hash[this.props.songId]) {
+	    if (SingleUserStore.currentUser().username !== undefined && SingleUserStore.currentUser().liked_songs_hash[this.props.songId]) {
 	      this.setState({ liked: true });
 	    }
 	  },
