@@ -12,7 +12,7 @@ var Navbar = React.createClass({
   },
   createProfile: function(){
     if (this.props.currentUser === undefined || this.props.currentUser.id === undefined){
-      return [<li key={2} ><a href="users/new">Sign Up</a></li>,<li id="login" key={1} ><a href="session/new">Sign In</a></li>];
+      return [<li key={2} ><a href="users/new.htm">Sign Up</a></li>,<li id="login" key={1} ><a href="session/new.htm">Sign In</a></li>];
     }
     return [<li key={1} ><Link to={"/user/" + this.state.currentUser.id} >Profile
   </Link></li>, <li id="logout" key={2}><a onClick={this.signOut}>Logout</a></li>];
