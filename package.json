@@ -16,11 +16,9 @@
     "history": "^3.0.0",
     "react": "*",
     "react-addons-linked-state-mixin": "*",
-    "react-bootstrap": "*",
     "react-dom": "*",
     "react-modal": "*",
     "react-router": "*",
-    "react-soundplayer": "*",
     "react-wavesurfer": "*",
     "webpack": "*"
   },
