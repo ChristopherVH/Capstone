@@ -362,19 +362,13 @@ img{
   position:relative;
   height: 246px;
   padding: 20px 0;
-  margin: 0, auto;
 }
 
 .single-song-container{
   position:relative;
   height: 246px;
   padding: 20px 0;
-  margin: 0, auto;
-}
-
-.move-right{
-  position: relative;
-  left: 10%;
+  margin: 0 auto;
 }
 
 .audio-actions{
@@ -775,6 +769,15 @@ video{
 .playlist-container, .song-container{
   border-bottom: 2px solid white;
 }
+
+.no-border{
+  border: 0;
+}
+
+.move-right{
+  left: 15%;
+}
+
 .error-modal-button{
   position: relative;
   bottom: 15px;

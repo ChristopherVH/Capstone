@@ -38551,7 +38551,7 @@
 	      { className: "song-list" },
 	      React.createElement(
 	        "div",
-	        { className: "song-container move-right" },
+	        { className: "song-container move-right no-border" },
 	        React.createElement(
 	          "div",
 	          { className: "feed-song-info" },

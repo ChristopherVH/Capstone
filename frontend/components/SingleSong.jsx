@@ -105,7 +105,7 @@ var singleSong = React.createClass({
     return(
       <div className="song-list">
 
-        <div className="song-container move-right">
+        <div className="song-container move-right no-border">
           <div className="feed-song-info">
             <div className="feed-song-title">
               {this.state.song.title}
