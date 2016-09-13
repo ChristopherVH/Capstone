@@ -68,7 +68,7 @@ var reactWaveSurfer = React.createClass({
     this.state.visual.destroy();
   },
   render: function () {
-    return (<div classname="surfer-and-animation-container">
+    return (<div className="surfer-and-animation-container">
       {this.loadingAnimation()}
       <div className="wave-surfer" ref="waveContainer" ></div>
     </div>

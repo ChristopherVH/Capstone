@@ -37844,7 +37844,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { classname: 'surfer-and-animation-container' },
+	      { className: 'surfer-and-animation-container' },
 	      this.loadingAnimation(),
 	      React.createElement('div', { className: 'wave-surfer', ref: 'waveContainer' })
 	    );
