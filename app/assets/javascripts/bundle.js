@@ -38446,42 +38446,101 @@
 	var Like = __webpack_require__(292);
 	var PlaylistModal = __webpack_require__(295);
 	var NewPlaylistModal = __webpack_require__(300);
+	var WaveSurfer = __webpack_require__(306);
 	
-	var Song = React.createClass({
-	  displayName: "Song",
+	// var Song = React.createClass({
+	//   getInitialState: function(){
+	//     return({
+	//       song: undefined,
+	//       showAudio: false
+	//     })
+	//   },
+	//   _onChange: function(){
+	//     this.setState({song: SongStore.find(this.props.params.song_id)})
+	//   },
+	// componentWillReceiveProps: function(newProps){
+	//   SongActions.fetchSong(newProps.params.song_id)
+	// },
+	//   renderAudioTag: function(){
+	//     if (this.state.showAudio === false){
+	//       return <button className="play-button"></button>;
+	//     }else {
+	//       return  <audio controls autoPlay>
+	//                 <source src={this.state.song.audio_url} type="audio/mpeg"></source>
+	//               </audio>;
+	//     }
+	//   },
+	//   showAudioTag: function(){
+	//     this.setState({showAudio: true})
+	//   },
+	//   componentDidMount: function(){
+	//     this.songListener = SongStore.addListener(this._onChange);
+	//     SongActions.fetchSong(this.props.params.song_id);
+	//   },
+	//   componentWillUnmount: function(){
+	//     this.songListener.remove();
+	//   },
+	//   render: function(){
+	//     if (this.state.song === undefined){
+	//       return <div></div>;
+	//     }
+	//     return(
+	//       <div className="single-song">
+	//         <div className='song-container'>
+	//           <div className="feed-song-info">
+	//             <div className="feed-song-title">{this.state.song.title}</div>
+	//             <div className="feed-song-artist">{this.state.song.artist}</div>
+	//           </div>
+	//           <br/>
+	//           <div className="song-thumbnail"><img src={this.state.song.image_url}></img>
+	//           </div>
+	//           <div className="audio-actions">
+	//             <Like songId={this.state.song.id} />
+	//             <NewPlaylistModal songId={this.state.song.id}/>
+	//             <PlaylistModal/>
+	//             <br/>
+	//             <div className="audio-tag" onClick={this.showAudioTag}>
+	//               {this.renderAudioTag()}
+	//             </div>
+	//           </div>
+	//         </div>
+	//       </div>
+	//     );
+	//   }
+	// })
+	
+	var singleSong = React.createClass({
+	  displayName: "singleSong",
 	
 	  getInitialState: function () {
 	    return {
 	      song: undefined,
-	      showAudio: false
+	      playing: false
 	    };
 	  },
-	  _onChange: function () {
-	    this.setState({ song: SongStore.find(this.props.params.song_id) });
+	  componentWillMount: function () {
+	    this.songListener = SongStore.addListener(this._onChange);
+	    SongActions.fetchSong(this.props.params.song_id);
 	  },
 	  componentWillReceiveProps: function (newProps) {
 	    SongActions.fetchSong(newProps.params.song_id);
 	  },
+	  _onChange: function () {
+	    this.setState({ song: SongStore.find(this.props.params.song_id) });
+	  },
 	  renderAudioTag: function () {
-	    if (this.state.showAudio === false) {
+	    if (this.state.playing === false) {
 	      return React.createElement("button", { className: "play-button" });
 	    } else {
-	      return React.createElement(
-	        "audio",
-	        { controls: true, autoPlay: true },
-	        React.createElement("source", { src: this.state.song.audio_url, type: "audio/mpeg" })
-	      );
+	      return React.createElement("button", { className: "pause-button" });
 	    }
 	  },
 	  showAudioTag: function () {
-	    this.setState({ showAudio: true });
-	  },
-	  componentDidMount: function () {
-	    this.songListener = SongStore.addListener(this._onChange);
-	    SongActions.fetchSong(this.props.params.song_id);
-	  },
-	  componentWillUnmount: function () {
-	    this.songListener.remove();
+	    if (this.state.playing === true) {
+	      this.setState({ playing: false });
+	    } else {
+	      this.setState({ playing: true });
+	    }
 	  },
 	  render: function () {
 	    if (this.state.song === undefined) {
@@ -38489,10 +38548,10 @@
 	    }
 	    return React.createElement(
 	      "div",
-	      { className: "single-song" },
+	      { className: "song-list" },
 	      React.createElement(
 	        "div",
-	        { className: "song-container" },
+	        { className: "song-container move-right" },
 	        React.createElement(
 	          "div",
 	          { className: "feed-song-info" },
@@ -38504,34 +38563,54 @@
 	          React.createElement(
 	            "div",
 	            { className: "feed-song-artist" },
-	            this.state.song.artist
+	            React.createElement(
+	              "div",
+	              { className: "inner-artist-text" },
+	              React.createElement(
+	                "em",
+	                null,
+	                "by"
+	              ),
+	              this.state.song.artist
+	            )
 	          )
 	        ),
-	        React.createElement("br", null),
 	        React.createElement(
 	          "div",
 	          { className: "song-thumbnail" },
-	          React.createElement("img", { src: this.state.song.image_url })
-	        ),
-	        React.createElement(
-	          "div",
-	          { className: "audio-actions" },
-	          React.createElement(Like, { songId: this.state.song.id }),
-	          React.createElement(NewPlaylistModal, { songId: this.state.song.id }),
-	          React.createElement(PlaylistModal, null),
-	          React.createElement("br", null),
+	          React.createElement("img", { src: this.state.song.image_url }),
 	          React.createElement(
 	            "div",
 	            { className: "audio-tag", onClick: this.showAudioTag },
 	            this.renderAudioTag()
 	          )
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "audio-actions" },
+	          React.createElement(Like, { className: "song-button", songId: this.state.song.id, userId: this.props.userId }),
+	          React.createElement(NewPlaylistModal, { className: "song-button", song: this.state.song, songId: this.state.song.id, userId: this.props.userId }),
+	          React.createElement(PlaylistModal, { className: "song-button", song: this.state.song, songId: this.state.song.id })
+	        ),
+	        React.createElement(WaveSurfer, { song: this.state.song, playing: this.state.playing }),
+	        React.createElement(
+	          "div",
+	          { className: "uploader" },
+	          "Uploaded ",
+	          React.createElement(
+	            "em",
+	            null,
+	            "by"
+	          ),
+	          " ",
+	          this.state.song.user.username
 	        )
 	      )
 	    );
 	  }
 	});
 	
-	module.exports = Song;
+	module.exports = singleSong;
 
 /***/ }
 /******/ ]);
