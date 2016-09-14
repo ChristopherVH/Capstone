@@ -10,7 +10,7 @@ var Profile = React.createClass({
     });
   },
   _onChange: function(){
-    this.setState({user: SingleUserStore.access()});
+      this.setState({user: SingleUserStore.access()});
   },
   componentWillReceiveProps: function(newProps){
     UserActions.fetchUserInfo(newProps.params.user_id);
@@ -56,7 +56,7 @@ var Profile = React.createClass({
             <h1 className="username">{this.state.user.username}</h1>
             <h2 className="song-count">Songs: {this.state.user.songs.length}</h2>
             <h2 className="playlist-count">Playlists: {this.state.user.playlists.length}</h2>
-            <h2 className="like-count">Likes: {this.state.user.likesnum}</h2>
+            <h2 className="like-count">Likes: {Object.keys(this.state.user.liked_songs_hash).length}</h2>
           </div>
         </div>
         );

@@ -37977,7 +37977,7 @@
 	            "h2",
 	            { className: "like-count" },
 	            "Likes: ",
-	            this.state.user.likesnum
+	            Object.keys(this.state.user.liked_songs_hash).length
 	          )
 	        )
 	      );
