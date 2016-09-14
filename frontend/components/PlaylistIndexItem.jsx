@@ -29,10 +29,10 @@ var Playlist = React.createClass({
     var that = this;
     return (this.state.playlist.songs.map(function (song,index) {
       if (song.song !== undefined){
-        return <PlaylistSong key={index} song={song.song} playing={that.state.Playing} currentSong={that.state.currentSong}
+        return <PlaylistSong key={index} song={song.song} playing={that.state.playing} currentSong={that.state.currentSong}
           setCurrentSongWave={that.setCurrentSongWave} setPlaying={that.setPlaying}/>;
       }else {
-        return <PlaylistSong key={index} song={song} playing={that.state.Playing} currentSong={that.state.currentSong}
+        return <PlaylistSong key={index} song={song} playing={that.state.playing} currentSong={that.state.currentSong}
           setCurrentSongWave={that.setCurrentSongWave} setPlaying={that.setPlaying}/>;
       }
     }));

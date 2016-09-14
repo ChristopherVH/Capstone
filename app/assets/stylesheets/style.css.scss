@@ -767,7 +767,14 @@ video{
   top: 200px;
 }
 .playlist-container, .song-container{
+  position: relative;
   border-bottom: 2px solid white;
+}
+
+.single-playlist-container{
+  width: 700px;
+  position:relative;
+  left: 15%;
 }
 
 .no-border{

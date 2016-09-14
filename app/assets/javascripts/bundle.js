@@ -37765,7 +37765,8 @@
 	      this.state.visual.destroy();
 	      var newWave = this.initWavesurfer(nextProps.song.audio_url);
 	      this.setState({ visual: newWave });
-	      if (nextProps.song.playlist_id !== undefined) {
+	      console.log(nextProps.song);
+	      if (nextProps.playlistId !== undefined) {
 	        newWave.on('ready', function () {
 	          newWave.playPause();
 	        });
@@ -38126,10 +38127,10 @@
 	    var that = this;
 	    return this.state.playlist.songs.map(function (song, index) {
 	      if (song.song !== undefined) {
-	        return React.createElement(PlaylistSong, { key: index, song: song.song, playing: that.state.Playing, currentSong: that.state.currentSong,
+	        return React.createElement(PlaylistSong, { key: index, song: song.song, playing: that.state.playing, currentSong: that.state.currentSong,
 	          setCurrentSongWave: that.setCurrentSongWave, setPlaying: that.setPlaying });
 	      } else {
-	        return React.createElement(PlaylistSong, { key: index, song: song, playing: that.state.Playing, currentSong: that.state.currentSong,
+	        return React.createElement(PlaylistSong, { key: index, song: song, playing: that.state.playing, currentSong: that.state.currentSong,
 	          setCurrentSongWave: that.setCurrentSongWave, setPlaying: that.setPlaying });
 	      }
 	    });
@@ -38320,33 +38321,82 @@
 	var ApiUtil = __webpack_require__(267);
 	var PlaylistSong = __webpack_require__(311);
 	var PlaylistActions = __webpack_require__(298);
+	var WaveSurfer = __webpack_require__(306);
 	
-	var SinglePlaylist = React.createClass({
-	  displayName: "SinglePlaylist",
+	// var singlePlaylist = React.createClass({
+	//   getInitialState: function(){
+	//     return({
+	//       playlist: undefined
+	//     })
+	//   },
+	// _onChange: function(){
+	//   this.setState({playlist: PlaylistStore.find(this.props.params.playlist_id)})
+	// },
+	// componentWillReceiveProps: function(newProps){
+	//   PlaylistActions.fetchPlaylist(newProps.params.playlist_id)
+	// },
+	// componentDidMount: function(){
+	//   this.playlistListener = PlaylistStore.addListener(this._onChange);
+	//   PlaylistActions.fetchPlaylist(this.props.params.playlist_id);
+	// },
+	//   componentWillUnmount: function(){
+	//     this.playlistListener.remove();
+	//   },
+	//   createSongList: function(){
+	//      var playlistSongs = this.state.playlist.songs.map(function (song, index) {
+	//         return <PlaylistSong key={index} idx={song.id} song={song}/>;
+	//       });
+	//     return playlistSongs;
+	//   },
+	//   render: function(){
+	//     if (this.state.playlist === undefined){
+	//       return <div></div>;
+	//     }
+	//     return(
+	//       <div className="single-playlist">
+	//         <div className="playlist-info">
+	//           <h3 className="playlist-title" onDoubleClick = {this.singlePlaylistRedirect} >{this.state.playlist.title}</h3>
+	//         </div>
+	//         <div className="playlist-description">{this.state.playlist.description}</div>
+	//         {this.createSongList()}
+	//       </div>
+	//     );
+	//   }
+	// })
+	
+	var singlePlaylist = React.createClass({
+	  displayName: "singlePlaylist",
 	
 	  getInitialState: function () {
 	    return {
-	      playlist: undefined
+	      playlist: undefined,
+	      playing: false
 	    };
 	  },
 	  _onChange: function () {
-	    this.setState({ playlist: PlaylistStore.find(this.props.params.playlist_id) });
+	    var playlist1 = PlaylistStore.find(this.props.params.playlist_id);
+	    this.setState({ playlist: playlist1, currentSong: playlist1.songs[0].song });
 	  },
-	  componentWillReceiveProps: function (newProps) {
-	    PlaylistActions.fetchPlaylist(newProps.params.playlist_id);
-	  },
-	  componentDidMount: function () {
+	  componentWillMount: function () {
 	    this.playlistListener = PlaylistStore.addListener(this._onChange);
 	    PlaylistActions.fetchPlaylist(this.props.params.playlist_id);
+	  },
+	  fillState: function () {
+	    var that = this;
+	    return this.state.playlist.songs.map(function (song, index) {
+	      return React.createElement(PlaylistSong, { key: index, song: song.song, playing: that.state.playing, currentSong: that.state.currentSong,
+	        setCurrentSongWave: that.setCurrentSongWave, setPlaying: that.setPlaying });
+	    });
+	  },
+	  setCurrentSongWave: function (song) {
+	    this.setState({ currentSong: song });
 	  },
 	  componentWillUnmount: function () {
 	    this.playlistListener.remove();
 	  },
-	  createSongList: function () {
-	    var playlistSongs = this.state.playlist.songs.map(function (song, index) {
-	      return React.createElement(PlaylistSong, { key: index, idx: song.id, song: song });
-	    });
-	    return playlistSongs;
+	  setPlaying: function (playingBoolean) {
+	    console.log(this.state.playlist);
+	    this.setState({ playing: playingBoolean });
 	  },
 	  render: function () {
 	    if (this.state.playlist === undefined) {
@@ -38354,27 +38404,42 @@
 	    }
 	    return React.createElement(
 	      "div",
-	      { className: "single-playlist" },
+	      { className: "playlist-list" },
 	      React.createElement(
 	        "div",
-	        { className: "playlist-info" },
+	        { className: "single-playlist-container" },
 	        React.createElement(
-	          "h3",
-	          { className: "playlist-title", onDoubleClick: this.singlePlaylistRedirect },
-	          this.state.playlist.title
-	        )
-	      ),
-	      React.createElement(
-	        "div",
-	        { className: "playlist-description" },
-	        this.state.playlist.description
-	      ),
-	      this.createSongList()
+	          "div",
+	          { className: "playlist-info" },
+	          React.createElement(
+	            "h3",
+	            { className: "playlist-title" },
+	            this.state.playlist.title + " ",
+	            ":"
+	          ),
+	          React.createElement(
+	            "div",
+	            { className: "playlist-description" },
+	            this.state.playlist.description
+	          )
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "current-list-image" },
+	          React.createElement("img", { src: this.state.currentSong.image_url })
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "playlist-wave" },
+	          React.createElement(WaveSurfer, { playlistId: this.state.playlist.id, song: this.state.currentSong, playing: this.state.playing })
+	        ),
+	        this.fillState()
+	      )
 	    );
 	  }
 	});
 	
-	module.exports = SinglePlaylist;
+	module.exports = singlePlaylist;
 
 /***/ },
 /* 314 */
@@ -38448,67 +38513,6 @@
 	var NewPlaylistModal = __webpack_require__(300);
 	var WaveSurfer = __webpack_require__(306);
 	
-	// var Song = React.createClass({
-	//   getInitialState: function(){
-	//     return({
-	//       song: undefined,
-	//       showAudio: false
-	//     })
-	//   },
-	//   _onChange: function(){
-	//     this.setState({song: SongStore.find(this.props.params.song_id)})
-	//   },
-	// componentWillReceiveProps: function(newProps){
-	//   SongActions.fetchSong(newProps.params.song_id)
-	// },
-	//   renderAudioTag: function(){
-	//     if (this.state.showAudio === false){
-	//       return <button className="play-button"></button>;
-	//     }else {
-	//       return  <audio controls autoPlay>
-	//                 <source src={this.state.song.audio_url} type="audio/mpeg"></source>
-	//               </audio>;
-	//     }
-	//   },
-	//   showAudioTag: function(){
-	//     this.setState({showAudio: true})
-	//   },
-	//   componentDidMount: function(){
-	//     this.songListener = SongStore.addListener(this._onChange);
-	//     SongActions.fetchSong(this.props.params.song_id);
-	//   },
-	//   componentWillUnmount: function(){
-	//     this.songListener.remove();
-	//   },
-	//   render: function(){
-	//     if (this.state.song === undefined){
-	//       return <div></div>;
-	//     }
-	//     return(
-	//       <div className="single-song">
-	//         <div className='song-container'>
-	//           <div className="feed-song-info">
-	//             <div className="feed-song-title">{this.state.song.title}</div>
-	//             <div className="feed-song-artist">{this.state.song.artist}</div>
-	//           </div>
-	//           <br/>
-	//           <div className="song-thumbnail"><img src={this.state.song.image_url}></img>
-	//           </div>
-	//           <div className="audio-actions">
-	//             <Like songId={this.state.song.id} />
-	//             <NewPlaylistModal songId={this.state.song.id}/>
-	//             <PlaylistModal/>
-	//             <br/>
-	//             <div className="audio-tag" onClick={this.showAudioTag}>
-	//               {this.renderAudioTag()}
-	//             </div>
-	//           </div>
-	//         </div>
-	//       </div>
-	//     );
-	//   }
-	// })
-	
 	var singleSong = React.createClass({
 	  displayName: "singleSong",
 	
@@ -38534,6 +38538,9 @@
 	    } else {
 	      return React.createElement("button", { className: "pause-button" });
 	    }
+	  },
+	  componentWillUnmount: function () {
+	    this.songListener.remove();
 	  },
 	  showAudioTag: function () {
 	    if (this.state.playing === true) {

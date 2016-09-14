@@ -21,10 +21,10 @@ var routes = (
       <IndexRoute component={ Greeting }/>
       <Route path="user/:user_id" component={ Profile }>
       </Route>
-      <Route path="playlists" component={PlaylistIndex}/>
-      <Route path="playlists/:playlist_id" component={SinglePlaylist}/>
-      <Route path="songs" component={SongIndex}/>
-      <Route path="songs/:song_id" component={SingleSong}/>
+      <Route path="playlists" component={ PlaylistIndex }/>
+      <Route path="playlists/:playlist_id" component={ SinglePlaylist }/>
+      <Route path="songs" component={ SongIndex }/>
+      <Route path="songs/:song_id" component={ SingleSong }/>
     </Route>
 );
 
