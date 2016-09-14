@@ -38323,47 +38323,6 @@
 	var PlaylistActions = __webpack_require__(298);
 	var WaveSurfer = __webpack_require__(306);
 	
-	// var singlePlaylist = React.createClass({
-	//   getInitialState: function(){
-	//     return({
-	//       playlist: undefined
-	//     })
-	//   },
-	// _onChange: function(){
-	//   this.setState({playlist: PlaylistStore.find(this.props.params.playlist_id)})
-	// },
-	// componentWillReceiveProps: function(newProps){
-	//   PlaylistActions.fetchPlaylist(newProps.params.playlist_id)
-	// },
-	// componentDidMount: function(){
-	//   this.playlistListener = PlaylistStore.addListener(this._onChange);
-	//   PlaylistActions.fetchPlaylist(this.props.params.playlist_id);
-	// },
-	//   componentWillUnmount: function(){
-	//     this.playlistListener.remove();
-	//   },
-	//   createSongList: function(){
-	//      var playlistSongs = this.state.playlist.songs.map(function (song, index) {
-	//         return <PlaylistSong key={index} idx={song.id} song={song}/>;
-	//       });
-	//     return playlistSongs;
-	//   },
-	//   render: function(){
-	//     if (this.state.playlist === undefined){
-	//       return <div></div>;
-	//     }
-	//     return(
-	//       <div className="single-playlist">
-	//         <div className="playlist-info">
-	//           <h3 className="playlist-title" onDoubleClick = {this.singlePlaylistRedirect} >{this.state.playlist.title}</h3>
-	//         </div>
-	//         <div className="playlist-description">{this.state.playlist.description}</div>
-	//         {this.createSongList()}
-	//       </div>
-	//     );
-	//   }
-	// })
-	
 	var singlePlaylist = React.createClass({
 	  displayName: "singlePlaylist",
 	
