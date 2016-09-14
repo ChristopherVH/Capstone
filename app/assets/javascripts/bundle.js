@@ -37147,28 +37147,23 @@
 	    case PlaylistConstant.PLAYLISTS_RECEIVED:
 	      PlaylistStore.resetPlaylists(payload.playlists);
 	      PlaylistStore.__emitChange();
-	      console.log("reset playlists all");
 	      break;
 	    case PlaylistConstant.PLAYLIST_RECEIVED:
 	      PlaylistStore.addPlaylist(payload.playlist);
 	      PlaylistStore.__emitChange();
-	      console.log("add playlist");
 	      break;
 	    case PlaylistConstant.USER_PLAYLISTS_RECEIVED:
 	      PlaylistStore.resetPlaylists(payload.playlists);
 	      PlaylistStore.__emitChange();
-	      console.log("reset playlists user");
 	      break;
 	    case PlaylistConstant.NEW_PLAYLIST_RECEIVED:
 	      PlaylistStore.addPlaylist(payload.playlist);
 	      PlaylistStore.storeNewPlaylist(payload.playlist);
 	      PlaylistStore.__emitChange();
-	      console.log("new playlist");
 	      break;
 	    case PlaylistConstant.PLAYLIST_DELETED:
 	      PlaylistStore.deletePlaylist(payload.playlistId);
 	      PlaylistStore.__emitChange();
-	      console.log("deleted playlists");
 	      break;
 	  }
 	};
@@ -37765,7 +37760,6 @@
 	      this.state.visual.destroy();
 	      var newWave = this.initWavesurfer(nextProps.song.audio_url);
 	      this.setState({ visual: newWave });
-	      console.log(nextProps.song);
 	      if (nextProps.playlistId !== undefined) {
 	        newWave.on('ready', function () {
 	          newWave.playPause();
@@ -38135,10 +38129,6 @@
 	      }
 	    });
 	  },
-	  componentWillReceiveProps: function (nextProps) {
-	    this.setState({ playlist: nextProps.playlist });
-	    this.firstSong(nextProps.playlist);
-	  },
 	  setCurrentSongWave: function (song) {
 	    this.setState({ currentSong: song });
 	  },
@@ -38211,11 +38201,7 @@
 	      this.setState({ playing: true });
 	      this.props.setPlaying(true);
 	    }
-	    if (this.props.song.song !== undefined) {
-	      this.props.setCurrentSongWave(this.props.song.song);
-	    } else {
-	      this.props.setCurrentSongWave(this.props.song);
-	    }
+	    this.props.setCurrentSongWave(this.props.song);
 	  },
 	  render: function () {
 	    return React.createElement(
@@ -38354,7 +38340,6 @@
 	    this.playlistListener.remove();
 	  },
 	  setPlaying: function (playingBoolean) {
-	    console.log(this.state.playlist);
 	    this.setState({ playing: playingBoolean });
 	  },
 	  render: function () {

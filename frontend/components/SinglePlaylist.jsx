@@ -34,7 +34,6 @@ var singlePlaylist = React.createClass({
     this.playlistListener.remove();
   },
   setPlaying: function(playingBoolean){
-    console.log(this.state.playlist);
     this.setState({playing: playingBoolean});
   },
   render: function(){

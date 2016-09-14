@@ -37,10 +37,6 @@ var Playlist = React.createClass({
       }
     }));
   },
-  componentWillReceiveProps: function(nextProps){
-    this.setState({playlist: nextProps.playlist});
-    this.firstSong(nextProps.playlist);
-  },
   setCurrentSongWave: function(song){
     this.setState({currentSong: song});
   },

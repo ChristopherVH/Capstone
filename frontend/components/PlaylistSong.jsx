@@ -22,11 +22,7 @@ var PlaylistSong = React.createClass({
       this.setState({playing: true});
       this.props.setPlaying(true);
     }
-    if (this.props.song.song !== undefined){
-      this.props.setCurrentSongWave(this.props.song.song);
-    }else{
-      this.props.setCurrentSongWave(this.props.song);
-    }
+    this.props.setCurrentSongWave(this.props.song);
   },
   render: function(){
     return(

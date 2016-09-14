@@ -18,7 +18,6 @@ var reactWaveSurfer = React.createClass({
       this.state.visual.destroy();
       var newWave = this.initWavesurfer(nextProps.song.audio_url);
       this.setState({visual : newWave});
-      console.log(nextProps.song);
       if (nextProps.playlistId !== undefined){
         newWave.on('ready', function(){
           newWave.playPause();
