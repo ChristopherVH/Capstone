@@ -48,6 +48,11 @@ var Profile = React.createClass({
     }
   },
   profileCover: function(){
+    if (SingleUserStore.currentUser().id === this.state.user.id){
+      var likes = Object.keys(SingleUserStore.currentUser().liked_songs_hash).length;
+    }else{
+      var likes = Object.keys(SingleUserStore.access().liked_songs_hash).length;
+    }
     if (this.state.user.cover_url){
       return (
       <div className="cover-photo-container">
@@ -56,7 +61,7 @@ var Profile = React.createClass({
             <h1 className="username">{this.state.user.username}</h1>
             <h2 className="song-count">Songs: {this.state.user.songs.length}</h2>
             <h2 className="playlist-count">Playlists: {this.state.user.playlists.length}</h2>
-            <h2 className="like-count">Likes: {Object.keys(this.state.user.liked_songs_hash).length}</h2>
+            <h2 className="like-count">Likes: {likes}</h2>
           </div>
         </div>
         );

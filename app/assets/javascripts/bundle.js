@@ -37948,6 +37948,11 @@
 	    }
 	  },
 	  profileCover: function () {
+	    if (SingleUserStore.currentUser().id === this.state.user.id) {
+	      var likes = Object.keys(SingleUserStore.currentUser().liked_songs_hash).length;
+	    } else {
+	      var likes = Object.keys(SingleUserStore.access().liked_songs_hash).length;
+	    }
 	    if (this.state.user.cover_url) {
 	      return React.createElement(
 	        "div",
@@ -37977,7 +37982,7 @@
 	            "h2",
 	            { className: "like-count" },
 	            "Likes: ",
-	            Object.keys(this.state.user.liked_songs_hash).length
+	            likes
 	          )
 	        )
 	      );
