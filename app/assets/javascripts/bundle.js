@@ -37997,11 +37997,8 @@
 	    this.populateFeed(this.props.allSongs, this.props.feed.playlists);
 	  },
 	  componentWillReceiveProps: function (newProps) {
-	    debugger;
 	    this.populateFeed(newProps.allSongs, newProps.playlists);
 	  },
-	  // need to change so when looking at other profile updates feed to what the prop is passing in
-	  // but when is current user updates for when the mofo creates a new playlist
 	  componentDidMount: function () {
 	    if (SingleUserStore.access().id === SingleUserStore.currentUser().id) {
 	      this.playlistListener = PlaylistStore.addListener(this._onChange);
