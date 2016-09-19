@@ -29102,11 +29102,11 @@
 	var Navbar = React.createClass({
 	  displayName: 'Navbar',
 	
-	  getInitialState: function () {
-	    return {
-	      currentUser: this.props.currentUser
-	    };
-	  },
+	  // getInitialState: function(){
+	  //   return({
+	  //     currentUser: this.props.currentUser
+	  //   })
+	  // },
 	  createProfile: function () {
 	    if (this.props.currentUser === undefined || this.props.currentUser.id === undefined) {
 	      return [React.createElement(
@@ -29132,7 +29132,7 @@
 	      { key: 1 },
 	      React.createElement(
 	        Link,
-	        { to: "/user/" + this.state.currentUser.id },
+	        { to: "/user/" + this.props.currentUser.id },
 	        'Profile'
 	      )
 	    ), React.createElement(
@@ -29600,15 +29600,6 @@
 
 	
 	module.exports = {
-	  fetchUserSongs: function (user_id) {
-	    $.ajax({
-	      type: "GET",
-	      url: "api/users/" + user_id + "/songs",
-	      success: function (songs) {
-	        UserActions.receiveUserSongs(songs); //TODO implement this when its actually useful
-	      }
-	    });
-	  },
 	  fetchUserPlaylists: function (user_id, callback) {
 	    $.ajax({
 	      type: "GET",
@@ -29635,7 +29626,7 @@
 	        callback();
 	      },
 	      success: function (currentUser) {
-	        callback(currentUser); //TODO implement this when its actually useful
+	        callback(currentUser);
 	      }
 	    });
 	  },
@@ -29819,7 +29810,6 @@
 	      url: "api/songs/trending",
 	      success: function (songs) {
 	        callback(songs);
-	        //goes back to song actions, dispatches
 	      }
 	    });
 	  },
@@ -29829,11 +29819,7 @@
 	      url: "api/songs/" + songId + "/like",
 	      data: { user_id: userId },
 	      success: function () {
-	        console.log("create like success");
 	        callback(songId);
-	      },
-	      error: function () {
-	        console.log("create like fail");
 	      }
 	    });
 	  },
@@ -29909,17 +29895,14 @@
 	  },
 	  userDirect: function (id) {
 	    window.location.href = '/#/user/' + id;
-	    // window.location.reload()
 	    this.props.callback();
 	  },
 	  songDirect: function (id) {
 	    window.location.href = '/#/songs/' + id;
-	    // window.location.reload()
 	    this.props.callback();
 	  },
 	  playlistDirect: function (id) {
 	    window.location.href = '/#/playlists/' + id;
-	    // window.location.reload()
 	    this.props.callback();
 	  },
 	  createSearchResults: function () {
@@ -36615,17 +36598,16 @@
 	
 	  getInitialState: function () {
 	    return {
-	      song: this.props.song,
+	      // song: this.props.song,
 	      playing: false
 	    };
 	  },
 	  singleSongRedirect: function () {
 	    window.location = '/#/songs/' + this.props.song.id;
 	  },
-	  componentWillReceiveProps: function (newProps) {
-	    this.setState({ song: newProps.song });
-	    //this.state.playing always coming back false
-	  },
+	  // componentWillReceiveProps: function(newProps){
+	  //   this.setState({song: newProps.song});
+	  // },
 	  renderAudioTag: function () {
 	    if (this.state.playing === false) {
 	      return React.createElement("button", { className: "play-button" });
@@ -36650,7 +36632,7 @@
 	        React.createElement(
 	          "div",
 	          { className: "feed-song-title" },
-	          this.state.song.title
+	          this.props.song.title
 	        ),
 	        React.createElement(
 	          "div",
@@ -36663,14 +36645,14 @@
 	              null,
 	              "by"
 	            ),
-	            this.state.song.artist
+	            this.props.song.artist
 	          )
 	        )
 	      ),
 	      React.createElement(
 	        "div",
 	        { className: "song-thumbnail" },
-	        React.createElement("img", { src: this.state.song.image_url, onDoubleClick: this.singleSongRedirect }),
+	        React.createElement("img", { src: this.props.song.image_url, onDoubleClick: this.singleSongRedirect }),
 	        React.createElement(
 	          "div",
 	          { className: "audio-tag", onClick: this.showAudioTag },
@@ -36680,11 +36662,11 @@
 	      React.createElement(
 	        "div",
 	        { className: "audio-actions" },
-	        React.createElement(Like, { className: "song-button", songId: this.state.song.id, userId: this.props.userId }),
-	        React.createElement(NewPlaylistModal, { className: "song-button", song: this.state.song, songId: this.state.song.id, userId: this.props.userId }),
-	        React.createElement(PlaylistModal, { className: "song-button", song: this.state.song, songId: this.state.song.id })
+	        React.createElement(Like, { className: "song-button", songId: this.props.song.id, userId: this.props.userId }),
+	        React.createElement(NewPlaylistModal, { className: "song-button", song: this.props.song, songId: this.props.song.id, userId: this.props.userId }),
+	        React.createElement(PlaylistModal, { className: "song-button", song: this.props.song, songId: this.props.song.id })
 	      ),
-	      React.createElement(WaveSurfer, { song: this.state.song, playing: this.state.playing }),
+	      React.createElement(WaveSurfer, { song: this.props.song, playing: this.state.playing }),
 	      React.createElement(
 	        "div",
 	        { className: "uploader" },
@@ -36695,12 +36677,11 @@
 	          "by"
 	        ),
 	        " ",
-	        this.state.song.user.username
+	        this.props.song.user.username
 	      )
 	    );
 	  }
 	});
-	// numbLikes={this.state.song.likers.length}
 	
 	module.exports = Song;
 
@@ -36750,7 +36731,6 @@
 	var Like = React.createClass({
 	  displayName: "Like",
 	
-	  //TODO maybe get it so likes is a number that goes up/down one based on song's likes
 	  getInitialState: function () {
 	    return {
 	      liked: false,
@@ -36758,7 +36738,6 @@
 	    };
 	  },
 	  componentWillMount: function () {
-	    console.log("mounting");
 	    if (SingleUserStore.currentUser().username !== undefined && SingleUserStore.currentUser().liked_songs_hash[this.props.songId]) {
 	      this.setState({ liked: true });
 	    }
@@ -36772,7 +36751,6 @@
 	      LikeActions.deleteLike(SingleUserStore.currentUser().id, this.props.songId);
 	      this.setState({ liked: false });
 	    }
-	    console.log("fetching user for likes update");
 	    UserActions.fetchUserInfo(this.props.userId);
 	  },
 	  openModal: function () {
@@ -36807,10 +36785,8 @@
 	      )];
 	    } else if (this.state.liked) {
 	      return React.createElement("input", { className: "like-button", type: "button", onClick: this.toggleLike });
-	      //this.props.numbLikes + 1
 	    } else {
 	      return React.createElement("input", { className: "not-like-button", type: "button", onClick: this.toggleLike });
-	      //this.props.numbLikes
 	    }
 	  },
 	  render: function () {
@@ -36858,7 +36834,6 @@
 	
 	SingleUserStore.addLike = function (songId) {
 	  _current["liked_songs_hash"][songId] = "X";
-	  console.log(_current["liked_songs_hash"]);
 	};
 	
 	SingleUserStore.deleteLike = function (songId) {
@@ -36885,12 +36860,10 @@
 	      break;
 	    case UserConstants.LIKE:
 	      SingleUserStore.addLike(payload.songId);
-	      console.log("like in store changing user");
 	      SingleUserStore.__emitChange();
 	      break;
 	    case UserConstants.DISLIKE:
 	      SingleUserStore.deleteLike(payload.songId);
-	      console.log("dislike in store changing user");
 	      SingleUserStore.__emitChange();
 	      break;
 	  }
@@ -36908,7 +36881,6 @@
 	
 	var LikeActions = {
 	  createLike: function (userId, songId) {
-	    console.log("create like action running");
 	    apiUtil.createLike(songId, userId, this.receiveLike);
 	  },
 	  receiveLike: function (songId) {
@@ -36987,7 +36959,6 @@
 	  },
 	  componentDidMount: function () {
 	    this.playlistListener = PlaylistStore.addListener(this._onChange);
-	    // PlaylistActions.fetchUserPlaylists(SingleUserStore.currentUser().id)
 	  },
 	  componentWillUnmount: function () {
 	    this.playlistListener.remove();
@@ -37259,7 +37230,6 @@
 	var playlistSongAdd = React.createClass({
 	  displayName: "playlistSongAdd",
 	
-	  //TODO maybe get it so likes is a number that goes up/down one based on song's likes
 	  getInitialState: function () {
 	    return {
 	      added: undefined
@@ -37318,7 +37288,6 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	// var Modal = require('boron/FadeModal');
 	var Modal = __webpack_require__(172);
 	var PlaylistStore = __webpack_require__(296);
 	var PlaylistActions = __webpack_require__(298);
@@ -37351,7 +37320,7 @@
 	    zIndex: 11
 	  }
 	};
-	// backdropStyle={backdropStyle} contentStyle={contentStyle}
+	
 	var NewPlaylistModal = React.createClass({
 	  displayName: 'NewPlaylistModal',
 	
@@ -37429,9 +37398,6 @@
 	    }
 	  },
 	  render: function () {
-	    // if (this.state.playlists === undefined){
-	    //   return <div></div>;
-	    // }
 	    return React.createElement(
 	      'div',
 	      null,
@@ -37462,7 +37428,7 @@
 	
 	  mixins: [LinkedStateMixin],
 	  getInitialState: function () {
-	    return { songId: this.props.songId, title: '', description: '' };
+	    return { title: '', description: '' };
 	  },
 	  createPlaylist: function (event) {
 	    event.preventDefault();
@@ -37870,7 +37836,6 @@
 	    });
 	  },
 	  fetchTrendingSongs: function () {
-	    //dispatch for spinner or something
 	    apiUtil.fetchTrendingSongs(this.receiveTrendingSongs);
 	  },
 	  receiveTrendingSongs: function (songs) {
@@ -37880,7 +37845,6 @@
 	    });
 	  },
 	  fetchAllSongs: function () {
-	    //dispatch for spinner or something
 	    apiUtil.fetchAllSongs(this.receiveSongs);
 	  },
 	  fetchSong: function (id) {
@@ -37904,13 +37868,15 @@
 	
 	  getInitialState: function () {
 	    return {
-	      user: undefined
+	      user: undefined,
+	      changingUser: false
 	    };
 	  },
 	  _onChange: function () {
-	    this.setState({ user: SingleUserStore.access() });
+	    this.setState({ user: SingleUserStore.access(), changingUser: false });
 	  },
 	  componentWillReceiveProps: function (newProps) {
+	    this.setState({ changingUser: true });
 	    UserActions.fetchUserInfo(newProps.params.user_id);
 	  },
 	  componentDidMount: function () {
@@ -37989,7 +37955,7 @@
 	    }
 	  },
 	  render: function () {
-	    if (this.state.user === undefined || this.state.user.id === undefined) {
+	    if (this.state.user === undefined || this.state.user.id === undefined || this.state.changingUser === true) {
 	      return React.createElement("div", null);
 	    }
 	    return React.createElement(
@@ -38024,24 +37990,31 @@
 	
 	  getInitialState: function () {
 	    return {
-	      playlists: this.props.feed.playlists,
-	      allSongs: this.props.allSongs
+	      jsxPostFeed: []
 	    };
 	  },
 	  componentWillMount: function () {
 	    this.populateFeed(this.props.allSongs, this.props.feed.playlists);
 	  },
-	  componentDidMount: function () {
-	    this.playlistListener = PlaylistStore.addListener(this._onChange);
-	    PlaylistActions.fetchUserPlaylists(SingleUserStore.currentUser().id);
+	  componentWillReceiveProps: function (newProps) {
+	    debugger;
+	    this.populateFeed(newProps.allSongs, newProps.playlists);
 	  },
-	  componentWillUnmount: function () {
-	    this.playlistListener.remove();
+	  // need to change so when looking at other profile updates feed to what the prop is passing in
+	  // but when is current user updates for when the mofo creates a new playlist
+	  componentDidMount: function () {
+	    if (SingleUserStore.access().id === SingleUserStore.currentUser().id) {
+	      this.playlistListener = PlaylistStore.addListener(this._onChange);
+	      PlaylistActions.fetchUserPlaylists(SingleUserStore.access().id);
+	    }
 	  },
 	  _onChange: function () {
-	    this.setState({ playlists: PlaylistStore.all() });
-	    //Store updating as expected
-	    //running populateFeed before state is being set
+	    this.populateFeed(this.props.allSongs, PlaylistStore.all());
+	  },
+	  componentWillUnmount: function () {
+	    if (SingleUserStore.access().id === SingleUserStore.currentUser().id) {
+	      this.playlistListener.remove();
+	    }
 	  },
 	  populateFeed: function (allSongs, playlists) {
 	    var that = this;
@@ -38056,7 +38029,6 @@
 	      }
 	      return 0;
 	    });
-	    // postFeed always coming back as expected
 	    var jsxPostFeed = [];
 	    var mock = [];
 	    postFeed.forEach(function (feedobj, index) {
@@ -38075,14 +38047,13 @@
 	        ));
 	      }
 	    });
-	    return jsxPostFeed;
+	    this.setState({ jsxPostFeed: jsxPostFeed });
 	  },
 	  render: function () {
-	    //playlists updating as expected
 	    return React.createElement(
 	      "ul",
 	      { className: "feed" },
-	      this.populateFeed(this.state.allSongs, this.state.playlists)
+	      this.state.jsxPostFeed
 	    );
 	  }
 	});
@@ -38105,7 +38076,6 @@
 	
 	  getInitialState: function () {
 	    return {
-	      playlist: this.props.playlist,
 	      playing: false
 	    };
 	  },
@@ -38124,7 +38094,7 @@
 	  },
 	  fillState: function () {
 	    var that = this;
-	    return this.state.playlist.songs.map(function (song, index) {
+	    return this.props.playlist.songs.map(function (song, index) {
 	      if (song.song !== undefined) {
 	        return React.createElement(PlaylistSong, { key: index, song: song.song, playing: that.state.playing, currentSong: that.state.currentSong,
 	          setCurrentSongWave: that.setCurrentSongWave, setPlaying: that.setPlaying });
@@ -38150,13 +38120,13 @@
 	        React.createElement(
 	          "h3",
 	          { className: "playlist-title", onDoubleClick: this.singlePlaylistRedirect },
-	          this.state.playlist.title + " ",
+	          this.props.playlist.title + " ",
 	          ":"
 	        ),
 	        React.createElement(
 	          "div",
 	          { className: "playlist-description" },
-	          this.state.playlist.description
+	          this.props.playlist.description
 	        )
 	      ),
 	      React.createElement(
@@ -38187,7 +38157,6 @@
 	
 	  getInitialState: function () {
 	    return {
-	      ord: this.props.song.ord,
 	      playing: false
 	    };
 	  },
@@ -38261,13 +38230,13 @@
 	
 	  getInitialState: function () {
 	    return {
-	      playlists: undefined
+	      playlists: []
 	    };
 	  },
 	  _onChange: function () {
 	    this.setState({ playlists: PlaylistStore.all() });
 	  },
-	  componentDidMount: function () {
+	  componentWillMount: function () {
 	    this.playlistListener = PlaylistStore.addListener(this._onChange);
 	    PlaylistActions.fetchAllPlaylists();
 	  },
@@ -38281,9 +38250,6 @@
 	    return playlistList;
 	  },
 	  render: function () {
-	    if (this.state.playlists === undefined) {
-	      return React.createElement("div", null);
-	    }
 	    return React.createElement(
 	      "div",
 	      null,

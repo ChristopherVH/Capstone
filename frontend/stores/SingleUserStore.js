@@ -28,7 +28,6 @@ SingleUserStore.setCurrentUser = function(user) {
 
 SingleUserStore.addLike = function(songId) {
   _current["liked_songs_hash"][songId] = "X";
-  console.log(_current["liked_songs_hash"]);
 };
 
 SingleUserStore.deleteLike = function(songId) {
@@ -55,12 +54,10 @@ SingleUserStore.__onDispatch = function(payload){
       break;
     case UserConstants.LIKE:
       SingleUserStore.addLike(payload.songId);
-      console.log("like in store changing user");
       SingleUserStore.__emitChange();
       break;
     case UserConstants.DISLIKE:
       SingleUserStore.deleteLike(payload.songId);
-      console.log("dislike in store changing user");
       SingleUserStore.__emitChange();
       break;
 }

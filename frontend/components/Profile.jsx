@@ -6,13 +6,15 @@ var UserActions = require("../actions/UserActions.js");
 var Profile = React.createClass({
   getInitialState: function(){
     return({
-      user: undefined
+      user: undefined,
+      changingUser: false
     });
   },
   _onChange: function(){
-      this.setState({user: SingleUserStore.access()});
+    this.setState({user: SingleUserStore.access(), changingUser: false});
   },
   componentWillReceiveProps: function(newProps){
+    this.setState({changingUser: true});
     UserActions.fetchUserInfo(newProps.params.user_id);
   },
   componentDidMount: function(){
@@ -68,7 +70,7 @@ var Profile = React.createClass({
     }
   },
   render: function(){
-    if (this.state.user === undefined || this.state.user.id === undefined){
+    if (this.state.user === undefined || this.state.user.id === undefined || this.state.changingUser === true){
       return <div></div>;
     }
     return(

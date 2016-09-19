@@ -8,24 +8,31 @@ var PlaylistActions = require("../actions/PlaylistActions.js");
 var Feed = React.createClass({
   getInitialState: function(){
     return({
-      playlists: this.props.feed.playlists,
-      allSongs: this.props.allSongs,
+      jsxPostFeed: []
     });
   },
   componentWillMount: function(){
     this.populateFeed(this.props.allSongs, this.props.feed.playlists);
   },
-  componentDidMount: function(){
-    this.playlistListener = PlaylistStore.addListener(this._onChange);
-    PlaylistActions.fetchUserPlaylists(SingleUserStore.currentUser().id);
+  componentWillReceiveProps: function(newProps){
+    debugger;
+    this.populateFeed(newProps.allSongs, newProps.playlists);
   },
-  componentWillUnmount: function(){
-    this.playlistListener.remove();
+  // need to change so when looking at other profile updates feed to what the prop is passing in
+  // but when is current user updates for when the mofo creates a new playlist
+  componentDidMount: function(){
+    if (SingleUserStore.access().id === SingleUserStore.currentUser().id){
+      this.playlistListener = PlaylistStore.addListener(this._onChange);
+      PlaylistActions.fetchUserPlaylists(SingleUserStore.access().id);
+    }
   },
   _onChange: function(){
-    this.setState({playlists: PlaylistStore.all()});
-    //Store updating as expected
-    //running populateFeed before state is being set
+    this.populateFeed(this.props.allSongs, PlaylistStore.all());
+  },
+  componentWillUnmount: function(){
+    if (SingleUserStore.access().id === SingleUserStore.currentUser().id){
+      this.playlistListener.remove();
+    }
   },
   populateFeed: function(allSongs, playlists){
     var that = this;
@@ -40,7 +47,6 @@ var Feed = React.createClass({
       }
       return 0;
     });
-    // postFeed always coming back as expected
     var jsxPostFeed = [];
     var mock = [];
     postFeed.forEach(function(feedobj, index){
@@ -51,13 +57,12 @@ var Feed = React.createClass({
         jsxPostFeed.push(<li className="feed-element"><Song key={index} song={feedobj} userId={that.props.userId}/></li>);
       }
     });
-    return jsxPostFeed;
+    this.setState({jsxPostFeed: jsxPostFeed});
   },
   render: function(){
-    //playlists updating as expected
     return(
       <ul className="feed">
-        {this.populateFeed(this.state.allSongs, this.state.playlists)}
+        {this.state.jsxPostFeed}
       </ul>
     );
   }

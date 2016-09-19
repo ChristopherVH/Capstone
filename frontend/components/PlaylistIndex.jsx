@@ -6,15 +6,15 @@ var PlaylistActions = require("../actions/PlaylistActions.js");
 var PlaylistIndex = React.createClass({
   getInitialState: function(){
     return({
-      playlists: undefined
-    })
+      playlists: []
+    });
   },
   _onChange: function(){
-    this.setState({playlists: PlaylistStore.all()})
+    this.setState({playlists: PlaylistStore.all()});
   },
-  componentDidMount: function(){
+  componentWillMount: function(){
     this.playlistListener = PlaylistStore.addListener(this._onChange);
-    PlaylistActions.fetchAllPlaylists()
+    PlaylistActions.fetchAllPlaylists();
   },
   componentWillUnmount: function(){
     this.playlistListener.remove();
@@ -26,18 +26,17 @@ var PlaylistIndex = React.createClass({
     return playlistList;
   },
   render: function(){
-    if (this.state.playlists === undefined){
-      return <div></div>
-    }
     return(
       <div>
         <h3 className="playlist-index-header" >All Playlists</h3>
         <ul className="playlist-list">
-          {this.createPlaylists(this.state.playlists)}
+          {
+            this.createPlaylists(this.state.playlists)
+          }
         </ul>
       </div>
-    )
+    );
   }
-})
+});
 
 module.exports = PlaylistIndex;

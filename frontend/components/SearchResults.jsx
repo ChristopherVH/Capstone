@@ -18,17 +18,14 @@ var SearchResults = React.createClass({
   },
   userDirect: function(id){
     window.location.href = ('/#/user/' + id)
-    // window.location.reload()
     this.props.callback()
   },
   songDirect: function(id){
     window.location.href = ('/#/songs/' + id)
-    // window.location.reload()
     this.props.callback()
   },
   playlistDirect: function(id){
     window.location.href = ('/#/playlists/' + id)
-    // window.location.reload()
     this.props.callback()
   },
   createSearchResults: function() {

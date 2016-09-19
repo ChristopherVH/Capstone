@@ -16,7 +16,6 @@ SongActions = {
     });
   },
   fetchTrendingSongs: function () {
-    //dispatch for spinner or something
     apiUtil.fetchTrendingSongs(this.receiveTrendingSongs)
   },
   receiveTrendingSongs: function (songs) {
@@ -26,7 +25,6 @@ SongActions = {
     });
   },
   fetchAllSongs: function () {
-    //dispatch for spinner or something
     apiUtil.fetchAllSongs(this.receiveSongs)
   },
   fetchSong: function(id){

@@ -8,7 +8,6 @@ var PlaylistActions = require("../actions/PlaylistActions.js");
 var Playlist = React.createClass({
   getInitialState: function(){
     return({
-      playlist: this.props.playlist,
       playing: false
     });
   },
@@ -27,7 +26,7 @@ var Playlist = React.createClass({
   },
   fillState: function(){
     var that = this;
-    return (this.state.playlist.songs.map(function (song,index) {
+    return (this.props.playlist.songs.map(function (song,index) {
       if (song.song !== undefined){
         return <PlaylistSong key={index} song={song.song} playing={that.state.playing} currentSong={that.state.currentSong}
           setCurrentSongWave={that.setCurrentSongWave} setPlaying={that.setPlaying}/>;
@@ -47,8 +46,8 @@ var Playlist = React.createClass({
     return(
       <div className="playlist-container">
         <div className="playlist-info">
-          <h3 className="playlist-title" onDoubleClick = {this.singlePlaylistRedirect} >{this.state.playlist.title + " "}:</h3>
-          <div className="playlist-description">{this.state.playlist.description}</div>
+          <h3 className="playlist-title" onDoubleClick = {this.singlePlaylistRedirect} >{this.props.playlist.title + " "}:</h3>
+          <div className="playlist-description">{this.props.playlist.description}</div>
         </div>
         <div className="current-list-image"><img src={this.state.currentSong.image_url}></img></div>
         <div className="playlist-wave">
@@ -59,6 +58,6 @@ var Playlist = React.createClass({
       </div>
     );
   }
-})
+});
 
 module.exports = Playlist;

@@ -3,7 +3,6 @@ var PlaylistActions = require("../actions/PlaylistActions.js");
 var UserActions = require("../actions/UserActions.js");
 
 var playlistSongAdd = React.createClass({
-  //TODO maybe get it so likes is a number that goes up/down one based on song's likes
   getInitialState: function(){
     return({
       added: undefined

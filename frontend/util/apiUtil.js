@@ -65,7 +65,6 @@ var songUtil = {
       url: "api/songs/trending",
       success: function (songs) {
         callback(songs);
-        //goes back to song actions, dispatches
       }
     });
   },
@@ -75,11 +74,7 @@ var songUtil = {
       url: "api/songs/"+ songId + "/like",
       data: {user_id: userId},
       success: function(){
-        console.log("create like success");
         callback(songId);
-      },
-      error: function(){
-        console.log("create like fail");
       }
     });
   },

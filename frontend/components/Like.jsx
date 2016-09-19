@@ -38,7 +38,6 @@ const customStyles = {
 };
 
 var Like = React.createClass({
-  //TODO maybe get it so likes is a number that goes up/down one based on song's likes
   getInitialState: function(){
     return({
       liked: false,
@@ -46,7 +45,6 @@ var Like = React.createClass({
     })
   },
   componentWillMount: function(){
-    console.log("mounting");
     if (SingleUserStore.currentUser().username !== undefined && SingleUserStore.currentUser().liked_songs_hash[this.props.songId]){
       this.setState({liked: true})
     }
@@ -60,7 +58,6 @@ var Like = React.createClass({
       LikeActions.deleteLike(SingleUserStore.currentUser().id, this.props.songId)
       this.setState({liked: false})
     }
-    console.log("fetching user for likes update");
     UserActions.fetchUserInfo(this.props.userId)
   },
   openModal: function() {
@@ -88,10 +85,8 @@ var Like = React.createClass({
     }
     else if (this.state.liked){
       return  <input className="like-button" type="button" onClick={this.toggleLike}/>;
-      //this.props.numbLikes + 1
     }else {
       return  <input className="not-like-button" type="button" onClick={this.toggleLike}/>;
-      //this.props.numbLikes
     }
   },
   render: function(){

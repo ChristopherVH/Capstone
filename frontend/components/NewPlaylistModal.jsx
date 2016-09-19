@@ -1,5 +1,4 @@
 var React = require('react');
-// var Modal = require('boron/FadeModal');
 var Modal = require('react-modal');
 var PlaylistStore = require("../stores/PlaylistStore.js");
 var PlaylistActions = require("../actions/PlaylistActions.js");
@@ -32,7 +31,7 @@ const customStyles = {
     zIndex               : 11
   }
 };
-// backdropStyle={backdropStyle} contentStyle={contentStyle}
+
 var NewPlaylistModal = React.createClass({
     getInitialState: function (){
       return({
@@ -84,9 +83,6 @@ var NewPlaylistModal = React.createClass({
         }
     },
     render: function() {
-      // if (this.state.playlists === undefined){
-      //   return <div></div>;
-      // }
         return (
             <div>
                 <button className="add-to-new-playlist-button" onClick={this.openModal}>Create New Playlist</button>

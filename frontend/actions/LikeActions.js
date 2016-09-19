@@ -4,7 +4,6 @@ var apiUtil = require("../util/apiUtil.js");
 
 var LikeActions = {
   createLike: function (userId, songId){
-    console.log("create like action running");
     apiUtil.createLike(songId, userId, this.receiveLike);
   },
   receiveLike: function(songId) {

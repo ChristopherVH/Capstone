@@ -7,7 +7,7 @@ var UserActions = require("../actions/UserActions.js");
 var PlaylistForm = React.createClass({
   mixins: [LinkedStateMixin],
   getInitialState: function() {
-    return {songId: this.props.songId, title: '', description: ''};
+    return {title: '', description: ''};
   },
   createPlaylist: function (event) {
     event.preventDefault();

@@ -3,7 +3,6 @@ var React = require('react');
 var PlaylistSong = React.createClass({
   getInitialState: function(){
     return({
-      ord: this.props.song.ord,
       playing: false
     });
   },
@@ -43,6 +42,6 @@ var PlaylistSong = React.createClass({
       </div>
     );
   }
-})
+});
 
 module.exports = PlaylistSong;

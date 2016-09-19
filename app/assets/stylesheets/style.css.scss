@@ -116,54 +116,7 @@ button:focus, .like-button:focus, input:focus, textarea{
 .error{
   position: absolute;
   color: red;
-  // bottom: 230px;
-  // margin-left: auto;
-  // margin-right: auto;
-  // left: 0;
-  // right: 0;
-  // text-align: center;
 }
-
-// .guestandin{
-//   display: inline-flex;
-// }
-//
-// .demo-user-form{
-//   display: inline-flex;
-// }
-//
-// .no-account{
-//   display: inline-flex;
-// }
-
-
-// .enterform{
-//   position: relative;;
-//   top: 250px;
-//   display: block;
-//   background-color: blue;
-// }
-//
-// .enterform {
-//   background-color: rgba(237, 237, 165, 0.5);
-//   border-radius: 25px;
-//   display: inline-block;
-// }
-// label {
-//     width:180px;
-//     clear:left;
-//     text-align:right;
-//     padding:10px;
-// }
-//
-// .guestandin, .enterform input{
-//   margin-top: 10px;
-//   margin-bottom: 10px;
-// }
-// header {
-//   background-color: #FF4500;
-//   z-index: 50;
-// }
 
 img{
   display:block;
@@ -181,47 +134,6 @@ img{
 #logout{
   cursor: pointer;
 }
-
-
-//navbar
-// header ul{
-//     list-style-type: none;
-//     margin: 0 auto;
-//     padding: 0;
-//     background-color: #FF4500;
-//     width:100%;
-// }
-//
-// header li{
-//   border-right:1px solid #bbb;
-//   padding: 14px 16px;
-//   text-align: center;
-// }
-//
-// header li a{
-//   color:black;
-// }
-//
-// header li:hover{
-//     background:#FF0000;
-// }
-
-// #logout, #login{
-//   float:right;
-//   margin: 0 auto;
-//   border-left:1px solid #bbb;
-// }
-//
-// #searchbar{
-//   // float:none;
-//   // position:relative;
-//   // display: inline-block;
-//   // margin: 0px auto;
-// }
-//
-// .navbar-brand {
-//   line-height: 2em;
-// }
 
 .navbar-form{
   margin-top: 13px;
